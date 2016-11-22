@@ -4,20 +4,20 @@ package rs.acs.uns.sw.govrs.client.fx.view;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.model.*;
 
 public class XMLEditorController {
 
-    private final Node rootIcon = new ImageView(
-            new Image(getClass().getResourceAsStream("../images/law.png"))
-    );
+    private final Image rootIcon =
+            new Image(getClass().getResourceAsStream("../images/law.png"));
 
     @FXML
-    private TreeView<String> actTree;
+    private TitledPane treeContainer;
 
     @FXML
     private TextArea textArea;
@@ -38,21 +38,37 @@ public class XMLEditorController {
      */
     @FXML
     private void initialize() {
-        TreeItem<String> rootItem = new TreeItem<String>("Pravilnik o zabrani XML-a", rootIcon);
-        rootItem.setExpanded(true);
-        TreeItem<String> item1 = new TreeItem<String>("Deo I");
-        TreeItem<String> item2 = new TreeItem<String>("Deo II");
-        TreeItem<String> item3 = new TreeItem<String>("Glava I");
-        rootItem.getChildren().add(item1);
-        rootItem.getChildren().add(item2);
-        item1.getChildren().add(item3);
-        item2.getChildren().add(item3);
+        Propis propis = new Propis("Propis o destabilizaciji mozga", "images/law.png");
+        Glava glava1 = new Glava("Glava prva", null);
+        Glava glava2 = new Glava("Glava druga", null);
+        Glava glava3 = new Glava("Glava treća", null);
+        Tacka t1 = new Tacka("Prva tačka");
+        Tacka t2= new Tacka("Prva tačka");
+        Tacka t3 = new Tacka("Prva tačka");
+        Tacka t4 = new Tacka("Prva tačka");
+        Tacka t5 = new Tacka("Prva tačka");
+        Tacka t6 = new Tacka("Prva tačka");
 
-        actTree.setRoot(rootItem);
-        System.out.println("XMLCTRL INIT");
-        actTree.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
-            System.out.println(newValue.getValue());
-        });
+        propis.getChildren().add(glava1);
+        propis.getChildren().add(glava2);
+        propis.getChildren().add(glava3);
+
+        glava1.getChildren().add(t1);
+        glava2.getChildren().add(t2);
+        glava2.getChildren().add(t3);
+        glava3.getChildren().add(t4);
+        glava3.getChildren().add(t5);
+        glava3.getChildren().add(t6);
+
+
+        TreeModel tree = new TreeModel(
+                propis,
+                Element::getChildren,
+                Element::nameProperty
+        );
+
+        TreeView<Element> treeView = tree.getTreeView();
+        treeContainer.setContent(treeView);
     }
 
     /**
@@ -63,4 +79,6 @@ public class XMLEditorController {
     public void setMainApp(MainFXApp mainApp) {
         this.mainApp = mainApp;
     }
+
+
 }

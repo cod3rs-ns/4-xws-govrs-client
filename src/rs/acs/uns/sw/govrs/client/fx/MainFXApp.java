@@ -1,19 +1,20 @@
 package rs.acs.uns.sw.govrs.client.fx;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import rs.acs.uns.sw.govrs.client.fx.model.ActSample;
-import rs.acs.uns.sw.govrs.client.fx.model.ActType;
+import rs.acs.uns.sw.govrs.client.fx.model.*;
 import rs.acs.uns.sw.govrs.client.fx.components.WindowButtons;
 import rs.acs.uns.sw.govrs.client.fx.view.XMLEditorController;
 
@@ -21,7 +22,6 @@ import java.io.IOException;
 
 public class MainFXApp extends Application {
 
-    public ActSample rootAct;
     private Stage primaryStage;
     private BorderPane rootLayout;
     private ToolBar toolBar;
@@ -30,7 +30,7 @@ public class MainFXApp extends Application {
     private double mouseDragOffsetY = 0;
 
     public MainFXApp() {
-        rootAct = new ActSample("id1", "Saiyan Act Root", ActType.TYPE_1, "Super Saiyan God Rose act");
+
     }
 
     public static void main(String[] args) {
@@ -82,26 +82,20 @@ public class MainFXApp extends Application {
             final WindowButtons windowButtons = new WindowButtons(primaryStage);
             toolBar.getItems().add(windowButtons);
             // add window header double clicking
-            toolBar.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override public void handle(MouseEvent event) {
-                    if (event.getClickCount() == 2) {
-                        windowButtons.toggleMax();
-                    }
+            toolBar.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    windowButtons.toggleMax();
                 }
             });
             // add window dragging
-            toolBar.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override public void handle(MouseEvent event) {
-                    mouseDragOffsetX = event.getSceneX();
-                    mouseDragOffsetY = event.getSceneY();
-                }
+            toolBar.setOnMousePressed(event -> {
+                mouseDragOffsetX = event.getSceneX();
+                mouseDragOffsetY = event.getSceneY();
             });
-            toolBar.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                @Override public void handle(MouseEvent event) {
-                    if(!windowButtons.isMaximized()) {
-                        primaryStage.setX(event.getScreenX()-mouseDragOffsetX);
-                        primaryStage.setY(event.getScreenY()-mouseDragOffsetY);
-                    }
+            toolBar.setOnMouseDragged(event -> {
+                if(!windowButtons.isMaximized()) {
+                    primaryStage.setX(event.getScreenX()-mouseDragOffsetX);
+                    primaryStage.setY(event.getScreenY()-mouseDragOffsetY);
                 }
             });
 
@@ -113,6 +107,48 @@ public class MainFXApp extends Application {
         loader.setLocation(MainFXApp.class.getResource("view/XMLEditor.fxml"));
         AnchorPane xmleditor = (AnchorPane) loader.load();
         rootLayout.setCenter(xmleditor);
+        /**
+        TextField add = new TextField();
+
+        Button addButton = new Button("Add");
+        addButton.disableProperty().bind(Bindings.createBooleanBinding(() ->
+                        treeView.getSelectionModel().getSelectedItem() == null ||
+                                treeView.getSelectionModel().getSelectedItem().getValue() instanceof Text,
+                treeView.getSelectionModel().selectedItemProperty()));
+
+        EventHandler<ActionEvent> addHandler = e -> {
+            if (treeView.getSelectionModel().getSelectedItem() == null
+                    || treeView.getSelectionModel().getSelectedItem().getValue() instanceof Text) {
+                return ;
+            }
+            treeView.getSelectionModel().getSelectedItem().getValue().createAndAddChild(add.getText());
+            add.clear();
+        };
+
+        add.setOnAction(event -> {
+
+        });
+        add.setOnAction(addHandler);
+        addButton.setOnAction(addHandler);
+
+        Button delete = new Button("Delete");
+        delete.disableProperty().bind(Bindings.createBooleanBinding(() ->
+                        treeView.getSelectionModel().getSelectedItem() == null ||
+                                treeView.getSelectionModel().getSelectedItem().getValue() == company,
+                treeView.getSelectionModel().selectedItemProperty()));
+
+        delete.setOnAction(e -> {
+            TreeItem<Element> selected = treeView.getSelectionModel().getSelectedItem() ;
+            selected.getParent().getValue().getChildren().remove(selected.getValue());
+        });
+
+        HBox controls = new HBox(5, add, addButton, delete);
+        controls.setPadding(new Insets(10));
+        controls.setAlignment(Pos.CENTER);
+
+        rootLayout.setCenter(treeView);
+        rootLayout.setBottom(controls);
+        */
 
         // Give the controller access to the main app.
         XMLEditorController controller = loader.getController();
