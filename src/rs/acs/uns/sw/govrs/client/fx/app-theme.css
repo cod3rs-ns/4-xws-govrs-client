@@ -1,0 +1,44 @@
+#win-close-btn {
+    -fx-font-size: 1px;
+    -fx-background-color: null;
+    -fx-background-image: url("images/win-close-btn.png");
+    -fx-padding: 6 6 4 6;
+}
+
+#win-min-btn {
+    -fx-font-size: 1px;
+    -fx-background-color: null;
+    -fx-background-image: url("images/win-min-btn.png");
+    -fx-padding: 6 6 4 6;
+}
+
+#win-max-btn {
+    -fx-font-size: 1px;
+    -fx-background-color: null;
+    -fx-background-image: url("images/win-max-btn.png");
+    -fx-padding: 6 6 4 6;
+}
+
+#win-close-btn:hover {
+    -fx-background-image: url("images/win-close-btn-hover.png");
+}
+
+#win-min-btn:hover {
+    -fx-background-image: url("images/win-min-btn-hover.png");
+}
+
+#win-max-btn:hover {
+    -fx-background-image: url("images/win-max-btn-hover.png");
+}
+
+#win-close-btn:focused, #win-min-btn:focused, #win-max-btn:focused {
+    -fx-effect: dropshadow(three-pass-box, -fx-focus-color, 5, 0.7, 0, 0);
+}
+
+#main-tool-bar {
+    -fx-padding: 10px;
+    -fx-background-image: url("images/main-tool-bar.png");
+    -fx-background-size: cover;
+    -fx-background-position: left top;
+    -fx-background-repeat: no-repeat;
+}
