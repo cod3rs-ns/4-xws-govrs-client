@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
@@ -29,15 +30,18 @@ public class TreeModel {
 
         treeView.setCellFactory(tv -> new TreeCell<Element>() {
             @Override
-            protected void updateItem(Element item, boolean empty) {
+            public void updateItem(Element item, boolean empty) {
                 super.updateItem(item, empty);
                 textProperty().unbind();
+                graphicProperty().unbind();
                 if (empty) {
                     setText("");
+                    setGraphic(null);
                 } else {
                     textProperty().bind(text.apply(item));
-                    if (item.getImage() != null)
-                        setGraphic(new ImageView(new Image(MainFXApp.class.getResourceAsStream(item.getImage()))));
+                    if (item.getImage() != null){
+                            setGraphic(new ImageView(new Image(MainFXApp.class.getResourceAsStream(item.getImage()))));
+                    }
                 }
             }
         });
