@@ -2,14 +2,13 @@ package rs.acs.uns.sw.govrs.client.fx.view;
 
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.model.*;
+import rs.acs.uns.sw.govrs.client.fx.model.tree.TreeModel;
 
 public class XMLEditorController {
 
