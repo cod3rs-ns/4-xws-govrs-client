@@ -79,6 +79,9 @@
                                       </content>
                                     </TitledPane>
                                  </children>
+                                 <BorderPane.margin>
+                                    <Insets top="4.0" />
+                                 </BorderPane.margin>
                               </AnchorPane>
                            </bottom>
                         </BorderPane>
