@@ -26,4 +26,25 @@ public class Propis extends Element {
     public void createAndAddChild(String name) {
         getChildren().add(new Glava(name));
     }
+
+    @Override
+    public String createElementOpening() {
+        return "<div style='color:blue'>";
+    }
+
+    @Override
+    public String createElementAttrs() {
+        return null;
+    }
+
+    @Override
+    public String createElementContent() {
+        System.out.println(getImage());
+        return getName();
+    }
+
+    @Override
+    public String createElementClosing() {
+        return "</div>";
+    }
 }

@@ -12,4 +12,24 @@ public class Text extends Element {
     public void createAndAddChild(String name) {
 
     }
+
+    @Override
+    public String createElementOpening() {
+        return null;
+    }
+
+    @Override
+    public String createElementAttrs() {
+        return null;
+    }
+
+    @Override
+    public String createElementContent() {
+        return null;
+    }
+
+    @Override
+    public String createElementClosing() {
+        return null;
+    }
 }

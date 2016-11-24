@@ -29,4 +29,24 @@ public class Glava extends Element {
     public void createAndAddChild(String name) {
         getChildren().add(new Tacka(name));
     }
+
+    @Override
+    public String createElementOpening() {
+        return "<div style='color:red'>";
+    }
+
+    @Override
+    public String createElementAttrs() {
+        return null;
+    }
+
+    @Override
+    public String createElementContent() {
+        return getName();
+    }
+
+    @Override
+    public String createElementClosing() {
+        return "</div>";
+    }
 }

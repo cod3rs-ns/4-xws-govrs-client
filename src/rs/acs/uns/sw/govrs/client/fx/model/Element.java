@@ -54,4 +54,25 @@ public abstract class Element {
     public String getImage() {
         return image;
     }
+
+    public abstract String createElementOpening();
+
+    public abstract String createElementAttrs();
+
+    public abstract String createElementContent();
+
+    public abstract String createElementClosing();
+
+    public String getHtml() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(createElementOpening());
+        sb.append(createElementContent());
+        for (Element child : getChildren()
+                ) {
+            sb.append(child.getHtml());
+        }
+        sb.append(createElementClosing());
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
 }

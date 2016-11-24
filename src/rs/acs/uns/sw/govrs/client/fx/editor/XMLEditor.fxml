@@ -29,59 +29,70 @@
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <TitledPane collapsible="false" prefHeight="226.0" prefWidth="202.0" text="Trenutni element" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <BorderPane prefHeight="226.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <center>
+                  <AnchorPane>
                      <children>
-                        <BorderPane fx:id="areaContainer" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <top>
-                              <AnchorPane BorderPane.alignment="CENTER">
+                        <TitledPane collapsible="false" prefHeight="226.0" prefWidth="202.0" text="Trenutni element" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <ToolBar prefHeight="35.0" prefWidth="282.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <items>
-                                          <Button fx:id="undoAction" mnemonicParsing="false" />
-                                          <Button fx:id="redoAction" mnemonicParsing="false" />
-                                          <Separator orientation="VERTICAL" />
-                                          <Button fx:id="cutAction" mnemonicParsing="false" />
-                                          <Button fx:id="copyAction" mnemonicParsing="false" />
-                                          <Button fx:id="pasteAction" mnemonicParsing="false" />
-                                          <Separator orientation="VERTICAL" />
-                                          <Button fx:id="boldAction" mnemonicParsing="false" />
-                                          <Button fx:id="italicAcition" mnemonicParsing="false" />
-                                          <Button fx:id="underlineAction" mnemonicParsing="false" />
-                                        <Button fx:id="strikethroughAction" mnemonicParsing="false" />
-                                          <Separator orientation="VERTICAL" />
-                                          <ComboBox fx:id="fontSizePicker" prefWidth="60.0">
-                                             <tooltip>
-                                                <Tooltip text="Veličina fonta" />
-                                             </tooltip>
-                                          </ComboBox>
-                                       </items>
-                                    </ToolBar>
-                                 </children>
-                              </AnchorPane>
-                           </top>
-                           <center>
+                                    <BorderPane fx:id="areaContainer" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <top>
+                                          <AnchorPane BorderPane.alignment="CENTER">
+                                             <children>
+                                                <ToolBar prefHeight="35.0" prefWidth="282.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <items>
+                                                      <Button fx:id="undoAction" mnemonicParsing="false" />
+                                                      <Button fx:id="redoAction" mnemonicParsing="false" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <Button fx:id="cutAction" mnemonicParsing="false" />
+                                                      <Button fx:id="copyAction" mnemonicParsing="false" />
+                                                      <Button fx:id="pasteAction" mnemonicParsing="false" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <Button fx:id="boldAction" mnemonicParsing="false" />
+                                                      <Button fx:id="italicAcition" mnemonicParsing="false" />
+                                                      <Button fx:id="underlineAction" mnemonicParsing="false" />
+                                                    <Button fx:id="strikethroughAction" mnemonicParsing="false" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <ComboBox fx:id="fontSizePicker" prefWidth="60.0">
+                                                         <tooltip>
+                                                            <Tooltip text="Veličina fonta" />
+                                                         </tooltip>
+                                                      </ComboBox>
+                                                   </items>
+                                                </ToolBar>
+                                             </children>
+                                          </AnchorPane>
+                                       </top>
+                                       <center>
                            </center>
-                           <bottom>
-                              <AnchorPane BorderPane.alignment="CENTER">
-                                 <children>
-                                    <TitledPane collapsible="false" prefHeight="206.0" prefWidth="574.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                      </content>
-                                    </TitledPane>
+                                       <bottom>
+                                          <AnchorPane BorderPane.alignment="CENTER">
+                                             <children>
+                                                <TitledPane collapsible="false" prefHeight="206.0" prefWidth="574.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <content>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                  </content>
+                                                </TitledPane>
+                                             </children>
+                                             <BorderPane.margin>
+                                                <Insets top="4.0" />
+                                             </BorderPane.margin>
+                                          </AnchorPane>
+                                       </bottom>
+                                    </BorderPane>
                                  </children>
-                                 <BorderPane.margin>
-                                    <Insets top="4.0" />
-                                 </BorderPane.margin>
                               </AnchorPane>
-                           </bottom>
-                        </BorderPane>
+                          </content>
+                        </TitledPane>
                      </children>
                   </AnchorPane>
-              </content>
-            </TitledPane>
+               </center>
+               <right>
+                  <AnchorPane fx:id="borderContainer" prefHeight="200.0" prefWidth="200.0" />
+               </right>
+            </BorderPane>
          </children>
          <BorderPane.margin>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />

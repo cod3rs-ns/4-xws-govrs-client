@@ -21,6 +21,26 @@ public class Tacka extends Element {
         super(name, image);
     }
 
+    @Override
+    public String createElementOpening() {
+        return "<p>";
+    }
+
+    @Override
+    public String createElementAttrs() {
+        return null;
+    }
+
+    @Override
+    public String createElementContent() {
+        return getName();
+    }
+
+    @Override
+    public String createElementClosing() {
+        return "</p>";
+    }
+
     public Tacka(String name) {
         super(name);
     }

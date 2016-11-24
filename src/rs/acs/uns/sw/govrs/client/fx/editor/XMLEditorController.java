@@ -13,18 +13,21 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.web.WebView;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.Paragraph;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.model.Element;
 import rs.acs.uns.sw.govrs.client.fx.model.Glava;
 import rs.acs.uns.sw.govrs.client.fx.model.Propis;
 import rs.acs.uns.sw.govrs.client.fx.model.Tacka;
 import rs.acs.uns.sw.govrs.client.fx.model.tree.TreeModel;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -36,11 +39,13 @@ public class XMLEditorController {
 
     private TreeModel tree;
 
+    private ActPreview preview;
+
     @FXML
     private TitledPane treeContainer;
 
     @FXML
-    private TextArea textArea;
+    private AnchorPane borderContainer;
 
 
     // -------------------- Buttons --------------------
@@ -282,6 +287,9 @@ public class XMLEditorController {
                     } else {
                         fontSizePicker.getSelectionModel().clearSelection();
                     }
+
+                    preview.update(null, propis);
+                    propis.createAndAddChild("Izmena - update");
                 });
             }
         });
@@ -290,6 +298,10 @@ public class XMLEditorController {
         VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
 
         areaContainer.setCenter(vsPane);
+
+        preview = new ActPreview();
+        borderContainer.getChildren().add(preview.getNode());
+        preview.update(null, propis);
     }
 
 
