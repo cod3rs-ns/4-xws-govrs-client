@@ -6,6 +6,8 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -94,10 +96,15 @@ public class XMLEditorController {
     private void initialize() {
         Propis propis = createDummyData();
 
+        preview = new ActPreview(propis);
+        borderContainer.getChildren().add(preview.getNode());
+        preview.update();
+
         tree = new TreeModel(
                 propis,
                 Element::getChildren,
-                Element::nameProperty
+                Element::nameProperty,
+                preview
         );
 
         TreeView<Element> treeView = tree.getTreeView();
@@ -277,8 +284,7 @@ public class XMLEditorController {
                         fontSizePicker.getSelectionModel().clearSelection();
                     }
 
-                    preview.update(null, propis);
-                    propis.createAndAddChild("Izmena - update");
+                    preview.update();
                 });
             }
         });
@@ -287,10 +293,6 @@ public class XMLEditorController {
         VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
 
         areaContainer.setCenter(vsPane);
-
-        preview = new ActPreview();
-        borderContainer.getChildren().add(preview.getNode());
-        preview.update(null, propis);
     }
 
 
