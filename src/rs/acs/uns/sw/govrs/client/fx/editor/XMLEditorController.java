@@ -10,10 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.web.WebView;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.Paragraph;
@@ -21,13 +19,14 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
+import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
+import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.model.Element;
 import rs.acs.uns.sw.govrs.client.fx.model.Glava;
 import rs.acs.uns.sw.govrs.client.fx.model.Propis;
 import rs.acs.uns.sw.govrs.client.fx.model.Tacka;
 import rs.acs.uns.sw.govrs.client.fx.model.tree.TreeModel;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -37,64 +36,47 @@ import static org.fxmisc.richtext.model.TwoDimensional.Bias.Forward;
 
 public class XMLEditorController {
 
+    private final StyledTextArea<ParStyle, TextStyle> area = new StyledTextArea<>(
+            ParStyle.EMPTY, (paragraph, style) -> paragraph.setStyle(style.toCss()),
+            TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Serif").updateTextColor(Color.BLACK),
+            (text, style) -> text.setStyle(style.toCss()));
+    private final SuspendableNo updatingToolbar = new SuspendableNo();
     private TreeModel tree;
-
     private ActPreview preview;
-
     @FXML
     private TitledPane treeContainer;
-
     @FXML
     private AnchorPane borderContainer;
-
-
     // -------------------- Buttons --------------------
     @FXML
     private Button undoAction;
-
     @FXML
     private Button redoAction;
-
     @FXML
     private Button cutAction;
-
     @FXML
     private Button copyAction;
-
     @FXML
     private Button pasteAction;
-
     @FXML
     private Button boldAction;
-
     @FXML
     private Button italicAcition;
-
     @FXML
     private Button underlineAction;
-
     @FXML
     private Button strikethroughAction;
-
     @FXML
     private ComboBox<Integer> fontSizePicker;
-
     @FXML
     private BorderPane areaContainer;
+    // Reference to the main application.
+    private MainFXApp mainApp;
 
-    private final StyledTextArea<ParStyle, TextStyle> area = new StyledTextArea<>(
-            ParStyle.EMPTY, ( paragraph, style) -> paragraph.setStyle(style.toCss()),
-            TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Serif").updateTextColor(Color.BLACK),
-            ( text, style) -> text.setStyle(style.toCss()));
     {
         area.setWrapText(true);
         area.setStyleCodecs(ParStyle.CODEC, TextStyle.CODEC);
     }
-
-    private final SuspendableNo updatingToolbar = new SuspendableNo();
-
-    // Reference to the main application.
-    private MainFXApp mainApp;
 
     /**
      * The constructor.
@@ -188,7 +170,9 @@ public class XMLEditorController {
 
 
         BooleanBinding selectionEmpty = new BooleanBinding() {
-            { bind(area.selectionProperty()); }
+            {
+                bind(area.selectionProperty());
+            }
 
             @Override
             protected boolean computeValue() {
@@ -200,7 +184,7 @@ public class XMLEditorController {
         copyAction.disableProperty().bind(selectionEmpty);
 
         area.beingUpdatedProperty().addListener((o, old, beingUpdated) -> {
-            if(!beingUpdated) {
+            if (!beingUpdated) {
                 boolean bold, italic, underline, strike;
                 Integer fontSize;
                 String fontFamily;
@@ -208,7 +192,7 @@ public class XMLEditorController {
                 Color backgroundColor;
 
                 IndexRange selection = area.getSelection();
-                if(selection.getLength() != 0) {
+                if (selection.getLength() != 0) {
                     StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
                     bold = styles.styleStream().anyMatch(s -> s.bold.orElse(false));
                     italic = styles.styleStream().anyMatch(s -> s.italic.orElse(false));
@@ -249,32 +233,32 @@ public class XMLEditorController {
                 Optional<Color> paragraphBackground = paragraphBackgrounds.length == 1 ? paragraphBackgrounds[0] : Optional.empty();
 
                 updatingToolbar.suspendWhile(() -> {
-                    if(bold) {
-                        if(!boldAction.getStyleClass().contains("pressed")) {
+                    if (bold) {
+                        if (!boldAction.getStyleClass().contains("pressed")) {
                             boldAction.getStyleClass().add("pressed");
                         }
                     } else {
                         boldAction.getStyleClass().remove("pressed");
                     }
 
-                    if(italic) {
-                        if(!italicAcition.getStyleClass().contains("pressed")) {
+                    if (italic) {
+                        if (!italicAcition.getStyleClass().contains("pressed")) {
                             italicAcition.getStyleClass().add("pressed");
                         }
                     } else {
                         italicAcition.getStyleClass().remove("pressed");
                     }
 
-                    if(underline) {
-                        if(!underlineAction.getStyleClass().contains("pressed")) {
+                    if (underline) {
+                        if (!underlineAction.getStyleClass().contains("pressed")) {
                             underlineAction.getStyleClass().add("pressed");
                         }
                     } else {
                         underlineAction.getStyleClass().remove("pressed");
                     }
 
-                    if(strike) {
-                        if(!strikethroughAction.getStyleClass().contains("pressed")) {
+                    if (strike) {
+                        if (!strikethroughAction.getStyleClass().contains("pressed")) {
                             strikethroughAction.getStyleClass().add("pressed");
                         }
                     } else {
@@ -282,7 +266,7 @@ public class XMLEditorController {
                     }
 
 
-                    if(fontSize != -1) {
+                    if (fontSize != -1) {
                         fontSizePicker.getSelectionModel().select(fontSize);
                     } else {
                         fontSizePicker.getSelectionModel().clearSelection();
@@ -338,30 +322,6 @@ public class XMLEditorController {
         glava3.getChildren().add(t6);
         return propis;
     }
-    private Button createButton(String styleClass, Runnable action) {
-        Button button = new Button();
-        button.getStyleClass().add(styleClass);
-        button.setOnAction(evt -> {
-            action.run();
-            area.requestFocus();
-        });
-        button.setPrefWidth(20);
-        button.setPrefHeight(20);
-        return button;
-    }
-
-    private ToggleButton createToggleButton(ToggleGroup grp, String styleClass, Runnable action) {
-        ToggleButton button = new ToggleButton();
-        button.setToggleGroup(grp);
-        button.getStyleClass().add(styleClass);
-        button.setOnAction(evt -> {
-            action.run();
-            area.requestFocus();
-        });
-        button.setPrefWidth(20);
-        button.setPrefHeight(20);
-        return button;
-    }
 
     private void toggleBold() {
         updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))));
@@ -379,25 +339,9 @@ public class XMLEditorController {
         updateStyleInSelection(spans -> TextStyle.strikethrough(!spans.styleStream().allMatch(style -> style.strikethrough.orElse(false))));
     }
 
-    private void alignLeft() {
-        updateParagraphStyleInSelection(ParStyle.alignLeft());
-    }
-
-    private void alignCenter() {
-        updateParagraphStyleInSelection(ParStyle.alignCenter());
-    }
-
-    private void alignRight() {
-        updateParagraphStyleInSelection(ParStyle.alignRight());
-    }
-
-    private void alignJustify() {
-        updateParagraphStyleInSelection(ParStyle.alignJustify());
-    }
-
     private void updateStyleInSelection(Function<StyleSpans<TextStyle>, TextStyle> mixinGetter) {
         IndexRange selection = area.getSelection();
-        if(selection.getLength() != 0) {
+        if (selection.getLength() != 0) {
             StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
             TextStyle mixin = mixinGetter.apply(styles);
             StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(mixin));
@@ -418,7 +362,7 @@ public class XMLEditorController {
         IndexRange selection = area.getSelection();
         int startPar = area.offsetToPosition(selection.getStart(), Forward).getMajor();
         int endPar = area.offsetToPosition(selection.getEnd(), Backward).getMajor();
-        for(int i = startPar; i <= endPar; ++i) {
+        for (int i = startPar; i <= endPar; ++i) {
             Paragraph<ParStyle, TextStyle> paragraph = area.getParagraph(i);
             area.setParagraphStyle(i, updater.apply(paragraph.getParagraphStyle()));
         }
@@ -429,32 +373,8 @@ public class XMLEditorController {
     }
 
     private void updateFontSize(Integer size) {
-        if(!updatingToolbar.get()) {
+        if (!updatingToolbar.get()) {
             updateStyleInSelection(TextStyle.fontSize(size));
-        }
-    }
-
-    private void updateFontFamily(String family) {
-        if(!updatingToolbar.get()) {
-            updateStyleInSelection(TextStyle.fontFamily(family));
-        }
-    }
-
-    private void updateTextColor(Color color) {
-        if(!updatingToolbar.get()) {
-            updateStyleInSelection(TextStyle.textColor(color));
-        }
-    }
-
-    private void updateBackgroundColor(Color color) {
-        if(!updatingToolbar.get()) {
-            updateStyleInSelection(TextStyle.backgroundColor(color));
-        }
-    }
-
-    private void updateParagraphBackground(Color color) {
-        if(!updatingToolbar.get()) {
-            updateParagraphStyleInSelection(ParStyle.backgroundColor(color));
         }
     }
 }

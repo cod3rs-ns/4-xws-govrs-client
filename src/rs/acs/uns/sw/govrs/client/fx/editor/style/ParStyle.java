@@ -15,7 +15,7 @@ import static javafx.scene.text.TextAlignment.*;
 /**
  * Holds information about the style of a paragraph.
  */
-class ParStyle {
+public class ParStyle {
 
     public static final ParStyle EMPTY = new ParStyle();
 
@@ -45,8 +45,8 @@ class ParStyle {
         }
 
     };
-    final Optional<TextAlignment> alignment;
-    final Optional<Color> backgroundColor;
+    public final Optional<TextAlignment> alignment;
+    public final Optional<Color> backgroundColor;
 
     public ParStyle() {
         this(Optional.empty(), Optional.empty());
@@ -129,7 +129,7 @@ class ParStyle {
         return sb.toString();
     }
 
-    ParStyle updateWith(ParStyle mixin) {
+    public ParStyle updateWith(ParStyle mixin) {
         return new ParStyle(
                 mixin.alignment.isPresent() ? mixin.alignment : alignment,
                 mixin.backgroundColor.isPresent() ? mixin.backgroundColor : backgroundColor);
