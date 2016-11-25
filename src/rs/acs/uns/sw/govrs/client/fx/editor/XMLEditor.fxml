@@ -51,15 +51,17 @@
                                                       <Button fx:id="pasteAction" mnemonicParsing="false" />
                                                       <Separator orientation="VERTICAL" />
                                                       <Button fx:id="boldAction" mnemonicParsing="false" />
-                                                      <Button fx:id="italicAcition" mnemonicParsing="false" />
+                                                      <Button fx:id="italicAction" mnemonicParsing="false" />
                                                       <Button fx:id="underlineAction" mnemonicParsing="false" />
-                                                    <Button fx:id="strikethroughAction" mnemonicParsing="false" />
+                                                    <Button fx:id="strikeAction" mnemonicParsing="false" />
                                                       <Separator orientation="VERTICAL" />
                                                       <ComboBox fx:id="fontSizePicker" prefWidth="60.0">
                                                          <tooltip>
                                                             <Tooltip text="Veličina fonta" />
                                                          </tooltip>
                                                       </ComboBox>
+                                                      <Separator orientation="VERTICAL" />
+                                                      <Button fx:id="linkAction" mnemonicParsing="false" />
                                                    </items>
                                                 </ToolBar>
                                              </children>

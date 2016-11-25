@@ -113,7 +113,6 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                 preview.update();
             }
         }
-
     }
 
     private void createTextField() {
@@ -126,7 +125,6 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                 cancelEdit();
             }
         });
-
     }
 
     private String getString() {
