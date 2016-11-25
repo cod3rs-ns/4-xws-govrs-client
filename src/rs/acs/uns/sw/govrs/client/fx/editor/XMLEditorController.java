@@ -162,9 +162,14 @@ public class XMLEditorController {
         });
 
 
+
+
         fontSizePicker.setItems(FXCollections.observableArrayList(8, 9, 10, 11, 12, 14, 16, 20, 24, 32, 40));
         fontSizePicker.getSelectionModel().select(0);
 
+        fontSizePicker.setOnAction(event -> {
+            updateFontSize(fontSizePicker.getValue());
+        });
         undoAction.disableProperty().bind(Bindings.not(area.undoAvailableProperty()));
         redoAction.disableProperty().bind(Bindings.not(area.redoAvailableProperty()));
 
@@ -349,6 +354,17 @@ public class XMLEditorController {
         }
     }
 
+    private void updateWholeStyle(TextStyle ts) {
+        area.selectAll();
+        IndexRange selection = area.getSelection();
+        if (selection.getLength() != 0) {
+            StyleSpans<TextStyle> styles = area.getStyleSpans(selection);
+            StyleSpans<TextStyle> newStyles = styles.mapStyles(style -> style.updateWith(ts));
+            area.setStyleSpans(selection.getStart(), newStyles);
+        }
+        area.deselect();
+    }
+
     private void updateStyleInSelection(TextStyle mixin) {
         IndexRange selection = area.getSelection();
         if (selection.getLength() != 0) {
@@ -374,7 +390,7 @@ public class XMLEditorController {
 
     private void updateFontSize(Integer size) {
         if (!updatingToolbar.get()) {
-            updateStyleInSelection(TextStyle.fontSize(size));
+            updateWholeStyle(TextStyle.fontSize(size));
         }
     }
 }
