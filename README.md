@@ -13,3 +13,6 @@ Project for course XML and Web Services. This is client application that relies 
 - richtextfx
 
 _all can be placed into lib folder manually or using maven_
+
+## Release info
+All releases ended by **.dev** are not nearly functional release, they are current progress examples used by team members in process of developing.
