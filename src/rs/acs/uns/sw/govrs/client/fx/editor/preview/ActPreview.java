@@ -1,44 +1,35 @@
 package rs.acs.uns.sw.govrs.client.fx.editor.preview;
 
-
 import javafx.scene.web.WebView;
 import rs.acs.uns.sw.govrs.client.fx.model.Element;
 
-import java.nio.file.Path;
-
-
 /**
  * WebView preview.
- *
- * @author Karl Tauber
  */
 public class ActPreview {
     private final WebView webView = new WebView();
+    private Element rootElement;
     private int lastScrollX;
     private int lastScrollY;
 
-    public ActPreview() {
+    public ActPreview(Element root) {
         webView.setFocusTraversable(false);
         webView.setPrefSize(300, 800);
+        rootElement = root;
     }
 
     public javafx.scene.Node getNode() {
         return webView;
     }
 
-    public void update(Path path, Element root) {
+    public void update() {
         if (!webView.getEngine().getLoadWorker().isRunning()) {
-            // get window.scrollX and window.scrollY from web engine,
-            // but only no worker is running (in this case the result would be zero)
-            Object scrollXobj = webView.getEngine().executeScript("window.scrollX");
-            Object scrollYobj = webView.getEngine().executeScript("window.scrollY");
-            lastScrollX = (scrollXobj instanceof Number) ? ((Number) scrollXobj).intValue() : 0;
-            lastScrollY = (scrollYobj instanceof Number) ? ((Number) scrollYobj).intValue() : 0;
+            Object scrollX = webView.getEngine().executeScript("window.scrollX");
+            Object scrollY = webView.getEngine().executeScript("window.scrollY");
+            lastScrollX = (scrollX instanceof Number) ? ((Number) scrollX).intValue() : 0;
+            lastScrollY = (scrollY instanceof Number) ? ((Number) scrollY).intValue() : 0;
         }
 
-        String base = (path != null)
-                ? ("<base href=\"" + path.getParent().toUri().toString() + "\">\n")
-                : "";
         String scrollScript = (lastScrollX > 0 || lastScrollY > 0)
                 ? ("  onload='window.scrollTo(" + lastScrollX + ", " + lastScrollY + ");'")
                 : "";
@@ -47,11 +38,10 @@ public class ActPreview {
                 "<!DOCTYPE html>\n"
                         + "<html>\n"
                         + "<head>\n"
-                        + "<link rel=\"stylesheet\" href=\"" + getClass().getResource("markdownpad-github.css") + "\">\n"
-                        + base
+                        + "<link rel=\"stylesheet\" href=\"" + getClass().getResource("preview_style.css") + "\">\n"
                         + "</head>\n"
                         + "<body" + scrollScript + ">\n"
-                        + root.getHtml()
+                        + rootElement.getHtml()
                         + "</body>\n"
                         + "</html>");
     }

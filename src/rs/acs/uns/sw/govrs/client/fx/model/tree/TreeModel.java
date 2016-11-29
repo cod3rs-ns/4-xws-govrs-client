@@ -3,14 +3,9 @@ package rs.acs.uns.sw.govrs.client.fx.model.tree;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.util.Callback;
-import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.model.Element;
 
 import java.util.function.Function;
@@ -18,36 +13,20 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 
 public class TreeModel {
-
     private final TreeView<Element> treeView;
-    private Function<Element, ObservableValue<String>> text;
     private final Function<Element, ObservableList<Element>> children;
+    private final ActPreview preview;
+    private Function<Element, ObservableValue<String>> text;
 
     public TreeModel(Element rootItem, Function<Element, ObservableList<Element>> children,
-                     Function<Element, ObservableValue<String>> text) {
+                     Function<Element, ObservableValue<String>> text, ActPreview preview) {
         this.text = text;
         this.children = children;
+        this.preview = preview;
 
         treeView = new TreeView<>(createTreeItem(rootItem));
         treeView.setEditable(true);
-        treeView.setCellFactory(p -> new CustomTextFieldTreeCell(text));
-//        treeView.setCellFactory(tv -> new TreeCell<Element>() {
-//            @Override
-//            public void updateItem(Element item, boolean empty) {
-//                super.updateItem(item, empty);
-//                textProperty().unbind();
-//                graphicProperty().unbind();
-//                if (empty) {
-//                    setText("");
-//                    setGraphic(null);
-//                } else {
-//                    textProperty().bind(text.apply(item));
-//                    if (item.getImage() != null){
-//                            setGraphic(new ImageView(new Image(MainFXApp.class.getResourceAsStream(item.getImage()))));
-//                    }
-//                }
-//            }
-//        });
+        treeView.setCellFactory(p -> new CustomTextFieldTreeCell(text, preview));
     }
 
     public TreeView<Element> getTreeView() {
