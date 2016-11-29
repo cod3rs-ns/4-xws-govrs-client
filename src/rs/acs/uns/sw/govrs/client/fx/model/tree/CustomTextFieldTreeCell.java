@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.model.Element;
 import rs.acs.uns.sw.govrs.client.fx.model.Glava;
 import rs.acs.uns.sw.govrs.client.fx.model.Propis;
@@ -20,10 +21,11 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
     private Function<Element, ObservableValue<String>> text;
+    private ActPreview preview;
 
-    public CustomTextFieldTreeCell(Function<Element, ObservableValue<String>> text) {
+    public CustomTextFieldTreeCell(Function<Element, ObservableValue<String>> text, ActPreview preview) {
         this.text = text;
-
+        this.preview = preview;
         if (getItem() instanceof Propis) {
             MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(getClass().getResourceAsStream("../../images/head.png"))));
             MenuItem newDeo = new MenuItem("Nova deo/dio/duo", new ImageView(new Image(getClass().getResourceAsStream("../../images/deo.png"))));
@@ -108,7 +110,7 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                 }
 
                 setContextMenu(addMenu);
-
+                preview.update();
             }
         }
     }
@@ -123,7 +125,6 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                 cancelEdit();
             }
         });
-
     }
 
     private String getString() {
