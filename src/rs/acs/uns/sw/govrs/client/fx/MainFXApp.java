@@ -2,8 +2,9 @@ package rs.acs.uns.sw.govrs.client.fx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -14,12 +15,20 @@ import javafx.stage.StageStyle;
 import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.components.WindowButtons;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
+import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainFXApp extends Application {
 
-    private Stage primaryStage;
+    public Stage getStage() {
+        return stage;
+    }
+
+    private Stage stage;
     private BorderPane rootLayout;
 
     private ToolBar toolBar;
@@ -38,10 +47,13 @@ public class MainFXApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        primaryStage = stage;
-        primaryStage.setTitle("GovRS client");
-        initRootLayout();
-        showXMLEditor();
+        this.stage = stage;
+        this.stage.setTitle("GovRS client");
+        this.stage.initStyle(StageStyle.UNDECORATED);
+        gotoLogin();
+        this.stage.show();
+        //initRootLayout();
+        //showXMLEditor();
     }
 
     private void initRootLayout() throws IOException {
@@ -56,9 +68,10 @@ public class MainFXApp extends Application {
 
         Scene scene = new Scene(rootLayout);
         scene.getStylesheets().add(MainFXApp.class.getResource("app-theme.css").toExternalForm());
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
+        stage.setScene(scene);
+        stage.show();
+        //gotoLogin();
 
     }
 
@@ -139,7 +152,7 @@ public class MainFXApp extends Application {
         GridPane.setConstraints(toolbar, 0, 0);
 
         // add close min max
-        final WindowButtons windowButtons = new WindowButtons(primaryStage);
+        final WindowButtons windowButtons = new WindowButtons(stage);
         toolbar.getItems().add(windowButtons);
 
         // add window header double clicking
@@ -156,8 +169,8 @@ public class MainFXApp extends Application {
         });
         toolbar.setOnMouseDragged(event -> {
             if(!windowButtons.isMaximized()) {
-                primaryStage.setX(event.getScreenX()-mouseDragOffsetX);
-                primaryStage.setY(event.getScreenY()-mouseDragOffsetY);
+                stage.setX(event.getScreenX()-mouseDragOffsetX);
+                stage.setY(event.getScreenY()-mouseDragOffsetY);
             }
         });
 
@@ -168,5 +181,35 @@ public class MainFXApp extends Application {
         StatusBar status = new StatusBar();
         status.setText("GovRS client initial app.");
         return status;
+    }
+
+    private void gotoLogin() {
+        try {
+            LoginController login = (LoginController) replaceSceneContent("login/Login.fxml");
+            login.setApp(this);
+        } catch (Exception ex) {
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private Initializable replaceSceneContent(String fxml) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        InputStream in = MainFXApp.class.getResourceAsStream(fxml);
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+        loader.setLocation(MainFXApp.class.getResource(fxml));
+        AnchorPane page;
+        try {
+            page = (AnchorPane) loader.load(in);
+        } finally {
+            in.close();
+        }
+        Scene scene = new Scene(page);
+        stage.setScene(scene);
+        stage.sizeToScene();
+        return (Initializable) loader.getController();
+    }
+
+    public void login() {
+        System.out.println("LOGOVANJE USPEŠNO");
     }
 }
