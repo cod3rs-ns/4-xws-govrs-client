@@ -15,6 +15,7 @@ import javafx.stage.StageStyle;
 import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.components.WindowButtons;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
+import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
 
 import java.io.IOException;
@@ -24,8 +25,14 @@ import java.util.logging.Logger;
 
 public class MainFXApp extends Application {
 
+    private boolean maximized = false;
+
     public Stage getStage() {
         return stage;
+    }
+
+    public void setMaximized(boolean maximized) {
+        this.maximized = maximized;
     }
 
     private Stage stage;
@@ -155,24 +162,6 @@ public class MainFXApp extends Application {
         final WindowButtons windowButtons = new WindowButtons(stage);
         toolbar.getItems().add(windowButtons);
 
-        // add window header double clicking
-        toolbar.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                windowButtons.toggleMax();
-            }
-        });
-
-        // add window dragging
-        toolbar.setOnMousePressed(event -> {
-            mouseDragOffsetX = event.getSceneX();
-            mouseDragOffsetY = event.getSceneY();
-        });
-        toolbar.setOnMouseDragged(event -> {
-            if(!windowButtons.isMaximized()) {
-                stage.setX(event.getScreenX()-mouseDragOffsetX);
-                stage.setY(event.getScreenY()-mouseDragOffsetY);
-            }
-        });
 
         return toolbar;
     }
@@ -187,6 +176,15 @@ public class MainFXApp extends Application {
         try {
             LoginController login = (LoginController) replaceSceneContent("login/Login.fxml");
             login.setApp(this);
+        } catch (Exception ex) {
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void gotoHome() {
+        try {
+            HomeController home = (HomeController) replaceSceneContent("home/Home.fxml");
+            home.setApp(this);
         } catch (Exception ex) {
             Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -211,5 +209,10 @@ public class MainFXApp extends Application {
 
     public void login() {
         System.out.println("LOGOVANJE USPEŠNO");
+        gotoHome();
+    }
+
+    public boolean isMaximized() {
+        return maximized;
     }
 }

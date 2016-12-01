@@ -31,6 +31,8 @@ public class LoginController extends AnchorPane implements Initializable {
     private Label errorLabel;
     @FXML
     private AnchorPane mainContainer;
+    @FXML
+    private Hyperlink citizenHyperlink;
 
     private MainFXApp app;
 
@@ -44,6 +46,10 @@ public class LoginController extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // TODO: delete this
+        usernameField.setText("admin");
+        passwordField.setText("admin");
+
         errorLabel.setText("");
         // add window dragging
         mainContainer.setOnMousePressed(event -> {

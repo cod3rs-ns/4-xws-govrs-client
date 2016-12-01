@@ -11,97 +11,108 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController">
-   <left>
-      <AnchorPane BorderPane.alignment="CENTER">
-         <children>
-            <TitledPane fx:id="treeContainer" collapsible="false" prefHeight="226.0" prefWidth="252.0" text="Struktura propisa" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <content>
-                  <TreeView maxWidth="250.0" minWidth="250.0" prefHeight="200.0" prefWidth="250.0" />
-               </content>
-            </TitledPane>
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-         </BorderPane.margin>
-      </AnchorPane>
-   </left>
-   <center>
-      <AnchorPane BorderPane.alignment="CENTER">
-         <children>
-            <BorderPane prefHeight="226.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <center>
-                  <AnchorPane>
-                     <children>
-                        <TitledPane collapsible="false" prefHeight="226.0" prefWidth="202.0" text="Trenutni element" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <BorderPane fx:id="areaContainer" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <top>
-                                          <AnchorPane BorderPane.alignment="CENTER">
-                                             <children>
-                                                <ToolBar prefHeight="35.0" prefWidth="282.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <items>
-                                                      <Button fx:id="undoAction" mnemonicParsing="false" />
-                                                      <Button fx:id="redoAction" mnemonicParsing="false" />
-                                                      <Separator orientation="VERTICAL" />
-                                                      <Button fx:id="cutAction" mnemonicParsing="false" />
-                                                      <Button fx:id="copyAction" mnemonicParsing="false" />
-                                                      <Button fx:id="pasteAction" mnemonicParsing="false" />
-                                                      <Separator orientation="VERTICAL" />
-                                                      <Button fx:id="boldAction" mnemonicParsing="false" />
-                                                      <Button fx:id="italicAction" mnemonicParsing="false" />
-                                                      <Button fx:id="underlineAction" mnemonicParsing="false" />
-                                                    <Button fx:id="strikeAction" mnemonicParsing="false" />
-                                                      <Separator orientation="VERTICAL" />
-                                                      <ComboBox fx:id="fontSizePicker" prefWidth="60.0">
-                                                         <tooltip>
-                                                            <Tooltip text="Veličina fonta" />
-                                                         </tooltip>
-                                                      </ComboBox>
-                                                      <Separator orientation="VERTICAL" />
-                                                      <Button fx:id="linkAction" mnemonicParsing="false" />
-                                                   </items>
-                                                </ToolBar>
-                                             </children>
-                                          </AnchorPane>
-                                       </top>
-                                       <center>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController">
+   <children>
+      <BorderPane layoutY="-272.0" prefHeight="234.0" prefWidth="1082.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-114.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <TitledPane fx:id="treeContainer" collapsible="false" minWidth="250.0" prefWidth="250.0" text="Struktura propisa" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <TreeView maxWidth="250.0" minWidth="250.0" prefHeight="200.0" prefWidth="250.0" />
+                     </content>
+                  </TitledPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </BorderPane.margin>
+            </AnchorPane>
+         </left>
+         <center>
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane prefHeight="226.0" prefWidth="820.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <left>
+                        <AnchorPane maxWidth="470.0" minWidth="470.0" prefWidth="470.0">
+                           <children>
+                              <TitledPane collapsible="false" maxWidth="470.0" minWidth="470.0" prefHeight="226.0" prefWidth="470.0" text="Trenutni element" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="470.0" prefHeight="180.0" prefWidth="470.0">
+                                       <children>
+                                          <BorderPane fx:id="areaContainer" minWidth="470.0" prefHeight="200.0" prefWidth="470.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <top>
+                                                <AnchorPane maxWidth="440.0" minWidth="440.0" prefWidth="440.0" BorderPane.alignment="CENTER">
+                                                   <children>
+                                                      <ToolBar layoutX="-10.0" maxWidth="450.0" prefHeight="35.0" prefWidth="450.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                         <items>
+                                                            <Button fx:id="undoAction" mnemonicParsing="false" />
+                                                            <Button fx:id="redoAction" mnemonicParsing="false" />
+                                                            <Separator orientation="VERTICAL" />
+                                                            <Button fx:id="cutAction" mnemonicParsing="false" />
+                                                            <Button fx:id="copyAction" mnemonicParsing="false" />
+                                                            <Button fx:id="pasteAction" mnemonicParsing="false" />
+                                                            <Separator orientation="VERTICAL" />
+                                                            <Button fx:id="boldAction" mnemonicParsing="false" />
+                                                            <Button fx:id="italicAction" mnemonicParsing="false" />
+                                                            <Button fx:id="underlineAction" mnemonicParsing="false" />
+                                                          <Button fx:id="strikeAction" mnemonicParsing="false" />
+                                                            <Separator orientation="VERTICAL" />
+                                                            <ComboBox fx:id="fontSizePicker" prefWidth="60.0">
+                                                               <tooltip>
+                                                                  <Tooltip text="Veličina fonta" />
+                                                               </tooltip>
+                                                            </ComboBox>
+                                                            <Separator orientation="VERTICAL" />
+                                                            <Button fx:id="linkAction" mnemonicParsing="false" />
+                                                         </items>
+                                                      </ToolBar>
+                                                   </children>
+                                                </AnchorPane>
+                                             </top>
+                                             <center>
                            </center>
-                                       <bottom>
-                                          <AnchorPane BorderPane.alignment="CENTER">
-                                             <children>
-                                                <TitledPane collapsible="false" prefHeight="206.0" prefWidth="574.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                  <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                  </content>
-                                                </TitledPane>
-                                             </children>
-                                             <BorderPane.margin>
-                                                <Insets top="4.0" />
-                                             </BorderPane.margin>
-                                          </AnchorPane>
-                                       </bottom>
-                                    </BorderPane>
-                                 </children>
-                              </AnchorPane>
-                          </content>
+                                             <bottom>
+                                                <AnchorPane BorderPane.alignment="CENTER">
+                                                   <children>
+                                                      <TitledPane collapsible="false" prefHeight="206.0" prefWidth="440.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <content>
+                                                          <AnchorPane minHeight="0.0" minWidth="440.0" prefHeight="180.0" prefWidth="440.0" />
+                                                        </content>
+                                                      </TitledPane>
+                                                   </children>
+                                                   <BorderPane.margin>
+                                                      <Insets top="4.0" />
+                                                   </BorderPane.margin>
+                                                </AnchorPane>
+                                             </bottom>
+                                          </BorderPane>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
+                     </left>
+                     <center>
+                        <TitledPane fx:id="previewContainer" collapsible="false" prefWidth="400.0" text="Pregled" BorderPane.alignment="TOP_LEFT">
+                           <BorderPane.margin>
+                              <Insets left="2.0" right="4.0" />
+                           </BorderPane.margin>
+                           <padding>
+                              <Insets left="4.0" right="4.0" />
+                           </padding>
                         </TitledPane>
-                     </children>
-                  </AnchorPane>
-               </center>
-               <right>
-                  <AnchorPane fx:id="borderContainer" prefHeight="200.0" prefWidth="200.0" />
-               </right>
-            </BorderPane>
-         </children>
-         <BorderPane.margin>
+                     </center>
+                  </BorderPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </BorderPane.margin>
+            </AnchorPane>
+         </center>
+         <padding>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-         </BorderPane.margin>
-      </AnchorPane>
-   </center>
-   <padding>
-      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-   </padding>
-</BorderPane>
+         </padding>
+      </BorderPane>
+   </children>
+</AnchorPane>

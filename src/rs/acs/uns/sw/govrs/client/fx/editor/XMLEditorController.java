@@ -39,7 +39,7 @@ public class XMLEditorController {
     @FXML
     private TitledPane treeContainer;
     @FXML
-    private AnchorPane borderContainer;
+    private TitledPane previewContainer;
     @FXML
     private BorderPane areaContainer;
     // -------------------------------------------------
@@ -94,8 +94,9 @@ public class XMLEditorController {
         Propis propis = createDummyData();
 
         preview = new ActPreview(propis);
-        borderContainer.getChildren().add(preview.getNode());
+        previewContainer.setContent(preview.getNode());
         preview.update();
+
 
         tree = new TreeModel(
                 propis,

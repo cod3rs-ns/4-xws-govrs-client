@@ -22,40 +22,9 @@ public class WindowButtons extends VBox {
         // close button
         Button closeBtn = new Button();
         closeBtn.setId("win-close-btn");
-        closeBtn.setOnAction(actionEvent -> Platform.exit());
-
-        // minimize button
-        Button minBtn = new Button();
-        minBtn.setId("win-min-btn");
-        minBtn.setOnAction(actionEvent -> stage.setIconified(true));
-
-        // maximize button
-        Button maxBtn = new Button();
-        maxBtn.setId("win-max-btn");
-        maxBtn.setOnAction(actionEvent -> toggleMax());
-
-        getChildren().addAll(closeBtn, maxBtn, minBtn);
     }
 
-    public void toggleMax() {
-        final Screen screen = Screen.getScreensForRectangle(stage.getX(), stage.getY(), 1, 1).get(0);
-        if (maximized) {
-            maximized = false;
-            if (winBounds != null) {
-                stage.setX(winBounds.getMinX());
-                stage.setY(winBounds.getMinY());
-                stage.setWidth(winBounds.getWidth());
-                stage.setHeight(winBounds.getHeight());
-            }
-        } else {
-            maximized = true;
-            winBounds = new Rectangle2D(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
-            stage.setX(screen.getVisualBounds().getMinX());
-            stage.setY(screen.getVisualBounds().getMinY());
-            stage.setWidth(screen.getVisualBounds().getWidth());
-            stage.setHeight(screen.getVisualBounds().getHeight());
-        }
-    }
+
 
     public boolean isMaximized() {
         return maximized;

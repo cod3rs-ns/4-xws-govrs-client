@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" styleClass="background" stylesheets="@home.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.home.HomeController">
+   <children>
+      <BorderPane prefHeight="700.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <AnchorPane prefHeight="60.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Separator layoutX="254.0" layoutY="49.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="0.0" />
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="54.0" AnchorPane.topAnchor="2.0">
+                     <image>
+                        <Image url="@../images/govrs.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="closeButton" minHeight="16.0" mnemonicParsing="false" prefWidth="16.0" styleClass="win-close-btn" text="Button" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="2.0" />
+                  <Button fx:id="minButton" minHeight="16.0" mnemonicParsing="false" prefWidth="16.0" styleClass="win-min-btn" text="Button" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="20.0" />
+                  <Button fx:id="maxButton" minHeight="16.0" mnemonicParsing="false" prefWidth="16.0" styleClass="win-max-btn" text="Button" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="38.0" />
+                  <AnchorPane layoutX="831.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fitHeight="60.0" fitWidth="180.0" layoutX="37.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                           <image>
+                              <Image url="@../images/userinfo.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="userLabel" layoutX="53.0" layoutY="5.0" text="Petar Petrović" textFill="WHITE" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="53.0" AnchorPane.topAnchor="4.0">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="userTypeLabel" alignment="CENTER" layoutX="72.0" layoutY="23.0" text="Odbornik" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="53.0">
+                           <font>
+                              <Font name="System Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </top>
+         <left>
+            <AnchorPane prefWidth="54.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="actionContainer" prefHeight="641.0" prefWidth="54.0" spacing="4.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="side-btn">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="side-btn" />
+                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="side-btn" />
+                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="side-btn" />
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </left>
+         <center>
+            <BorderPane fx:id="container" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
