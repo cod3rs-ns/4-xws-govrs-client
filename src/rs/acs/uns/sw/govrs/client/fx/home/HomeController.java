@@ -19,7 +19,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomeController extends AnchorPane implements Initializable {
-
+    private double mouseDragOffsetX = 0;
+    private double mouseDragOffsetY = 0;
     private Rectangle2D winBounds = null;
     private boolean maximized = false;
 
@@ -39,6 +40,8 @@ public class HomeController extends AnchorPane implements Initializable {
     private ImageView userImage;
     @FXML
     private VBox actionContainer;
+    @FXML
+    private AnchorPane dragPane;
 
     public MainFXApp getApp() {
         return app;
@@ -63,9 +66,19 @@ public class HomeController extends AnchorPane implements Initializable {
 //        controller.setMainApp(app);
 
         // Replaced standard window buttons and their actions
-        closeButton.setOnAction(actionEvent -> Platform.exit());
-        minButton.setOnAction(actionEvent -> app.getStage().setIconified(true));
-        maxButton.setOnAction(actionEvent -> toggleMax());
+        closeButton.setOnAction(event -> Platform.exit());
+        minButton.setOnAction(event -> app.getStage().setIconified(true));
+        maxButton.setOnAction(event -> toggleMax());
+
+        // add window dragging
+        dragPane.setOnMousePressed(event -> {
+            mouseDragOffsetX = event.getSceneX();
+            mouseDragOffsetY = event.getSceneY();
+        });
+        dragPane.setOnMouseDragged(event -> {
+            app.getStage().setX(event.getScreenX() - mouseDragOffsetX);
+            app.getStage().setY(event.getScreenY() - mouseDragOffsetY);
+        });
 
     }
 
