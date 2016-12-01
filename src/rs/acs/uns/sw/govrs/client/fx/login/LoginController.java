@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.domain.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,8 +48,8 @@ public class LoginController extends AnchorPane implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: delete this
-        usernameField.setText("admin");
-        passwordField.setText("admin");
+        usernameField.setText("predsednik");
+        passwordField.setText("pass");
 
         errorLabel.setText("");
         // add window dragging
@@ -65,13 +66,27 @@ public class LoginController extends AnchorPane implements Initializable {
         closeButton.setOnAction(event -> Platform.exit());
 
         loginButton.setOnAction(event -> {
-            if (usernameField.getText().equals("admin") && passwordField.getText().equals("admin")){
+            if (usernameField.getText().equals("predsednik") && passwordField.getText().equals("pass")){
+                User u = new User("predsednik", "pass", "Petar", "Petrović", "predsednik");
+                app.setLoggedUser(u);
                 app.login();
-            } else {
+            }
+            else if(usernameField.getText().equals("odbornik") && passwordField.getText().equals("pass")){
+                User u = new User("odbornik", "pass", "Nikola", "Nikolić", "odbornik");
+                app.setLoggedUser(u);
+                app.login();
+            }
+            else {
                 usernameField.setText("");
                 passwordField.setText("");
                 errorLabel.setText("Neuspešna autorizacija!");
             }
+        });
+
+        citizenHyperlink.setOnAction(event -> {
+            User u = new User("gradjanin", "pass", "Marko", "Marković", "gradjanin");
+            app.setLoggedUser(u);
+            app.login();
         });
     }
 }

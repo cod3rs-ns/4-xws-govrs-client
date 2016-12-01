@@ -1,6 +1,7 @@
 package rs.acs.uns.sw.govrs.client.fx;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.components.WindowButtons;
+import rs.acs.uns.sw.govrs.client.fx.domain.User;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
@@ -25,15 +27,20 @@ import java.util.logging.Logger;
 
 public class MainFXApp extends Application {
 
-    private boolean maximized = false;
+    private User loggedUser;
+
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
 
     public Stage getStage() {
         return stage;
     }
 
-    public void setMaximized(boolean maximized) {
-        this.maximized = maximized;
-    }
 
     private Stage stage;
     private BorderPane rootLayout;
@@ -208,11 +215,13 @@ public class MainFXApp extends Application {
     }
 
     public void login() {
-        System.out.println("LOGOVANJE USPEŠNO");
+        System.out.print("LOGOVANJE USPEŠNO: ");
+        System.out.println(getLoggedUser());
         gotoHome();
     }
 
-    public boolean isMaximized() {
-        return maximized;
+    public void logout() {
+        this.loggedUser = null;
+        gotoLogin();
     }
 }

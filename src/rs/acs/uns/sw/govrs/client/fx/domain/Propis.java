@@ -1,38 +1,35 @@
-package rs.acs.uns.sw.govrs.client.fx.model;
+package rs.acs.uns.sw.govrs.client.fx.domain;
 
 import javafx.collections.ObservableList;
 
 import java.util.function.Function;
 
-/**
- * Created by St_Keky on 22.11.2016..
- */
-public class Glava extends Element {
+public class Propis extends Element {
 
-    public Glava(String name, String image, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
+    public Propis(String name, String image, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
         super(name, image, children, childrenSupplier);
     }
 
-    public Glava(String name, String image, ObservableList<Element> children) {
+    public Propis(String name, String image, ObservableList<Element> children) {
         super(name, image, children);
     }
 
-    public Glava(String name, String image) {
+    public Propis(String name, String image) {
         super(name, image);
     }
 
-    public Glava(String name) {
+    public Propis(String name) {
         super(name);
     }
 
     @Override
     public void createAndAddChild(String name) {
-        getChildren().add(new Tacka(name));
+        getChildren().add(new Glava(name));
     }
 
     @Override
     public String createElementOpening() {
-        return "<div style='color:red'>";
+        return "<div style='color:blue'>";
     }
 
     @Override
@@ -42,6 +39,7 @@ public class Glava extends Element {
 
     @Override
     public String createElementContent() {
+        System.out.println(getImage());
         return getName();
     }
 

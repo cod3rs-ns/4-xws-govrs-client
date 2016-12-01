@@ -8,7 +8,6 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -19,11 +18,11 @@ import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
-import rs.acs.uns.sw.govrs.client.fx.model.Element;
-import rs.acs.uns.sw.govrs.client.fx.model.Glava;
-import rs.acs.uns.sw.govrs.client.fx.model.Propis;
-import rs.acs.uns.sw.govrs.client.fx.model.Tacka;
-import rs.acs.uns.sw.govrs.client.fx.model.tree.TreeModel;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.Glava;
+import rs.acs.uns.sw.govrs.client.fx.domain.Propis;
+import rs.acs.uns.sw.govrs.client.fx.domain.Tacka;
+import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
 
 import java.util.function.Function;
 

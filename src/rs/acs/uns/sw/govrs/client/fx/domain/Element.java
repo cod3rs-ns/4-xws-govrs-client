@@ -1,4 +1,4 @@
-package rs.acs.uns.sw.govrs.client.fx.model;
+package rs.acs.uns.sw.govrs.client.fx.domain;
 
 
 import javafx.beans.property.SimpleStringProperty;

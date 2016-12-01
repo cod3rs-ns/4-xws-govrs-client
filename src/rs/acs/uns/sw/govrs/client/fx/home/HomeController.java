@@ -3,18 +3,18 @@ package rs.acs.uns.sw.govrs.client.fx.home;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
-import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,26 +35,34 @@ public class HomeController extends AnchorPane implements Initializable {
     private Label userLabel;
     @FXML
     private Label userTypeLabel;
+    @FXML
+    private ImageView userImage;
+    @FXML
+    private VBox actionContainer;
+
+    public MainFXApp getApp() {
+        return app;
+    }
 
     private MainFXApp app;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainFXApp.class.getResource("editor/XMLEditor.fxml"));
-        AnchorPane xmleditor = null;
-        try {
-            xmleditor = (AnchorPane) loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        container.setCenter(xmleditor);
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(MainFXApp.class.getResource("editor/XMLEditor.fxml"));
+//        AnchorPane xmleditor = null;
+//        try {
+//            xmleditor = (AnchorPane) loader.load();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        container.setCenter(xmleditor);
+//
+//        // Give the controller access to the main app.
+//        XMLEditorController controller = loader.getController();
+//        controller.setMainApp(app);
 
-        // Give the controller access to the main app.
-        XMLEditorController controller = loader.getController();
-        controller.setMainApp(app);
-
-
+        // Replaced standard window buttons and their actions
         closeButton.setOnAction(actionEvent -> Platform.exit());
         minButton.setOnAction(actionEvent -> app.getStage().setIconified(true));
         maxButton.setOnAction(actionEvent -> toggleMax());
@@ -63,6 +71,27 @@ public class HomeController extends AnchorPane implements Initializable {
 
     public void setApp(MainFXApp app) {
         this.app = app;
+        switch (app.getLoggedUser().getType()) {
+            case "predsednik":
+                actionContainer.getChildren().add(createButton("a-home", this::action));
+                actionContainer.getChildren().add(createButton("a-law", this::action));
+                actionContainer.getChildren().add(createButton("a-amendment", this::action));
+                actionContainer.getChildren().add(createButton("a-all", this::action));
+                actionContainer.getChildren().add(createButton("a-vote", this::action));
+                break;
+            case "odbornik":
+                actionContainer.getChildren().add(createButton("a-home", this::action));
+                actionContainer.getChildren().add(createButton("a-law", this::action));
+                actionContainer.getChildren().add(createButton("a-amendment", this::action));
+                actionContainer.getChildren().add(createButton("a-all", this::action));
+                break;
+            default:
+                actionContainer.getChildren().add(createButton("a-home", this::action));
+                break;
+        }
+
+        this.userLabel.setText(app.getLoggedUser().getFirstName() + ' ' + app.getLoggedUser().getLastName());
+        this.userTypeLabel.setText(app.getLoggedUser().getType());
     }
 
     private void toggleMax() {
@@ -83,5 +112,35 @@ public class HomeController extends AnchorPane implements Initializable {
             app.getStage().setWidth(screen.getVisualBounds().getWidth());
             app.getStage().setHeight(screen.getVisualBounds().getHeight());
         }
+    }
+
+    @FXML
+    private void userInfoEnter() {
+        userImage.setImage(new Image(this.getClass().getResourceAsStream("../images/user-info-hover.png")));
+    }
+
+    @FXML
+    private void userInfoExit() {
+        userImage.setImage(new Image(this.getClass().getResourceAsStream("../images/user-info.png")));
+    }
+
+    private Button createButton(String type, Runnable action) {
+        Button button = new Button();
+        button.setPrefHeight(50);
+        button.setPrefWidth(50);
+        button.getStyleClass().add(type);
+        button.setOnAction(event ->
+                action.run()
+        );
+        return button;
+    }
+
+    private void action() {
+        System.out.println("Button clicked");
+    }
+
+    @FXML
+    private void logout() {
+        app.logout();
     }
 }
