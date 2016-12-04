@@ -2,171 +2,101 @@ package rs.acs.uns.sw.govrs.client.fx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
+import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.controlsfx.control.StatusBar;
-import rs.acs.uns.sw.govrs.client.fx.components.WindowButtons;
-import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
+import rs.acs.uns.sw.govrs.client.fx.domain.User;
+import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
+import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Main JavaFX application. Everything Starts here.
+ */
 public class MainFXApp extends Application {
+    private User loggedUser;
+    private Stage stage;
 
-    private Stage primaryStage;
-    private BorderPane rootLayout;
-
-    private ToolBar toolBar;
-    private StatusBar statusBar;
-
-    private double mouseDragOffsetX = 0;
-    private double mouseDragOffsetY = 0;
-
-    public MainFXApp() {
-
-    }
-
+    /**
+     * Main method.
+     * @param args arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        primaryStage = stage;
-        primaryStage.setTitle("GovRS client");
-        initRootLayout();
-        showXMLEditor();
+        this.stage = stage;
+        this.stage.setTitle("GovRS client");
+        this.stage.initStyle(StageStyle.UNDECORATED);
+        gotoLogin();
+        this.stage.show();
     }
 
-    private void initRootLayout() throws IOException {
-        rootLayout = new BorderPane();
-        rootLayout.setPrefSize(1000, 800);
-
-        // initial end set up components
-        toolBar = createMainToolbar();
-        statusBar = createStatusBar();
-        rootLayout.setTop(toolBar);
-        rootLayout.setBottom(statusBar);
-
-        Scene scene = new Scene(rootLayout);
-        scene.getStylesheets().add(MainFXApp.class.getResource("app-theme.css").toExternalForm());
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
+    private void gotoLogin() {
+        try {
+            LoginController login = (LoginController) replaceSceneContent("login/Login.fxml");
+            login.setApp(this);
+        } catch (Exception ex) {
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    private void gotoHome() {
+        try {
+            HomeController home = (HomeController) replaceSceneContent("home/Home.fxml");
+            home.setApp(this);
+        } catch (Exception ex) {
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-
-    public void showXMLEditor() throws IOException {
+    private Initializable replaceSceneContent(String fxml) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainFXApp.class.getResource("editor/XMLEditor.fxml"));
-        BorderPane xmleditor = (BorderPane) loader.load();
-        rootLayout.setCenter(xmleditor);
-
-        // Give the controller access to the main app.
-        XMLEditorController controller = loader.getController();
-        controller.setMainApp(this);
-        /**
-        TextField add = new TextField();
-
-        Button addButton = new Button("Add");
-        addButton.disableProperty().bind(Bindings.createBooleanBinding(() ->
-                        treeView.getSelectionModel().getSelectedItem() == null ||
-                                treeView.getSelectionModel().getSelectedItem().getValue() instanceof Text,
-                treeView.getSelectionModel().selectedItemProperty()));
-
-        EventHandler<ActionEvent> addHandler = e -> {
-            if (treeView.getSelectionModel().getSelectedItem() == null
-                    || treeView.getSelectionModel().getSelectedItem().getValue() instanceof Text) {
-                return ;
-            }
-            treeView.getSelectionModel().getSelectedItem().getValue().createAndAddChild(add.getText());
-            add.clear();
-        };
-
-        add.setOnAction(event -> {
-
-        });
-        add.setOnAction(addHandler);
-        addButton.setOnAction(addHandler);
-
-        Button delete = new Button("Delete");
-        delete.disableProperty().bind(Bindings.createBooleanBinding(() ->
-                        treeView.getSelectionModel().getSelectedItem() == null ||
-                                treeView.getSelectionModel().getSelectedItem().getValue() == company,
-                treeView.getSelectionModel().selectedItemProperty()));
-
-        delete.setOnAction(e -> {
-            TreeItem<Element> selected = treeView.getSelectionModel().getSelectedItem() ;
-            selected.getParent().getValue().getChildren().remove(selected.getValue());
-        });
-
-        HBox controls = new HBox(5, add, addButton, delete);
-        controls.setPadding(new Insets(10));
-        controls.setAlignment(Pos.CENTER);
-
-        rootLayout.setCenter(treeView);
-        rootLayout.setBottom(controls);
-        */
-
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+        loader.setLocation(MainFXApp.class.getResource(fxml));
+        try (InputStream in = MainFXApp.class.getResourceAsStream(fxml)) {
+            AnchorPane page = loader.load(in);
+            Scene scene = new Scene(page);
+            stage.setScene(scene);
+            stage.sizeToScene();
+        } catch (IOException ex) {
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return (Initializable) loader.getController();
     }
 
-    private ToolBar createMainToolbar() {
-        // create main toolbar
-        ToolBar toolbar = new ToolBar();
-        toolbar.setId("main-tool-bar");
-        ImageView logo = new ImageView(new Image(MainFXApp.class.getResourceAsStream("images/logo.png")));
-        HBox.setMargin(logo, new Insets(0,0,0,5));
-        toolbar.getItems().add(logo);
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        toolbar.getItems().add(spacer);
-        Region spacer2 = new Region();
-        HBox.setHgrow(spacer2, Priority.ALWAYS);
-        toolbar.getItems().add(spacer2);
-
-        toolbar.setPrefHeight(66);
-        toolbar.setMinHeight(66);
-        toolbar.setMaxHeight(66);
-        GridPane.setConstraints(toolbar, 0, 0);
-
-        // add close min max
-        final WindowButtons windowButtons = new WindowButtons(primaryStage);
-        toolbar.getItems().add(windowButtons);
-
-        // add window header double clicking
-        toolbar.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                windowButtons.toggleMax();
-            }
-        });
-
-        // add window dragging
-        toolbar.setOnMousePressed(event -> {
-            mouseDragOffsetX = event.getSceneX();
-            mouseDragOffsetY = event.getSceneY();
-        });
-        toolbar.setOnMouseDragged(event -> {
-            if(!windowButtons.isMaximized()) {
-                primaryStage.setX(event.getScreenX()-mouseDragOffsetX);
-                primaryStage.setY(event.getScreenY()-mouseDragOffsetY);
-            }
-        });
-
-        return toolbar;
+    /**
+     * Log-in provided user and redirect to Home stage.
+     * @param user User to be logged-in.
+     */
+    public void login(User user) {
+        loggedUser = user;
+        Logger.getLogger(MainFXApp.class.getName()).log(Level.INFO, loggedUser.toString());
+        gotoHome();
     }
 
-    private StatusBar createStatusBar() {
-        StatusBar status = new StatusBar();
-        status.setText("GovRS client initial app.");
-        return status;
+    /**
+     *  Log-out current user and redirect to Login stage.
+     */
+    public void logout() {
+        this.loggedUser = null;
+        gotoLogin();
+    }
+
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }

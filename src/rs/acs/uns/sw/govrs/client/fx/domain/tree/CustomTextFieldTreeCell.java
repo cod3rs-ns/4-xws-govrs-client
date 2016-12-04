@@ -1,4 +1,4 @@
-package rs.acs.uns.sw.govrs.client.fx.model.tree;
+package rs.acs.uns.sw.govrs.client.fx.domain.tree;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ContextMenu;
@@ -10,10 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
-import rs.acs.uns.sw.govrs.client.fx.model.Element;
-import rs.acs.uns.sw.govrs.client.fx.model.Glava;
-import rs.acs.uns.sw.govrs.client.fx.model.Propis;
-import rs.acs.uns.sw.govrs.client.fx.model.Tacka;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.Glava;
+import rs.acs.uns.sw.govrs.client.fx.domain.Propis;
+import rs.acs.uns.sw.govrs.client.fx.domain.Tacka;
 
 import java.util.function.Function;
 

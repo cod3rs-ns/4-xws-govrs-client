@@ -1,7 +1,7 @@
 package rs.acs.uns.sw.govrs.client.fx.editor.preview;
 
 import javafx.scene.web.WebView;
-import rs.acs.uns.sw.govrs.client.fx.model.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 
 /**
  * WebView preview.

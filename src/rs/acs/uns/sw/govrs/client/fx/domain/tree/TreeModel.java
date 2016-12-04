@@ -1,4 +1,4 @@
-package rs.acs.uns.sw.govrs.client.fx.model.tree;
+package rs.acs.uns.sw.govrs.client.fx.domain.tree;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
-import rs.acs.uns.sw.govrs.client.fx.model.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 
 import java.util.function.Function;
 
