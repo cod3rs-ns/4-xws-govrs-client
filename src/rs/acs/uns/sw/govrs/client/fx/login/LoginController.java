@@ -68,13 +68,11 @@ public class LoginController extends AnchorPane implements Initializable {
         loginButton.setOnAction(event -> {
             if (usernameField.getText().equals("predsednik") && passwordField.getText().equals("pass")){
                 User u = new User("predsednik", "pass", "Petar", "Petrović", "predsednik");
-                app.setLoggedUser(u);
-                app.login();
+                app.login(u);
             }
             else if(usernameField.getText().equals("odbornik") && passwordField.getText().equals("pass")){
                 User u = new User("odbornik", "pass", "Nikola", "Nikolić", "odbornik");
-                app.setLoggedUser(u);
-                app.login();
+                app.login(u);
             }
             else {
                 usernameField.setText("");
@@ -85,8 +83,7 @@ public class LoginController extends AnchorPane implements Initializable {
 
         citizenHyperlink.setOnAction(event -> {
             User u = new User("gradjanin", "pass", "Marko", "Marković", "gradjanin");
-            app.setLoggedUser(u);
-            app.login();
+            app.login(u);
         });
     }
 }

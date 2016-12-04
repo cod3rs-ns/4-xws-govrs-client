@@ -3,6 +3,7 @@ package rs.acs.uns.sw.govrs.client.fx.home;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
@@ -14,7 +15,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -51,19 +54,19 @@ public class HomeController extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(MainFXApp.class.getResource("editor/XMLEditor.fxml"));
-//        AnchorPane xmleditor = null;
-//        try {
-//            xmleditor = (AnchorPane) loader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        container.setCenter(xmleditor);
-//
-//        // Give the controller access to the main app.
-//        XMLEditorController controller = loader.getController();
-//        controller.setMainApp(app);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainFXApp.class.getResource("editor/XMLEditor.fxml"));
+        AnchorPane xmleditor = null;
+        try {
+            xmleditor = (AnchorPane) loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        container.setCenter(xmleditor);
+
+        // Give the controller access to the main app.
+        XMLEditorController controller = loader.getController();
+        controller.setMainApp(app);
 
         // Replaced standard window buttons and their actions
         closeButton.setOnAction(event -> Platform.exit());
