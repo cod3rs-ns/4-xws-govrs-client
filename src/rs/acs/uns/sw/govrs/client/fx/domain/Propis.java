@@ -39,7 +39,6 @@ public class Propis extends Element {
 
     @Override
     public String createElementContent() {
-        System.out.println(getImage());
         return getName();
     }
 

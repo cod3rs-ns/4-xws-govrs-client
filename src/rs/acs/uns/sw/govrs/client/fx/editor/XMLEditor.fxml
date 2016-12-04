@@ -63,7 +63,7 @@
                               </AnchorPane>
                               <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <children>
-                                    <TitledPane collapsible="false" prefHeight="200.0" prefWidth="400.0" text="Atributi" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                    <TitledPane collapsible="false" prefHeight="200.0" prefWidth="400.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                        <content>
                                           <AnchorPane />
                                        </content>

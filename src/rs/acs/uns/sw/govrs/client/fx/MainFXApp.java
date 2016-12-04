@@ -24,6 +24,10 @@ public class MainFXApp extends Application {
     private User loggedUser;
     private Stage stage;
 
+    /**
+     * Main method.
+     * @param args arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
@@ -70,12 +74,19 @@ public class MainFXApp extends Application {
         return (Initializable) loader.getController();
     }
 
+    /**
+     * Log-in provided user and redirect to Home stage.
+     * @param user User to be logged-in.
+     */
     public void login(User user) {
         loggedUser = user;
         Logger.getLogger(MainFXApp.class.getName()).log(Level.INFO, loggedUser.toString());
         gotoHome();
     }
 
+    /**
+     *  Log-out current user and redirect to Login stage.
+     */
     public void logout() {
         this.loggedUser = null;
         gotoLogin();

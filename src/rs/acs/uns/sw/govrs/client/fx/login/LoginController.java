@@ -1,22 +1,22 @@
 package rs.acs.uns.sw.govrs.client.fx.login;
 
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.User;
+import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
+/**
+ * Controls user log-in.
+ */
 public class LoginController extends AnchorPane implements Initializable {
+    // mouse drag offset for window moving
     private double mouseDragOffsetX = 0;
     private double mouseDragOffsetY = 0;
 
@@ -37,21 +37,15 @@ public class LoginController extends AnchorPane implements Initializable {
 
     private MainFXApp app;
 
-    public LoginController() {
-
-    }
-
-    public void setApp(MainFXApp app) {
-        this.app = app;
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: delete this
+        // This is only for test purpose, because it speeds up log-in process
         usernameField.setText("predsednik");
         passwordField.setText("pass");
 
         errorLabel.setText("");
+
         // add window dragging
         mainContainer.setOnMousePressed(event -> {
             mouseDragOffsetX = event.getSceneX();
@@ -65,25 +59,29 @@ public class LoginController extends AnchorPane implements Initializable {
         // close app
         closeButton.setOnAction(event -> Platform.exit());
 
+        // TODO: implement real login functionality
         loginButton.setOnAction(event -> {
-            if (usernameField.getText().equals("predsednik") && passwordField.getText().equals("pass")){
-                User u = new User("predsednik", "pass", "Petar", "Petrović", "predsednik");
+            if (usernameField.getText().equals(Constants.PRESIDENT) && "pass".equals(passwordField.getText())) {
+                User u = new User("predsednik", "pass", "Petar", "Petrović", Constants.PRESIDENT);
                 app.login(u);
-            }
-            else if(usernameField.getText().equals("odbornik") && passwordField.getText().equals("pass")){
-                User u = new User("odbornik", "pass", "Nikola", "Nikolić", "odbornik");
+            } else if (usernameField.getText().equals(Constants.ALDERMAN) && "pass".equals(passwordField.getText())) {
+                User u = new User("odbornik", "pass", "Nikola", "Nikolić", Constants.ALDERMAN);
                 app.login(u);
-            }
-            else {
+            } else {
                 usernameField.setText("");
                 passwordField.setText("");
                 errorLabel.setText("Neuspešna autorizacija!");
             }
         });
 
+        // citizen login
         citizenHyperlink.setOnAction(event -> {
-            User u = new User("gradjanin", "pass", "Marko", "Marković", "gradjanin");
+            User u = new User("gradjanin", "pass", "Marko", "Marković", Constants.CITIZEN);
             app.login(u);
         });
+    }
+
+    public void setApp(MainFXApp app) {
+        this.app = app;
     }
 }

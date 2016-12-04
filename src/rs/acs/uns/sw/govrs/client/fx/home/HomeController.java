@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,16 +17,25 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
+import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Home stage for every user.
+ */
 public class HomeController extends AnchorPane implements Initializable {
+    // === window controls and drag info ===
     private double mouseDragOffsetX = 0;
     private double mouseDragOffsetY = 0;
     private Rectangle2D winBounds = null;
     private boolean maximized = false;
+    // =====================================
 
     @FXML
     private Button closeButton;
@@ -46,27 +56,22 @@ public class HomeController extends AnchorPane implements Initializable {
     @FXML
     private AnchorPane dragPane;
 
-    public MainFXApp getApp() {
-        return app;
-    }
-
     private MainFXApp app;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(MainFXApp.class.getResource("editor/XMLEditor.fxml"));
-        AnchorPane xmleditor = null;
-        try {
-            xmleditor = (AnchorPane) loader.load();
+        try (InputStream in = MainFXApp.class.getResourceAsStream("editor/XMLEditor.fxml")) {
+            AnchorPane editor = loader.load(in);
+            container.setCenter(editor);
+            // Give the controller access to the main app.
+            XMLEditorController controller = loader.getController();
+            controller.setMainApp(app);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
         }
-        container.setCenter(xmleditor);
-
-        // Give the controller access to the main app.
-        XMLEditorController controller = loader.getController();
-        controller.setMainApp(app);
 
         // Replaced standard window buttons and their actions
         closeButton.setOnAction(event -> Platform.exit());
@@ -88,21 +93,14 @@ public class HomeController extends AnchorPane implements Initializable {
     public void setApp(MainFXApp app) {
         this.app = app;
         switch (app.getLoggedUser().getType()) {
-            case "predsednik":
-                actionContainer.getChildren().add(createButton("a-home", this::action));
-                actionContainer.getChildren().add(createButton("a-law", this::action));
-                actionContainer.getChildren().add(createButton("a-amendment", this::action));
-                actionContainer.getChildren().add(createButton("a-all", this::action));
-                actionContainer.getChildren().add(createButton("a-vote", this::action));
+            case Constants.PRESIDENT:
+                setPresidentActions();
                 break;
-            case "odbornik":
-                actionContainer.getChildren().add(createButton("a-home", this::action));
-                actionContainer.getChildren().add(createButton("a-law", this::action));
-                actionContainer.getChildren().add(createButton("a-amendment", this::action));
-                actionContainer.getChildren().add(createButton("a-all", this::action));
+            case Constants.ALDERMAN:
+                setAldermanActions();
                 break;
             default:
-                actionContainer.getChildren().add(createButton("a-home", this::action));
+                actionContainer.getChildren().add(createButton(Constants.HOME, this::action));
                 break;
         }
 
@@ -152,11 +150,27 @@ public class HomeController extends AnchorPane implements Initializable {
     }
 
     private void action() {
-        System.out.println("Button clicked");
+        Logger.getLogger(HomeController.class.getName()).log(Level.INFO, "Button clicked!");
+    }
+
+    private void setAldermanActions() {
+        actionContainer.getChildren().add(createButton(Constants.HOME, this::action));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::action));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
+    }
+
+    private void setPresidentActions() {
+        actionContainer.getChildren().add(createButton(Constants.HOME, this::action));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::action));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
+        actionContainer.getChildren().add(createButton(Constants.VOTE, this::action));
     }
 
     @FXML
     private void logout() {
         app.logout();
     }
+
 }

@@ -72,7 +72,6 @@ public abstract class Element {
             sb.append(child.getHtml());
         }
         sb.append(createElementClosing());
-        System.out.println(sb.toString());
         return sb.toString();
     }
 }
