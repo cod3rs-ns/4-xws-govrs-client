@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="400.0" styleClass="background" stylesheets="@login.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.login.LoginController">
+   <children>
+      <AnchorPane prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="closeButton" cancelButton="true" layoutX="378.0" layoutY="10.0" minHeight="16.0" minWidth="16.0" mnemonicParsing="false" styleClass="win-close-btn" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            <ImageView fitHeight="50.0" fitWidth="150.0" layoutX="131.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="5.0">
+               <image>
+                  <Image url="@../images/govrs2.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <HBox layoutX="142.0" layoutY="115.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="295.0" spacing="8.0">
+               <children>
+                  <Label text="Korisničko ime">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="usernameField" />
+                  <Label text="Lozinka">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="passwordField" />
+                  <AnchorPane>
+                     <children>
+                        <Label fx:id="errorLabel" alignment="CENTER" layoutX="10.0" layoutY="-18.0" text="Neuspešna autorizacija!" textAlignment="CENTER" textFill="#ae0000" underline="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </VBox>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="loginButton" alignment="CENTER" defaultButton="true" layoutX="44.0" layoutY="26.0" minHeight="100.0" minWidth="100.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" styleClass="login-btn" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="26.0">
+                     <tooltip>
+                        <Tooltip autoFix="false" text="Ulogujte se u govRS" textOverrun="WORD_ELLIPSIS">
+                           <font>
+                              <Font size="13.0" />
+                           </font></Tooltip>
+                     </tooltip>
+                  </Button>
+                  <Hyperlink fx:id="citizenHyperlink" alignment="CENTER" layoutX="47.0" layoutY="141.0" text="Uloguj se kao građanin" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

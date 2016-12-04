@@ -8,7 +8,6 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -19,16 +18,20 @@ import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
-import rs.acs.uns.sw.govrs.client.fx.model.Element;
-import rs.acs.uns.sw.govrs.client.fx.model.Glava;
-import rs.acs.uns.sw.govrs.client.fx.model.Propis;
-import rs.acs.uns.sw.govrs.client.fx.model.Tacka;
-import rs.acs.uns.sw.govrs.client.fx.model.tree.TreeModel;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.Glava;
+import rs.acs.uns.sw.govrs.client.fx.domain.Propis;
+import rs.acs.uns.sw.govrs.client.fx.domain.Tacka;
+import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
 
 import java.util.function.Function;
 
+/**
+ * Used for creating Laws.
+ */
 public class XMLEditorController {
 
+    private static final String PRESSED = "pressed";
     private final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
 
@@ -39,7 +42,7 @@ public class XMLEditorController {
     @FXML
     private TitledPane treeContainer;
     @FXML
-    private AnchorPane borderContainer;
+    private TitledPane previewContainer;
     @FXML
     private BorderPane areaContainer;
     // -------------------------------------------------
@@ -94,8 +97,9 @@ public class XMLEditorController {
         Propis propis = createDummyData();
 
         preview = new ActPreview(propis);
-        borderContainer.getChildren().add(preview.getNode());
+        previewContainer.setContent(preview.getNode());
         preview.update();
+
 
         tree = new TreeModel(
                 propis,
@@ -134,7 +138,10 @@ public class XMLEditorController {
         // Area style update logic
         area.beingUpdatedProperty().addListener((o, old, beingUpdated) -> {
             if (!beingUpdated) {
-                boolean bold, italic, underline, strike;
+                boolean bold;
+                boolean italic;
+                boolean underline;
+                boolean strike;
                 Integer fontSize;
 
                 IndexRange selection = area.getSelection();
@@ -159,35 +166,35 @@ public class XMLEditorController {
 
                 updatingToolbar.suspendWhile(() -> {
                     if (bold) {
-                        if (!boldAction.getStyleClass().contains("pressed")) {
-                            boldAction.getStyleClass().add("pressed");
+                        if (!boldAction.getStyleClass().contains(PRESSED)) {
+                            boldAction.getStyleClass().add(PRESSED);
                         }
                     } else {
-                        boldAction.getStyleClass().remove("pressed");
+                        boldAction.getStyleClass().remove(PRESSED);
                     }
 
                     if (italic) {
-                        if (!italicAction.getStyleClass().contains("pressed")) {
-                            italicAction.getStyleClass().add("pressed");
+                        if (!italicAction.getStyleClass().contains(PRESSED)) {
+                            italicAction.getStyleClass().add(PRESSED);
                         }
                     } else {
-                        italicAction.getStyleClass().remove("pressed");
+                        italicAction.getStyleClass().remove(PRESSED);
                     }
 
                     if (underline) {
-                        if (!underlineAction.getStyleClass().contains("pressed")) {
-                            underlineAction.getStyleClass().add("pressed");
+                        if (!underlineAction.getStyleClass().contains(PRESSED)) {
+                            underlineAction.getStyleClass().add(PRESSED);
                         }
                     } else {
-                        underlineAction.getStyleClass().remove("pressed");
+                        underlineAction.getStyleClass().remove(PRESSED);
                     }
 
                     if (strike) {
-                        if (!strikeAction.getStyleClass().contains("pressed")) {
-                            strikeAction.getStyleClass().add("pressed");
+                        if (!strikeAction.getStyleClass().contains(PRESSED)) {
+                            strikeAction.getStyleClass().add(PRESSED);
                         }
                     } else {
-                        strikeAction.getStyleClass().remove("pressed");
+                        strikeAction.getStyleClass().remove(PRESSED);
                     }
 
                     if (fontSize != -1) {
@@ -355,9 +362,7 @@ public class XMLEditorController {
 
         linkAction.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.LINK));
 
-        fontSizePicker.setOnAction(event -> {
-            updateFontSize(fontSizePicker.getValue());
-        });
+        fontSizePicker.setOnAction(event -> updateFontSize(fontSizePicker.getValue()));
 
     }
 

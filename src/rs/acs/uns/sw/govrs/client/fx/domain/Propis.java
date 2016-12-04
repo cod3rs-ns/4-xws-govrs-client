@@ -1,4 +1,4 @@
-package rs.acs.uns.sw.govrs.client.fx.model;
+package rs.acs.uns.sw.govrs.client.fx.domain;
 
 import javafx.collections.ObservableList;
 
@@ -39,7 +39,6 @@ public class Propis extends Element {
 
     @Override
     public String createElementContent() {
-        System.out.println(getImage());
         return getName();
     }
 

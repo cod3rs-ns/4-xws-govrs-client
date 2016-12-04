@@ -1,4 +1,4 @@
-package rs.acs.uns.sw.govrs.client.fx.model;
+package rs.acs.uns.sw.govrs.client.fx.domain;
 
 /**
  * Created by St_Keky on 22.11.2016..

@@ -1,4 +1,4 @@
-package rs.acs.uns.sw.govrs.client.fx.model;
+package rs.acs.uns.sw.govrs.client.fx.domain;
 
 
 import javafx.beans.property.SimpleStringProperty;
@@ -72,7 +72,6 @@ public abstract class Element {
             sb.append(child.getHtml());
         }
         sb.append(createElementClosing());
-        System.out.println(sb.toString());
         return sb.toString();
     }
 }
