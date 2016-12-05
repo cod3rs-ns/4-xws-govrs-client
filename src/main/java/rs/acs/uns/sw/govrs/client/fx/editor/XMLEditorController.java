@@ -15,6 +15,7 @@ import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.client.RESTClient;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
@@ -98,8 +99,9 @@ public class XMLEditorController {
 
         preview = new ActPreview(propis);
         previewContainer.setContent(preview.getNode());
-        preview.update();
-
+        //preview.update();
+        preview.getNode().getEngine().loadContent(RESTClient.testRest("name0"));
+        preview.getNode().getEngine().reload();
 
         tree = new TreeModel(
                 propis,

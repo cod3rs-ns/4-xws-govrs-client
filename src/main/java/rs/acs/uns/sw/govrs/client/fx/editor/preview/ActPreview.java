@@ -18,11 +18,12 @@ public class ActPreview {
         rootElement = root;
     }
 
-    public javafx.scene.Node getNode() {
+    public WebView getNode() {
         return webView;
     }
 
     public void update() {
+        /*
         if (!webView.getEngine().getLoadWorker().isRunning()) {
             Object scrollX = webView.getEngine().executeScript("window.scrollX");
             Object scrollY = webView.getEngine().executeScript("window.scrollY");
@@ -44,6 +45,7 @@ public class ActPreview {
                         + rootElement.getHtml()
                         + "</body>\n"
                         + "</html>");
+                        */
     }
 
     public void scrollY(double value) {
