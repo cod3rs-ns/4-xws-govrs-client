@@ -16,7 +16,7 @@
    <children>
       <BorderPane prefHeight="800.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <AnchorPane fx:id="dragPane" prefHeight="60.0" prefWidth="1000.0" style="-fx-background-color: #03A9F4;" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="dragPane" prefHeight="60.0" prefWidth="1000.0" style="-fx-background-color: #363f45;" BorderPane.alignment="CENTER">
                <children>
                   <Separator layoutX="254.0" layoutY="49.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="0.0" />
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="2.0">
@@ -53,7 +53,7 @@
          <left>
             <AnchorPane prefWidth="54.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="actionContainer" layoutX="2.0" prefHeight="641.0" prefWidth="54.0" spacing="4.0" style="-fx-background-color: #03A9F4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0" />
+                  <VBox fx:id="actionContainer" layoutX="2.0" prefHeight="641.0" prefWidth="54.0" spacing="4.0" style="-fx-background-color: #363f45;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0" />
                   <Separator orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>

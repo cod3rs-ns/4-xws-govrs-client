@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import rs.acs.uns.sw.govrs.client.fx.client.RESTClient;
 import rs.acs.uns.sw.govrs.client.fx.domain.User;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
@@ -32,6 +31,7 @@ public class MainFXApp extends Application {
 
     /**
      * Main method.
+     *
      * @param args arguments
      */
     public static void main(String[] args) {
@@ -69,8 +69,8 @@ public class MainFXApp extends Application {
             HomeController home = (HomeController) replaceSceneContent("/home/Home.fxml");
             home.setApp(this);
 
-            String a = RESTClient.testRest("name0");
-            System.out.println(a);
+            //String a = RESTClient.testRest("name0");
+            //System.out.println(a);
         } catch (Exception ex) {
             Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,6 +93,7 @@ public class MainFXApp extends Application {
 
     /**
      * Log-in provided user and redirect to Home stage.
+     *
      * @param user User to be logged-in.
      */
     public void login(User user) {
@@ -102,7 +103,7 @@ public class MainFXApp extends Application {
     }
 
     /**
-     *  Log-out current user and redirect to Login stage.
+     * Log-out current user and redirect to Login stage.
      */
     public void logout() {
         this.loggedUser = null;

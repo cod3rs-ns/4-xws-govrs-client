@@ -15,15 +15,14 @@ import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
-import rs.acs.uns.sw.govrs.client.fx.client.RESTClient;
-import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
-import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
-import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.Glava;
 import rs.acs.uns.sw.govrs.client.fx.domain.Propis;
 import rs.acs.uns.sw.govrs.client.fx.domain.Tacka;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
+import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
+import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 
 import java.util.function.Function;
 
@@ -100,7 +99,7 @@ public class XMLEditorController {
         preview = new ActPreview(propis);
         previewContainer.setContent(preview.getNode());
         //preview.update();
-        preview.getNode().getEngine().loadContent(RESTClient.testRest("name0"));
+        //preview.getNode().getEngine().loadContent(RESTClient.testRest("name0"));
         preview.getNode().getEngine().reload();
 
         tree = new TreeModel(

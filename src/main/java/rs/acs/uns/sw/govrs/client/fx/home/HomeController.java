@@ -17,6 +17,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
+import rs.acs.uns.sw.govrs.client.fx.laws.LawsListing;
+import rs.acs.uns.sw.govrs.client.fx.laws.SingleLaw;
 import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
 import java.io.IOException;
@@ -60,8 +62,10 @@ public class HomeController extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /*
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
+
         loader.setLocation(MainFXApp.class.getResource("/editor/XMLEditor.fxml"));
         try (InputStream in = MainFXApp.class.getResourceAsStream("/editor/XMLEditor.fxml")) {
             AnchorPane editor = loader.load(in);
@@ -72,6 +76,21 @@ public class HomeController extends AnchorPane implements Initializable {
         } catch (IOException e) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
         }
+        */
+        FXMLLoader loader = new FXMLLoader();
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+
+        loader.setLocation(MainFXApp.class.getResource("/laws/LawsListing.fxml"));
+        try (InputStream in = MainFXApp.class.getResourceAsStream("/laws/LawsListing.fxml")) {
+            AnchorPane editor = loader.load(in);
+            container.setCenter(editor);
+            // Give the controller access to the main app.
+            LawsListing controller = loader.getController();
+            //controller.setMainApp(app);
+        } catch (IOException e) {
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
+        }
+
 
         // Replaced standard window buttons and their actions
         closeButton.setOnAction(event -> Platform.exit());
