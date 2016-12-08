@@ -107,7 +107,7 @@ public class XMLEditorController {
         RestClient restClient = RestClient.create()
                 .method("GET")
                 .host("http://localhost:9011/api")
-                .path("/laws/name0");
+                .path("/laws/jedin_metod_pravila");
 
         // retrieve a list from the DataProvider
         GluonObservableObject<Law> lawProperty;

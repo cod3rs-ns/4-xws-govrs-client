@@ -2,6 +2,7 @@
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
 import javafx.beans.property.StringProperty;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -37,7 +38,7 @@ import java.util.List;
     "stav"
 })
 @XmlRootElement(name = "clan", namespace = "http://www.parlament.gov.rs/schema/elementi")
-public class Article {
+public class Article extends Element{
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi", required = true)
     protected List<Paragraph> stav;
@@ -128,5 +129,43 @@ public class Article {
 
     public StringProperty nameProperty() {
         return name;
+    }
+
+    @Override
+    public void initChildrenObservableList() {
+        // add all paragraphs
+        for (Element e:getStav()) {
+            getChildren().add(e);
+        }
+
+        // init observable list for all children
+        for (Element e: getChildren()) {
+            e.initChildrenObservableList();
+        }
+    }
+
+    @Override
+    public void createAndAddChild(String name) {
+
+    }
+
+    @Override
+    public String createElementOpening() {
+        return null;
+    }
+
+    @Override
+    public String createElementAttrs() {
+        return null;
+    }
+
+    @Override
+    public String createElementContent() {
+        return null;
+    }
+
+    @Override
+    public String createElementClosing() {
+        return null;
     }
 }

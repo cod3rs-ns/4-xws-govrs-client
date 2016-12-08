@@ -2,6 +2,7 @@
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
 import javafx.beans.property.StringProperty;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -37,7 +38,7 @@ import java.util.List;
     "content"
 })
 @XmlRootElement(name = "stav", namespace = "http://www.parlament.gov.rs/schema/elementi")
-public class Paragraph {
+public class Paragraph extends Element{
 
     @XmlElementRef(name = "tacka", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Clause.class, required = false)
     @XmlMixed
@@ -130,5 +131,49 @@ public class Paragraph {
 
     public StringProperty nameProperty() {
         return name;
+    }
+
+    @Override
+    public void initChildrenObservableList() {
+        // add all clauses and all chunks of text content
+        for (Object o:getContent()) {
+            if (o instanceof Clause) {
+                Clause e = (Clause)o;
+                getChildren().add(e);
+            } else {
+                StringElement se = new StringElement(o.toString());
+                getChildren().add(se);
+            }
+        }
+
+        // init observable list for all children
+        for (Element e: getChildren()) {
+            e.initChildrenObservableList();
+        }
+    }
+
+    @Override
+    public void createAndAddChild(String name) {
+
+    }
+
+    @Override
+    public String createElementOpening() {
+        return null;
+    }
+
+    @Override
+    public String createElementAttrs() {
+        return null;
+    }
+
+    @Override
+    public String createElementContent() {
+        return null;
+    }
+
+    @Override
+    public String createElementClosing() {
+        return null;
     }
 }

@@ -133,7 +133,15 @@ public class Section extends Element{
 
     @Override
     public void initChildrenObservableList() {
+        // add all articles
+        for (Element e:getClan()) {
+            getChildren().add(e);
+        }
 
+        // init observable list for all children
+        for (Element e: getChildren()) {
+            e.initChildrenObservableList();
+        }
     }
 
     @Override

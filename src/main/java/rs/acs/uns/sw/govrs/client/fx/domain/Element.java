@@ -11,6 +11,7 @@ import java.util.function.Function;
 public abstract class Element {
     private final StringProperty name = new SimpleStringProperty();
     private final Function<String, Element> childrenSupplier;
+    private final StringProperty elementContent = new SimpleStringProperty();
     private String image = "/images/dot.png";
     private ObservableList<Element> children = FXCollections.observableArrayList();
 
@@ -47,6 +48,18 @@ public abstract class Element {
 
     public StringProperty nameProperty() {
         return name;
+    }
+
+    public String getElementContent() {
+        return elementContent.get();
+    }
+
+    public StringProperty elementContentProperty() {
+        return elementContent;
+    }
+
+    public void setElementContent(String elementContent) {
+        this.elementContent.set(elementContent);
     }
 
     public ObservableList<Element> getChildren() {
