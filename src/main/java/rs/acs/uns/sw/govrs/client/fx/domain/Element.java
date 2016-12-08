@@ -11,7 +11,7 @@ import java.util.function.Function;
 public abstract class Element {
     private final StringProperty name = new SimpleStringProperty();
     private final Function<String, Element> childrenSupplier;
-    private String image;
+    private String image = "/images/dot.png";
     private ObservableList<Element> children = FXCollections.observableArrayList();
 
     public Element(String name, String image, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
@@ -19,6 +19,10 @@ public abstract class Element {
         this.children = children;
         this.childrenSupplier = childrenSupplier;
         setName(name);
+    }
+
+    public Element(){
+        this.childrenSupplier = null;
     }
 
     public Element(String name, String image, ObservableList<Element> children) {
@@ -48,6 +52,8 @@ public abstract class Element {
     public ObservableList<Element> getChildren() {
         return children;
     }
+
+    public abstract void initChildrenObservableList();
 
     public abstract void createAndAddChild(String name);
 

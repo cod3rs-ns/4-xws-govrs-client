@@ -23,6 +23,11 @@ public class Propis extends Element {
     }
 
     @Override
+    public void initChildrenObservableList() {
+
+    }
+
+    @Override
     public void createAndAddChild(String name) {
         getChildren().add(new Glava(name));
     }

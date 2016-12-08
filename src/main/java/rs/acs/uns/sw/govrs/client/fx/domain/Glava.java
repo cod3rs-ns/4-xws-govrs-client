@@ -26,6 +26,11 @@ public class Glava extends Element {
     }
 
     @Override
+    public void initChildrenObservableList() {
+
+    }
+
+    @Override
     public void createAndAddChild(String name) {
         getChildren().add(new Tacka(name));
     }

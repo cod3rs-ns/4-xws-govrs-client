@@ -9,6 +9,11 @@ public class Text extends Element {
     }
 
     @Override
+    public void initChildrenObservableList() {
+
+    }
+
+    @Override
     public void createAndAddChild(String name) {
 
     }

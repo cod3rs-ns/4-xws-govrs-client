@@ -46,6 +46,11 @@ public class Tacka extends Element {
     }
 
     @Override
+    public void initChildrenObservableList() {
+
+    }
+
+    @Override
     public void createAndAddChild(String name) {
         throw new UnsupportedOperationException("Dot can not have children");
     }

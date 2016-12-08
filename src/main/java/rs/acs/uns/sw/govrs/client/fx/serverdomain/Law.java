@@ -3,6 +3,8 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -74,7 +76,7 @@ import java.util.List;
     "body"
 })
 @XmlRootElement(name = "propis", namespace = "http://www.parlament.gov.rs/schema/propis")
-public class Law {
+public class Law extends Element{
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis")
     protected Law.Head head;
@@ -189,6 +191,49 @@ public class Law {
 
     public StringProperty nameProperty() {
         return name;
+    }
+
+    @Override
+    public void initChildrenObservableList() {
+        // add all chapters
+        for (Element e: getBody().getDio()){
+            getChildren().add(e);
+        }
+
+        // add all parts
+        for (Element e: getBody().getGlava()){
+            getChildren().add(e);
+        }
+
+        // init observable list for all children
+        for (Element e: getChildren()) {
+            e.initChildrenObservableList();
+        }
+    }
+
+    @Override
+    public void createAndAddChild(String name) {
+        // TODO
+    }
+
+    @Override
+    public String createElementOpening() {
+        return null;
+    }
+
+    @Override
+    public String createElementAttrs() {
+        return null;
+    }
+
+    @Override
+    public String createElementContent() {
+        return null;
+    }
+
+    @Override
+    public String createElementClosing() {
+        return null;
     }
 
     /**

@@ -1,6 +1,9 @@
 package rs.acs.uns.sw.govrs.client.fx.editor;
 
 
+import com.gluonhq.connect.GluonObservableObject;
+import com.gluonhq.connect.provider.DataProvider;
+import com.gluonhq.connect.provider.RestClient;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.binding.Bindings;
@@ -23,6 +26,10 @@ import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
+import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
+import rs.acs.uns.sw.govrs.client.fx.rest.SearchResultInputConverter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
 
 import java.util.function.Function;
 
@@ -94,21 +101,38 @@ public class XMLEditorController {
      */
     @FXML
     private void initialize() {
-        Propis propis = createDummyData();
+        //Propis propis = createDummyData();
 
-        preview = new ActPreview(propis);
-        previewContainer.setContent(preview.getNode());
-        preview.update();
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9011/api")
+                .path("/laws/name0");
 
-        tree = new TreeModel(
-                propis,
-                Element::getChildren,
-                Element::nameProperty,
-                preview
-        );
+        // retrieve a list from the DataProvider
+        GluonObservableObject<Law> lawProperty;
+        LawInputConverter converter = new LawInputConverter();
+        lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
 
-        TreeView<Element> treeView = tree.getTreeView();
-        treeContainer.setContent(treeView);
+        lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+            Law propis = lawProperty.get();
+            propis.initChildrenObservableList();
+            preview = new ActPreview(propis);
+            previewContainer.setContent(preview.getNode());
+            preview.update();
+
+            tree = new TreeModel(
+                    propis,
+                    Element::getChildren,
+                    Element::nameProperty,
+                    preview
+            );
+
+            TreeView<Element> treeView = tree.getTreeView();
+            treeContainer.setContent(treeView);
+        }));
+
+
 
         // Populate possible font sizes
         fontSizePicker.setItems(FXCollections.observableArrayList(8, 9, 10, 11, 12, 14, 16, 20, 24, 32, 40));
