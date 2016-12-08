@@ -16,9 +16,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
-import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
-import rs.acs.uns.sw.govrs.client.fx.laws.LawsListing;
-import rs.acs.uns.sw.govrs.client.fx.laws.SingleLaw;
+import rs.acs.uns.sw.govrs.client.fx.laws.LawSearchController;
+import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
 import java.io.IOException;
@@ -60,37 +59,13 @@ public class HomeController extends AnchorPane implements Initializable {
 
     private MainFXApp app;
 
+    private StateManager stateManager;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        /*
-        FXMLLoader loader = new FXMLLoader();
-        loader.setBuilderFactory(new JavaFXBuilderFactory());
-
-        loader.setLocation(MainFXApp.class.getResource("/editor/XMLEditor.fxml"));
-        try (InputStream in = MainFXApp.class.getResourceAsStream("/editor/XMLEditor.fxml")) {
-            AnchorPane editor = loader.load(in);
-            container.setCenter(editor);
-            // Give the controller access to the main app.
-            XMLEditorController controller = loader.getController();
-            controller.setMainApp(app);
-        } catch (IOException e) {
-            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
-        }
-        */
-        FXMLLoader loader = new FXMLLoader();
-        loader.setBuilderFactory(new JavaFXBuilderFactory());
-
-        loader.setLocation(MainFXApp.class.getResource("/laws/LawsListing.fxml"));
-        try (InputStream in = MainFXApp.class.getResourceAsStream("/laws/LawsListing.fxml")) {
-            AnchorPane editor = loader.load(in);
-            container.setCenter(editor);
-            // Give the controller access to the main app.
-            LawsListing controller = loader.getController();
-            //controller.setMainApp(app);
-        } catch (IOException e) {
-            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
-        }
-
+        stateManager = new StateManager();
+        stateManager.setRootContainer(container);
+        stateManager.setApp(app);
 
         // Replaced standard window buttons and their actions
         closeButton.setOnAction(event -> Platform.exit());
@@ -119,12 +94,13 @@ public class HomeController extends AnchorPane implements Initializable {
                 setAldermanActions();
                 break;
             default:
-                actionContainer.getChildren().add(createButton(Constants.HOME, this::action));
+                actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
                 break;
         }
 
         this.userLabel.setText(app.getLoggedUser().getFirstName() + ' ' + app.getLoggedUser().getLastName());
         this.userTypeLabel.setText(app.getLoggedUser().getType());
+        stateManager.switchState(Constants.LAW_SEARCH_FXML);
     }
 
     private void toggleMax() {
@@ -172,16 +148,24 @@ public class HomeController extends AnchorPane implements Initializable {
         Logger.getLogger(HomeController.class.getName()).log(Level.INFO, "Button clicked!");
     }
 
+    private void homeAction() {
+        stateManager.switchState(Constants.LAW_SEARCH_FXML);
+    }
+
+    private void lawAction() {
+        stateManager.switchState(Constants.NEW_LAW_FXML);
+    }
+
     private void setAldermanActions() {
-        actionContainer.getChildren().add(createButton(Constants.HOME, this::action));
-        actionContainer.getChildren().add(createButton(Constants.LAW, this::action));
+        actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction));
         actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
         actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
     }
 
     private void setPresidentActions() {
-        actionContainer.getChildren().add(createButton(Constants.HOME, this::action));
-        actionContainer.getChildren().add(createButton(Constants.LAW, this::action));
+        actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction));
         actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
         actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
         actionContainer.getChildren().add(createButton(Constants.VOTE, this::action));

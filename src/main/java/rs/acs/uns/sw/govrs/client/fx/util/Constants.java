@@ -16,6 +16,10 @@ public class Constants {
     public static final String ALL = "a-all";
     public static final String VOTE = "a-vote";
 
+    // FXML
+    public static final String LAW_SEARCH_FXML = "/laws/LawsListing.fxml";
+    public static final String NEW_LAW_FXML = "/editor/XMLEditor.fxml";
+
 
     private Constants() {
 

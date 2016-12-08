@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LawsListing extends AnchorPane implements Initializable {
+public class LawSearchController extends AnchorPane implements Initializable {
     @FXML
     private VBox lawsContainer;
     @FXML

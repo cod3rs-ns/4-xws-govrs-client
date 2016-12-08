@@ -98,9 +98,7 @@ public class XMLEditorController {
 
         preview = new ActPreview(propis);
         previewContainer.setContent(preview.getNode());
-        //preview.update();
-        //preview.getNode().getEngine().loadContent(RESTClient.testRest("name0"));
-        preview.getNode().getEngine().reload();
+        preview.update();
 
         tree = new TreeModel(
                 propis,
