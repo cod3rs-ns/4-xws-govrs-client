@@ -1,7 +1,11 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.StringProperty;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +45,10 @@ public class Paragraph {
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String id;
+
     @XmlAttribute(name = "name")
-    protected String name;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty name;
 
     /**
      * Gets the value of the content property.
@@ -107,7 +113,7 @@ public class Paragraph {
      *     
      */
     public String getName() {
-        return name;
+        return name.get();
     }
 
     /**
@@ -119,7 +125,10 @@ public class Paragraph {
      *     
      */
     public void setName(String value) {
-        this.name = value;
+        this.name.set(value);
     }
 
+    public StringProperty nameProperty() {
+        return name;
+    }
 }

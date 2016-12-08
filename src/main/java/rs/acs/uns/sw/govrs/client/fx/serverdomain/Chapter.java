@@ -1,7 +1,11 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.StringProperty;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,13 +50,18 @@ public class Chapter {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi", required = true)
     protected List<Part> glava;
+
     @XmlAttribute(name = "role")
-    protected String role;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty role;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String id;
+
     @XmlAttribute(name = "name")
-    protected String name;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty name;
 
     /**
      * Gets the value of the glava property.
@@ -92,7 +101,7 @@ public class Chapter {
      *     
      */
     public String getRole() {
-        return role;
+        return role.get();
     }
 
     /**
@@ -104,7 +113,7 @@ public class Chapter {
      *     
      */
     public void setRole(String value) {
-        this.role = value;
+        this.role.set(value);
     }
 
     /**
@@ -140,7 +149,7 @@ public class Chapter {
      *     
      */
     public String getName() {
-        return name;
+        return name.get();
     }
 
     /**
@@ -152,7 +161,14 @@ public class Chapter {
      *     
      */
     public void setName(String value) {
-        this.name = value;
+        this.name.set(value);
     }
 
+    public StringProperty roleProperty() {
+        return role;
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
 }

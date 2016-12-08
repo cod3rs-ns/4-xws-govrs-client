@@ -80,6 +80,7 @@ public class Law {
     protected Law.Head head;
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis")
     protected Law.Body body;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String id;
@@ -186,6 +187,9 @@ public class Law {
         this.name.setValue(value);
     }
 
+    public StringProperty nameProperty() {
+        return name;
+    }
 
     /**
      * <p>Java class for anonymous complex type.
@@ -323,12 +327,18 @@ public class Law {
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
         @XmlSchemaType(name = "date")
         protected XMLGregorianCalendar datum;
-        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected String status;
+
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
         protected User podnosilac;
+
+
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected String mjesto;
+        @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+        protected StringProperty status;
+
+        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
+        @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+        protected StringProperty mjesto;
 
         /**
          * Gets the value of the datum property.
@@ -363,7 +373,7 @@ public class Law {
          *     
          */
         public String getStatus() {
-            return status;
+            return status.get();
         }
 
         /**
@@ -375,7 +385,7 @@ public class Law {
          *     
          */
         public void setStatus(String value) {
-            this.status = value;
+            this.status.set(value);
         }
 
         /**
@@ -411,7 +421,7 @@ public class Law {
          *     
          */
         public String getMjesto() {
-            return mjesto;
+            return mjesto.get();
         }
 
         /**
@@ -423,9 +433,16 @@ public class Law {
          *     
          */
         public void setMjesto(String value) {
-            this.mjesto = value;
+            this.mjesto.setValue(value);
         }
 
+        public StringProperty statusProperty() {
+            return status;
+        }
+
+        public StringProperty mjestoProperty() {
+            return mjesto;
+        }
     }
 
 }
