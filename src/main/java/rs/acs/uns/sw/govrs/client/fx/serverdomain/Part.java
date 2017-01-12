@@ -181,12 +181,21 @@ public class Part extends Element{
 
     @Override
     public void createAndAddChild(Element element) {
-
+        if (element instanceof Section) {
+            Section s = (Section) element;
+            s.setParent(this);
+            getOdjeljak().add(s);
+            getChildren().add(s);
+        }
     }
 
     @Override
     public void removeChild(Element element) {
-
+        if (element instanceof Section) {
+            Section s = (Section) element;
+            getOdjeljak().remove(s);
+            getChildren().remove(s);
+        }
     }
 
     @Override

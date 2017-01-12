@@ -195,12 +195,38 @@ public class Section extends Element{
 
     @Override
     public void createAndAddChild(Element element) {
+        // add new article
+        if (element instanceof Article) {
+            Article a = (Article)element;
+            a.setParent(this);
+            getClan().add(a);
+            getChildren().add(a);
+        }
 
+        // add new subsection
+        if (element instanceof Subsection) {
+            Subsection s = (Subsection)element;
+            s.setParent(this);
+            getPododjeljak().add(s);
+            getChildren().add(s);
+        }
     }
 
     @Override
     public void removeChild(Element element) {
+        // remove article
+        if (element instanceof Article) {
+            Article a = (Article)element;
+            getClan().remove(a);
+            getChildren().remove(a);
+        }
 
+        // remove subsection
+        if (element instanceof Subsection) {
+            Subsection s = (Subsection) element;
+            getPododjeljak().remove(s);
+            getChildren().remove(s);
+        }
     }
 
     @Override

@@ -165,12 +165,19 @@ public class Article extends Element{
 
     @Override
     public void createAndAddChild(Element element) {
-
+        if (element instanceof Paragraph || element instanceof StringElement) {
+            element.setParent(this);
+            getContent().add(element);
+            getChildren().add(element);
+        }
     }
 
     @Override
     public void removeChild(Element element) {
-
+        if (element instanceof Paragraph || element instanceof StringElement) {
+            getContent().remove(element);
+            getChildren().remove(element);
+        }
     }
 
     @Override

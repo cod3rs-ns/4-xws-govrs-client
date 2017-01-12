@@ -157,12 +157,21 @@ public class Subsection extends Element {
 
     @Override
     public void createAndAddChild(Element element) {
-
+        if (element instanceof Article) {
+            Article a = (Article) element;
+            a.setParent(this);
+            getClan().add(a);
+            getChildren().add(a);
+        }
     }
 
     @Override
     public void removeChild(Element element) {
-
+        if (element instanceof Article) {
+            Article a = (Article) element;
+            getClan().remove(a);
+            getChildren().remove(a);
+        }
     }
 
     @Override

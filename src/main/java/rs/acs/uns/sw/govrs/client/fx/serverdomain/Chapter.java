@@ -186,12 +186,21 @@ public class Chapter extends Element {
 
     @Override
     public void createAndAddChild(Element element) {
-
+        if (element instanceof Part) {
+            Part p = (Part) element;
+            p.setParent(this);
+            getGlava().add(p);
+            getChildren().add(p);
+        }
     }
 
     @Override
     public void removeChild(Element element) {
-
+        if (element instanceof Part) {
+            Part p = (Part) element;
+            getGlava().remove(p);
+            getChildren().remove(p);
+        }
     }
 
     @Override
