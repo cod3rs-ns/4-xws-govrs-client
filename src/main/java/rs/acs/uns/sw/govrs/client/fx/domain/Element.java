@@ -56,7 +56,7 @@ public abstract class Element {
 
     public abstract void initChildrenObservableList();
 
-    public abstract void createAndAddChild(String name);
+    public abstract void createAndAddChild(Element element);
 
     /**
      * Selects image by Element instance type.

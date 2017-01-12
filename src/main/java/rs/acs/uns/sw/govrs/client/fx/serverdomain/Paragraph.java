@@ -163,8 +163,9 @@ public class Paragraph extends Element {
     }
 
 
+
     @Override
-    public void createAndAddChild(String name) {
+    public void createAndAddChild(Element element) {
 
     }
 
