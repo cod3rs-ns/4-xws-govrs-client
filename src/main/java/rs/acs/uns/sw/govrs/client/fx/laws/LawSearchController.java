@@ -36,7 +36,7 @@ public class LawSearchController extends AnchorPane implements Initializable {
             // create a RestClient to the specific URL
             RestClient restClient = RestClient.create()
                     .method("GET")
-                    .host("http://localhost:9011/api")
+                    .host("http://localhost:9000/api")
                     .path("/laws/");
 
             // retrieve a list from the DataProvider

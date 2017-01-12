@@ -11,9 +11,9 @@ import javafx.scene.input.KeyCode;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.domain.Glava;
-import rs.acs.uns.sw.govrs.client.fx.domain.Propis;
-import rs.acs.uns.sw.govrs.client.fx.domain.Tacka;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Clause;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Part;
 
 import java.util.function.Function;
 
@@ -26,21 +26,21 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
     public CustomTextFieldTreeCell(Function<Element, ObservableValue<String>> text, ActPreview preview) {
         this.text = text;
         this.preview = preview;
-        if (getItem() instanceof Propis) {
-            MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/head.png"))));
+        if (getItem() instanceof Law) {
+            MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/chapter.png"))));
             MenuItem newDeo = new MenuItem("Nova deo/dio/duo", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/deo.png"))));
             addMenu.getItems().add(newGlava);
             addMenu.getItems().add(newDeo);
             newGlava.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove vugle!"));
             newDeo.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo novog dela!"));
         }
-        if(getItem() instanceof Tacka) {
+        if(getItem() instanceof Clause) {
             MenuItem falseItem = new MenuItem("Nema šta na tačku dodati!");
             addMenu.getItems().add(falseItem);
 
             falseItem.setDisable(true);
         }
-        if(getItem() instanceof Glava) {
+        if(getItem() instanceof Part) {
             MenuItem addMenuItem = new MenuItem("Nova tačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/dot.png"))));
             addMenu.getItems().add(addMenuItem);
             addMenuItem.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove čke!"));
@@ -89,21 +89,21 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                     setGraphic(new ImageView(new Image(MainFXApp.class.getResourceAsStream(item.getImage()))));
                 }
                 ContextMenu addMenu = new ContextMenu();
-                if (getItem() instanceof Propis) {
-                    MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/head.png"))));
+                if (getItem() instanceof Law) {
+                    MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/chapter.png"))));
                     MenuItem newDeo = new MenuItem("Nova deo/dio/duo", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/deo.png"))));
                     addMenu.getItems().add(newGlava);
                     addMenu.getItems().add(newDeo);
                     newGlava.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove vugle!"));
                     newDeo.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo novog dela!"));
                 }
-                if(getItem() instanceof Tacka) {
+                if(getItem() instanceof Clause) {
                     MenuItem falseItem = new MenuItem("Nema šta na tačku dodati!");
                     addMenu.getItems().add(falseItem);
 
                     falseItem.setDisable(true);
                 }
-                if(getItem() instanceof Glava) {
+                if(getItem() instanceof Part) {
                     MenuItem addMenuItem = new MenuItem("Nova tačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/dot.png"))));
                     addMenu.getItems().add(addMenuItem);
                     addMenuItem.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove čke!"));

@@ -19,9 +19,6 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.domain.Glava;
-import rs.acs.uns.sw.govrs.client.fx.domain.Propis;
-import rs.acs.uns.sw.govrs.client.fx.domain.Tacka;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
@@ -106,8 +103,8 @@ public class XMLEditorController {
         // create a RestClient to the specific URL
         RestClient restClient = RestClient.create()
                 .method("GET")
-                .host("http://localhost:9011/api")
-                .path("/laws/jedin_metod_pravila");
+                .host("http://localhost:9000/api")
+                .path("/laws/law01");
 
         // retrieve a list from the DataProvider
         GluonObservableObject<Law> lawProperty;
@@ -248,30 +245,6 @@ public class XMLEditorController {
         this.mainApp = mainApp;
     }
 
-    private Propis createDummyData() {
-        Propis propis = new Propis("Propis o destabilizaciji mozga", "/images/law.png");
-        Glava glava1 = new Glava("Glava prva", null);
-        Glava glava2 = new Glava("Glava druga", null);
-        Glava glava3 = new Glava("Glava treća", null);
-        Tacka t1 = new Tacka("Prva tačka");
-        Tacka t2 = new Tacka("Druga tačka");
-        Tacka t3 = new Tacka("Treća tačka");
-        Tacka t4 = new Tacka("Četvrta tačka");
-        Tacka t5 = new Tacka("Peta tačka");
-        Tacka t6 = new Tacka("Šesta tačka");
-
-        propis.getChildren().add(glava1);
-        propis.getChildren().add(glava2);
-        propis.getChildren().add(glava3);
-
-        glava1.getChildren().add(t1);
-        glava2.getChildren().add(t2);
-        glava2.getChildren().add(t3);
-        glava3.getChildren().add(t4);
-        glava3.getChildren().add(t5);
-        glava3.getChildren().add(t6);
-        return propis;
-    }
 
     private void toggleBold() {
         updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))));

@@ -5,11 +5,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.function.Function;
 
 public abstract class Element {
-    private final StringProperty name = new SimpleStringProperty();
     private final Function<String, Element> childrenSupplier;
     private final StringProperty elementContent = new SimpleStringProperty();
     private String image = "/images/dot.png";
@@ -38,17 +39,9 @@ public abstract class Element {
         this(name, "/images/dot.png", FXCollections.observableArrayList(), n -> null);
     }
 
-    public String getName() {
-        return name.get();
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public StringProperty nameProperty() {
-        return name;
-    }
+    public abstract String getName();
+    public abstract void setName(String name);
+    public abstract StringProperty nameProperty();
 
     public String getElementContent() {
         return elementContent.get();
@@ -71,6 +64,41 @@ public abstract class Element {
     public abstract void createAndAddChild(String name);
 
     public String getImage() {
+        if (this instanceof Law) {
+            return "/images/law.png";
+        }
+        if (this instanceof Chapter) {
+            return "/images/chapter.png";
+        }
+        if (this instanceof Part) {
+            return "/images/part.png";
+        }
+        if (this instanceof Section) {
+            return "/images/section.png";
+        }
+        if (this instanceof Subsection) {
+            return "/images/subsection.png";
+        }
+        if (this instanceof Article) {
+            return "/images/article.png";
+        }
+        if (this instanceof Paragraph) {
+            return "/images/paragraph.png";
+        }
+        if (this instanceof Clause) {
+            return "/images/clause.png";
+        }
+        if (this instanceof Subclause) {
+            return "/images/subclause.png";
+        }
+        if (this instanceof Item) {
+            return "/images/item.png";
+        }
+        if (this instanceof StringElement) {
+            return "/images/text.png";
+        }
+
+
         return image;
     }
 
