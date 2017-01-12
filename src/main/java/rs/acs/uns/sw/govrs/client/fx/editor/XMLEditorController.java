@@ -36,11 +36,11 @@ import java.util.function.Function;
 public class XMLEditorController {
 
     private static final String PRESSED = "pressed";
-    private final StyledTextArea<ParStyle, TextStyle> area;
+    public final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
 
     private TreeModel tree;
-    private ActPreview preview;
+    public ActPreview preview;
 
     // ------------------ Containers -------------------
     @FXML
@@ -90,6 +90,7 @@ public class XMLEditorController {
                 (text, style) -> text.setStyle(style.toCss()));
         area.setWrapText(true);
         area.setStyleCodecs(ParStyle.CODEC, TextStyle.CODEC);
+
     }
 
     /**
@@ -116,13 +117,12 @@ public class XMLEditorController {
             propis.initChildrenObservableList();
             preview = new ActPreview(propis);
             previewContainer.setContent(preview.getNode());
-            preview.update();
-
+            area.replaceText(0, 0, "");
             tree = new TreeModel(
                     propis,
                     Element::getChildren,
                     Element::nameProperty,
-                    preview
+                    this
             );
 
             TreeView<Element> treeView = tree.getTreeView();

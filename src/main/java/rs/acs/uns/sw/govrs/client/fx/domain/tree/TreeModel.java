@@ -5,8 +5,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
 
 import java.util.function.Function;
 
@@ -15,18 +15,26 @@ import static java.util.stream.Collectors.toList;
 public class TreeModel {
     private final TreeView<Element> treeView;
     private final Function<Element, ObservableList<Element>> children;
-    private final ActPreview preview;
     private Function<Element, ObservableValue<String>> text;
+    private XMLEditorController editorController;
 
     public TreeModel(Element rootItem, Function<Element, ObservableList<Element>> children,
-                     Function<Element, ObservableValue<String>> text, ActPreview preview) {
+                     Function<Element, ObservableValue<String>> text, XMLEditorController controller) {
         this.text = text;
         this.children = children;
-        this.preview = preview;
+        this.editorController = controller;
 
         treeView = new TreeView<>(createTreeItem(rootItem));
         treeView.setEditable(true);
-        treeView.setCellFactory(p -> new CustomTextFieldTreeCell(text, preview));
+        treeView.setCellFactory(p -> new CustomTextFieldTreeCell(text, editorController.preview));
+        treeView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                TreeItem<Element> item = treeView.getSelectionModel().getSelectedItem();
+                System.out.println(item);
+                // TODO create Logic for displaying in text area
+                editorController.area.replaceText(0, editorController.area.getLength(), item.getValue().getName());
+            }
+        });
     }
 
     public TreeView<Element> getTreeView() {
