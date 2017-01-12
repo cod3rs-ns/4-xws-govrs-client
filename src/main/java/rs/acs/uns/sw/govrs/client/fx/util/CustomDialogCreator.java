@@ -3,6 +3,7 @@ package rs.acs.uns.sw.govrs.client.fx.util;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 
 public class CustomDialogCreator {
@@ -19,6 +20,7 @@ public class CustomDialogCreator {
         stage.getIcons().add(
                 new Image(MainFXApp.class.getResource("/images/dialog.png").toString()));
         return dialog;
+
     }
 
     public static Alert createDeleteConfirmationDialog(String elementName) {
