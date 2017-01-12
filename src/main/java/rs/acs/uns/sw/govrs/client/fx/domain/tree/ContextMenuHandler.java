@@ -1,13 +1,11 @@
 package rs.acs.uns.sw.govrs.client.fx.domain.tree;
 
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.editor.CustomDialogCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
 import java.util.Optional;
@@ -86,8 +84,17 @@ public class ContextMenuHandler {
     private ContextMenu createPartContextMenu(Part part) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem newSection = new MenuItem("Novi odeljak", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/section.png"))));
+        MenuItem deleteOption = createDeleteMenuItem();
         contextMenu.getItems().add(newSection);
+        contextMenu.getItems().add(deleteOption);
         newSection.setOnAction(event -> part.createAndAddChild(new Section()));
+        deleteOption.setOnAction(event -> {
+            Alert deleteAlert = CustomDialogCreator.createDeleteConfirmationDialog(part.getName());
+            Optional<ButtonType> result = deleteAlert.showAndWait();
+            if (result.get() == CustomDialogCreator.YES){
+                part.getParent().removeChild(part);
+            }
+        });
         return contextMenu;
     }
 
@@ -164,17 +171,20 @@ public class ContextMenuHandler {
 
     private ContextMenu createItemContextMenu(Item item) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem deleteItem = new MenuItem("Ukloni", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/delete.png"))));
-        deleteItem.setDisable(true);
+        MenuItem deleteItem = createDeleteMenuItem();
         contextMenu.getItems().add(deleteItem);
         return contextMenu;
     }
 
     private ContextMenu createTextContextMenu(StringElement text) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem deleteItem = new MenuItem("Ukloni", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/delete.png"))));
+        MenuItem deleteItem = createDeleteMenuItem();
         deleteItem.setDisable(true);
         contextMenu.getItems().add(deleteItem);
         return contextMenu;
+    }
+
+    private MenuItem createDeleteMenuItem() {
+        return new MenuItem("Ukloni", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/delete.png"))));
     }
 }

@@ -149,6 +149,7 @@ public class Subsection extends Element {
 
         // init observable list for all children
         for (Element e: getChildren()) {
+            e.setParent(this);
             e.initChildrenObservableList();
         }
     }

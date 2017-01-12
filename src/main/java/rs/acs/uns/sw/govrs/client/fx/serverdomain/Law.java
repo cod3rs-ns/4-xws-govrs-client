@@ -154,6 +154,7 @@ public class Law  extends Element{
 
         // init observable list for all children
         for (Element e: getChildren()) {
+            e.setParent(this);
             e.initChildrenObservableList();
         }
     }
@@ -163,12 +164,14 @@ public class Law  extends Element{
         // create Part
         if (element instanceof Part) {
             Part p = (Part)element;
+            p.setParent(this);
             getBody().getGlava().add(p);
             getChildren().add(p);
         }
         // create Chapter
         if (element instanceof Chapter) {
             Chapter c = (Chapter)element;
+            c.setParent(this);
             getBody().getDio().add(c);
             getChildren().add(c);
         }
@@ -176,7 +179,18 @@ public class Law  extends Element{
 
     @Override
     public void removeChild(Element element) {
-
+        // create Part
+        if (element instanceof Part) {
+            Part p = (Part)element;
+            getBody().getGlava().remove(p);
+            getChildren().remove(p);
+        }
+        // create Chapter
+        if (element instanceof Chapter) {
+            Chapter c = (Chapter)element;
+            getBody().getDio().remove(c);
+            getChildren().remove(c);
+        }
     }
 
     @Override

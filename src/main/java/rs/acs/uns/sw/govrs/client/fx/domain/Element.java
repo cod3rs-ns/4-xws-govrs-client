@@ -13,6 +13,7 @@ public abstract class Element {
     private final Function<String, Element> childrenSupplier;
     private final StringProperty elementContent = new SimpleStringProperty();
     private ObservableList<Element> children = FXCollections.observableArrayList();
+    private Element parent;
 
     public Element(String name, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
         this.children = children;
@@ -59,6 +60,15 @@ public abstract class Element {
     public abstract void createAndAddChild(Element element);
 
     public abstract void removeChild(Element element);
+
+
+    public Element getParent() {
+        return parent;
+    }
+
+    public void setParent(Element parent) {
+        this.parent = parent;
+    }
 
     /**
      * Selects image by Element instance type.
