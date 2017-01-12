@@ -160,6 +160,11 @@ public class Subsection extends Element {
     }
 
     @Override
+    public void removeChild(Element element) {
+
+    }
+
+    @Override
     public String createElementOpening() {
         return null;
     }

@@ -160,6 +160,22 @@ public class Law  extends Element{
 
     @Override
     public void createAndAddChild(Element element) {
+        // create Part
+        if (element instanceof Part) {
+            Part p = (Part)element;
+            getBody().getGlava().add(p);
+            getChildren().add(p);
+        }
+        // create Chapter
+        if (element instanceof Chapter) {
+            Chapter c = (Chapter)element;
+            getBody().getDio().add(c);
+            getChildren().add(c);
+        }
+    }
+
+    @Override
+    public void removeChild(Element element) {
 
     }
 

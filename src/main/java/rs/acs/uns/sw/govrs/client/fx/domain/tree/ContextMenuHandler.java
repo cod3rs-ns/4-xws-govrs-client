@@ -2,11 +2,15 @@ package rs.acs.uns.sw.govrs.client.fx.domain.tree;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
+
+import java.util.Optional;
 
 public class ContextMenuHandler {
 
@@ -54,13 +58,28 @@ public class ContextMenuHandler {
 
     private ContextMenu createLawContextMenu(Law law) {
         ContextMenu contextMenu = new ContextMenu();
-
         MenuItem newChapter = new MenuItem("Novi deo", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/chapter.png"))));
         MenuItem newPart = new MenuItem("Nova glava", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/part.png"))));
         contextMenu.getItems().add(newPart);
         contextMenu.getItems().add(newChapter);
-        newPart.setOnAction(event -> law.createAndAddChild("Part"));
-        newChapter.setOnAction(event -> law.createAndAddChild("Chapter"));
+        newPart.setOnAction(event -> {
+            TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Glava");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> {
+                Part p = new Part();
+                p.setName(name);
+                law.createAndAddChild(p);
+            });
+        });
+        newChapter.setOnAction(event -> {
+            TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Deo");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> {
+                Chapter c = new Chapter();
+                c.setName(name);
+                law.createAndAddChild(c);
+            });
+        });
         return contextMenu;
     }
 
@@ -68,7 +87,7 @@ public class ContextMenuHandler {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem newSection = new MenuItem("Novi odeljak", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/section.png"))));
         contextMenu.getItems().add(newSection);
-        newSection.setOnAction(event -> part.createAndAddChild("Section"));
+        newSection.setOnAction(event -> part.createAndAddChild(new Section()));
         return contextMenu;
     }
 
@@ -76,7 +95,7 @@ public class ContextMenuHandler {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem newSection = new MenuItem("Nova glava", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/part.png"))));
         contextMenu.getItems().add(newSection);
-        newSection.setOnAction(event -> chapter.createAndAddChild("Part"));
+        newSection.setOnAction(event -> chapter.createAndAddChild(new Part()));
         return contextMenu;
     }
 
@@ -86,8 +105,8 @@ public class ContextMenuHandler {
         MenuItem newArticle = new MenuItem("Novi član", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/article.png"))));
         contextMenu.getItems().add(newSubsection);
         contextMenu.getItems().add(newArticle);
-        newSubsection.setOnAction(event -> section.createAndAddChild("Subsection"));
-        newArticle.setOnAction(event -> section.createAndAddChild("Article"));
+        newSubsection.setOnAction(event -> section.createAndAddChild(new Subsection()));
+        newArticle.setOnAction(event -> section.createAndAddChild(new Article()));
         return contextMenu;
     }
 
@@ -95,7 +114,7 @@ public class ContextMenuHandler {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem newArticle = new MenuItem("Novi član", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/article.png"))));
         contextMenu.getItems().add(newArticle);
-        newArticle.setOnAction(event -> subsection.createAndAddChild("Article"));
+        newArticle.setOnAction(event -> subsection.createAndAddChild(new Article()));
         return contextMenu;
     }
 
@@ -105,8 +124,8 @@ public class ContextMenuHandler {
         MenuItem newText = new MenuItem("Novi tekst", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/text.png"))));
         contextMenu.getItems().add(newParagraph);
         contextMenu.getItems().add(newText);
-        newParagraph.setOnAction(event -> article.createAndAddChild("Article"));
-        newText.setOnAction(event -> article.createAndAddChild("Text"));
+        newParagraph.setOnAction(event -> article.createAndAddChild(new Paragraph()));
+        newText.setOnAction(event -> article.createAndAddChild(new StringElement("")));
         return contextMenu;
     }
 
@@ -116,8 +135,8 @@ public class ContextMenuHandler {
         MenuItem newText = new MenuItem("Novi tekst", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/text.png"))));
         contextMenu.getItems().add(newClause);
         contextMenu.getItems().add(newText);
-        newClause.setOnAction(event -> paragraph.createAndAddChild("Clause"));
-        newText.setOnAction(event -> paragraph.createAndAddChild("Text"));
+        newClause.setOnAction(event -> paragraph.createAndAddChild(new Clause()));
+        newText.setOnAction(event -> paragraph.createAndAddChild(new StringElement("")));
         return contextMenu;
     }
 
@@ -127,8 +146,8 @@ public class ContextMenuHandler {
         MenuItem newText = new MenuItem("Novi tekst", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/text.png"))));
         contextMenu.getItems().add(newSubclause);
         contextMenu.getItems().add(newText);
-        newSubclause.setOnAction(event -> clause.createAndAddChild("Subclause"));
-        newText.setOnAction(event -> clause.createAndAddChild("Text"));
+        newSubclause.setOnAction(event -> clause.createAndAddChild(new Subclause()));
+        newText.setOnAction(event -> clause.createAndAddChild(new StringElement("")));
         return contextMenu;
     }
 
@@ -138,8 +157,8 @@ public class ContextMenuHandler {
         MenuItem newText = new MenuItem("Novi tekst", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/text.png"))));
         contextMenu.getItems().add(newItem);
         contextMenu.getItems().add(newText);
-        newItem.setOnAction(event -> subclause.createAndAddChild("Item"));
-        newText.setOnAction(event -> subclause.createAndAddChild("Text"));
+        newItem.setOnAction(event -> subclause.createAndAddChild(new Item()));
+        newText.setOnAction(event -> subclause.createAndAddChild(new StringElement("")));
         return contextMenu;
     }
 

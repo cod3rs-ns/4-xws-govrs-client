@@ -189,6 +189,11 @@ public class Chapter extends Element {
     }
 
     @Override
+    public void removeChild(Element element) {
+
+    }
+
+    @Override
     public String createElementOpening() {
         return null;
     }

@@ -58,6 +58,8 @@ public abstract class Element {
 
     public abstract void createAndAddChild(Element element);
 
+    public abstract void removeChild(Element element);
+
     /**
      * Selects image by Element instance type.
      *
