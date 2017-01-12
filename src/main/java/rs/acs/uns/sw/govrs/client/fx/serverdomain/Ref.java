@@ -12,18 +12,15 @@ import javax.xml.bind.annotation.*;
 
 
 /**
- * <p>Java class for TLice complex type.
+ * <p>Java class for anonymous complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="TLice">
+ * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element ref="{http://www.parlament.gov.rs/schema/korisnici}Adresa"/>
- *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -32,42 +29,40 @@ import javax.xml.bind.annotation.*;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TLice", namespace = "http://www.parlament.gov.rs/schema/korisnici", propOrder = {
-    "adresa"
+@XmlType(name = "", propOrder = {
+    "content"
 })
-@XmlSeeAlso({
-    LegalEntity.class,
-    Individual.class
-})
-public abstract class Person {
+@XmlRootElement(name = "ref", namespace = "http://www.parlament.gov.rs/schema/elementi")
+public class Ref {
 
-    @XmlElement(name = "Adresa", namespace = "http://www.parlament.gov.rs/schema/korisnici", required = true)
-    protected Address adresa;
+    @XmlValue
+    protected String content;
     @XmlAttribute(name = "id")
-    protected Long id;
+    @XmlSchemaType(name = "anyURI")
+    protected String id;
 
     /**
-     * Gets the value of the adresa property.
+     * Gets the value of the content property.
      * 
      * @return
      *     possible object is
-     *     {@link Address }
+     *     {@link String }
      *     
      */
-    public Address getAdresa() {
-        return adresa;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * Sets the value of the adresa property.
+     * Sets the value of the content property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Address }
+     *     {@link String }
      *     
      */
-    public void setAdresa(Address value) {
-        this.adresa = value;
+    public void setContent(String value) {
+        this.content = value;
     }
 
     /**
@@ -75,10 +70,10 @@ public abstract class Person {
      * 
      * @return
      *     possible object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -87,10 +82,10 @@ public abstract class Person {
      * 
      * @param value
      *     allowed object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public void setId(Long value) {
+    public void setId(String value) {
         this.id = value;
     }
 

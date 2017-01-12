@@ -8,13 +8,7 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
-
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
@@ -24,12 +18,12 @@ import java.util.Map;
 
 
 /**
- * <p>Java class for propis element declaration.
+ * <p>Java class for amandmani element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="propis">
+ * &lt;element name="amandmani">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -106,6 +100,18 @@ import java.util.Map;
  *                         &lt;/complexContent>
  *                       &lt;/complexType>
  *                     &lt;/element>
+ *                     &lt;element name="propis">
+ *                       &lt;complexType>
+ *                         &lt;complexContent>
+ *                           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                             &lt;sequence>
+ *                               &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}ref"/>
+ *                             &lt;/sequence>
+ *                             &lt;anyAttribute processContents='lax'/>
+ *                           &lt;/restriction>
+ *                         &lt;/complexContent>
+ *                       &lt;/complexType>
+ *                     &lt;/element>
  *                   &lt;/sequence>
  *                   &lt;anyAttribute processContents='lax'/>
  *                 &lt;/restriction>
@@ -116,10 +122,20 @@ import java.util.Map;
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                   &lt;choice>
- *                     &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}glava" maxOccurs="unbounded"/>
- *                     &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}dio" maxOccurs="unbounded"/>
- *                   &lt;/choice>
+ *                   &lt;sequence>
+ *                     &lt;element name="pravni_osnov">
+ *                       &lt;complexType>
+ *                         &lt;complexContent>
+ *                           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                             &lt;sequence>
+ *                               &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}clan"/>
+ *                             &lt;/sequence>
+ *                           &lt;/restriction>
+ *                         &lt;/complexContent>
+ *                       &lt;/complexType>
+ *                     &lt;/element>
+ *                     &lt;element ref="{http://www.parlament.gov.rs/schema/amandman}amandman" maxOccurs="unbounded"/>
+ *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -140,22 +156,18 @@ import java.util.Map;
     "head",
     "body"
 })
-@XmlRootElement(name = "propis", namespace = "http://www.parlament.gov.rs/schema/propis")
-public class Law  extends Element{
+@XmlRootElement(name = "amandmani", namespace = "http://www.parlament.gov.rs/schema/amandman")
+public class Amendments {
 
-    @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-    protected Law.Head head;
-    @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-    protected Law.Body body;
-
+    @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+    protected Head head;
+    @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+    protected Body body;
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
     protected String id;
-
     @XmlAttribute(name = "name")
-    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty name = new SimpleStringProperty("Propis");
-
+    protected String name;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -164,10 +176,10 @@ public class Law  extends Element{
      *
      * @return
      *     possible object is
-     *     {@link Law.Head }
+     *     {@link Head }
      *
      */
-    public Law.Head getHead() {
+    public Head getHead() {
         return head;
     }
 
@@ -176,10 +188,10 @@ public class Law  extends Element{
      *
      * @param value
      *     allowed object is
-     *     {@link Law.Head }
+     *     {@link Head }
      *
      */
-    public void setHead(Law.Head value) {
+    public void setHead(Head value) {
         this.head = value;
     }
 
@@ -188,10 +200,10 @@ public class Law  extends Element{
      *
      * @return
      *     possible object is
-     *     {@link Law.Body }
+     *     {@link Body }
      *
      */
-    public Law.Body getBody() {
+    public Body getBody() {
         return body;
     }
 
@@ -200,10 +212,10 @@ public class Law  extends Element{
      *
      * @param value
      *     allowed object is
-     *     {@link Law.Body }
+     *     {@link Body }
      *
      */
-    public void setBody(Law.Body value) {
+    public void setBody(Body value) {
         this.body = value;
     }
 
@@ -240,7 +252,7 @@ public class Law  extends Element{
      *
      */
     public String getName() {
-        return name.get();
+        return name;
     }
 
     /**
@@ -251,57 +263,8 @@ public class Law  extends Element{
      *     {@link String }
      *
      */
-
     public void setName(String value) {
-        this.name.setValue(value);
-    }
-
-    public StringProperty nameProperty() {
-        return name;
-    }
-
-
-    @Override
-    public void initChildrenObservableList() {
-        // add all chapters
-        for (Element e: getBody().getDio()){
-            getChildren().add(e);
-        }
-
-        // add all parts
-        for (Element e: getBody().getGlava()){
-            getChildren().add(e);
-        }
-
-        // init observable list for all children
-        for (Element e: getChildren()) {
-            e.initChildrenObservableList();
-        }
-    }
-
-    @Override
-    public void createAndAddChild(String name) {
-        // TODO
-    }
-
-    @Override
-    public String createElementOpening() {
-        return null;
-    }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+        this.name = value;
     }
 
     /**
@@ -332,10 +295,20 @@ public class Law  extends Element{
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;choice>
-     *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}glava" maxOccurs="unbounded"/>
-     *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}dio" maxOccurs="unbounded"/>
-     *       &lt;/choice>
+     *       &lt;sequence>
+     *         &lt;element name="pravni_osnov">
+     *           &lt;complexType>
+     *             &lt;complexContent>
+     *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *                 &lt;sequence>
+     *                   &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}clan"/>
+     *                 &lt;/sequence>
+     *               &lt;/restriction>
+     *             &lt;/complexContent>
+     *           &lt;/complexType>
+     *         &lt;/element>
+     *         &lt;element ref="{http://www.parlament.gov.rs/schema/amandman}amandman" maxOccurs="unbounded"/>
+     *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -345,72 +318,122 @@ public class Law  extends Element{
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "glava",
-        "dio"
+        "pravniOsnov",
+        "amandman"
     })
     public static class Body {
 
-        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi")
-        protected List<Part> glava;
-        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi")
-        protected List<Chapter> dio;
+        @XmlElement(name = "pravni_osnov", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected PravniOsnov pravniOsnov;
+        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected List<Amendment> amandman;
 
         /**
-         * Gets the value of the glava property.
+         * Gets the value of the pravniOsnov property.
          *
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the glava property.
-         *
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getGlava().add(newItem);
-         * </pre>
-         *
-         *
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link Part }
-         *
+         * @return
+         *     possible object is
+         *     {@link PravniOsnov }
          *
          */
-        public List<Part> getGlava() {
-            if (glava == null) {
-                glava = new ArrayList<Part>();
-            }
-            return this.glava;
+        public PravniOsnov getPravniOsnov() {
+            return pravniOsnov;
         }
 
         /**
-         * Gets the value of the dio property.
+         * Sets the value of the pravniOsnov property.
+         *
+         * @param value
+         *     allowed object is
+         *     {@link PravniOsnov }
+         *
+         */
+        public void setPravniOsnov(PravniOsnov value) {
+            this.pravniOsnov = value;
+        }
+
+        /**
+         * Gets the value of the amandman property.
          *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the dio property.
+         * This is why there is not a <CODE>set</CODE> method for the amandman property.
          *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
-         *    getDio().add(newItem);
+         *    getAmandman().add(newItem);
          * </pre>
          *
          *
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Chapter }
+         * {@link Amendment }
          *
          *
          */
-        public List<Chapter> getDio() {
-            if (dio == null) {
-                dio = new ArrayList<Chapter>();
+        public List<Amendment> getAmandman() {
+            if (amandman == null) {
+                amandman = new ArrayList<Amendment>();
             }
-            return this.dio;
+            return this.amandman;
+        }
+
+
+        /**
+         * <p>Java class for anonymous complex type.
+         *
+         * <p>The following schema fragment specifies the expected content contained within this class.
+         *
+         * <pre>
+         * &lt;complexType>
+         *   &lt;complexContent>
+         *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+         *       &lt;sequence>
+         *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}clan"/>
+         *       &lt;/sequence>
+         *     &lt;/restriction>
+         *   &lt;/complexContent>
+         * &lt;/complexType>
+         * </pre>
+         *
+         *
+         */
+        @XmlAccessorType(XmlAccessType.FIELD)
+        @XmlType(name = "", propOrder = {
+            "clan"
+        })
+        public static class PravniOsnov {
+
+            @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi", required = true)
+            protected Article clan;
+
+            /**
+             * Gets the value of the clan property.
+             *
+             * @return
+             *     possible object is
+             *     {@link Article }
+             *
+             */
+            public Article getClan() {
+                return clan;
+            }
+
+            /**
+             * Sets the value of the clan property.
+             *
+             * @param value
+             *     allowed object is
+             *     {@link Article }
+             *
+             */
+            public void setClan(Article value) {
+                this.clan = value;
+            }
+
         }
 
     }
@@ -493,6 +516,18 @@ public class Law  extends Element{
      *             &lt;/complexContent>
      *           &lt;/complexType>
      *         &lt;/element>
+     *         &lt;element name="propis">
+     *           &lt;complexType>
+     *             &lt;complexContent>
+     *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *                 &lt;sequence>
+     *                   &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}ref"/>
+     *                 &lt;/sequence>
+     *                 &lt;anyAttribute processContents='lax'/>
+     *               &lt;/restriction>
+     *             &lt;/complexContent>
+     *           &lt;/complexType>
+     *         &lt;/element>
      *       &lt;/sequence>
      *       &lt;anyAttribute processContents='lax'/>
      *     &lt;/restriction>
@@ -511,29 +546,29 @@ public class Law  extends Element{
         "glasovaZa",
         "glasovaProtiv",
         "glasovaSuzdrzani",
-        "podnosilac"
+        "podnosilac",
+        "propis"
     })
     public static class Head {
 
-        @XmlElement(name = "datum_predloga", namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected Law.Head.DatumPredloga datumPredloga;
-        @XmlElement(name = "datum_izglasavanja", namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected Law.Head.DatumIzglasavanja datumIzglasavanja;
-        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected Law.Head.Status status;
-        @XmlElement(name = "glasova_za", namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected Law.Head.GlasovaZa glasovaZa;
-        @XmlElement(name = "glasova_protiv", namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected Law.Head.GlasovaProtiv glasovaProtiv;
-        @XmlElement(name = "glasova_suzdrzani", namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected Law.Head.GlasovaSuzdrzani glasovaSuzdrzani;
-        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        protected Law.Head.Podnosilac podnosilac;
-
-        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
-        @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-        protected StringProperty mjesto = new SimpleStringProperty();
-
+        @XmlElement(name = "datum_predloga", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected DatumPredloga datumPredloga;
+        @XmlElement(name = "datum_izglasavanja", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected DatumIzglasavanja datumIzglasavanja;
+        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected Status status;
+        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected String mjesto;
+        @XmlElement(name = "glasova_za", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected GlasovaZa glasovaZa;
+        @XmlElement(name = "glasova_protiv", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected GlasovaProtiv glasovaProtiv;
+        @XmlElement(name = "glasova_suzdrzani", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected GlasovaSuzdrzani glasovaSuzdrzani;
+        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected Podnosilac podnosilac;
+        @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
+        protected Propis propis;
         @XmlAnyAttribute
         private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -542,10 +577,10 @@ public class Law  extends Element{
          *
          * @return
          *     possible object is
-         *     {@link Law.Head.DatumPredloga }
+         *     {@link DatumPredloga }
          *
          */
-        public Law.Head.DatumPredloga getDatumPredloga() {
+        public DatumPredloga getDatumPredloga() {
             return datumPredloga;
         }
 
@@ -554,10 +589,10 @@ public class Law  extends Element{
          *
          * @param value
          *     allowed object is
-         *     {@link Law.Head.DatumPredloga }
+         *     {@link DatumPredloga }
          *
          */
-        public void setDatumPredloga(Law.Head.DatumPredloga value) {
+        public void setDatumPredloga(DatumPredloga value) {
             this.datumPredloga = value;
         }
 
@@ -566,10 +601,10 @@ public class Law  extends Element{
          *
          * @return
          *     possible object is
-         *     {@link Law.Head.DatumIzglasavanja }
+         *     {@link DatumIzglasavanja }
          *
          */
-        public Law.Head.DatumIzglasavanja getDatumIzglasavanja() {
+        public DatumIzglasavanja getDatumIzglasavanja() {
             return datumIzglasavanja;
         }
 
@@ -578,10 +613,10 @@ public class Law  extends Element{
          *
          * @param value
          *     allowed object is
-         *     {@link Law.Head.DatumIzglasavanja }
+         *     {@link DatumIzglasavanja }
          *
          */
-        public void setDatumIzglasavanja(Law.Head.DatumIzglasavanja value) {
+        public void setDatumIzglasavanja(DatumIzglasavanja value) {
             this.datumIzglasavanja = value;
         }
 
@@ -590,10 +625,10 @@ public class Law  extends Element{
          *
          * @return
          *     possible object is
-         *     {@link Law.Head.Status }
+         *     {@link Status }
          *
          */
-        public Law.Head.Status getStatus() {
+        public Status getStatus() {
             return status;
         }
 
@@ -602,10 +637,10 @@ public class Law  extends Element{
          *
          * @param value
          *     allowed object is
-         *     {@link Law.Head.Status }
+         *     {@link Status }
          *
          */
-        public void setStatus(Law.Head.Status value) {
+        public void setStatus(Status value) {
             this.status = value;
         }
 
@@ -618,7 +653,7 @@ public class Law  extends Element{
          *
          */
         public String getMjesto() {
-            return mjesto.get();
+            return mjesto;
         }
 
         /**
@@ -630,7 +665,7 @@ public class Law  extends Element{
          *
          */
         public void setMjesto(String value) {
-            this.mjesto.setValue(value);
+            this.mjesto = value;
         }
 
         /**
@@ -638,10 +673,10 @@ public class Law  extends Element{
          *
          * @return
          *     possible object is
-         *     {@link Law.Head.GlasovaZa }
+         *     {@link GlasovaZa }
          *
          */
-        public Law.Head.GlasovaZa getGlasovaZa() {
+        public GlasovaZa getGlasovaZa() {
             return glasovaZa;
         }
 
@@ -650,10 +685,10 @@ public class Law  extends Element{
          *
          * @param value
          *     allowed object is
-         *     {@link Law.Head.GlasovaZa }
+         *     {@link GlasovaZa }
          *
          */
-        public void setGlasovaZa(Law.Head.GlasovaZa value) {
+        public void setGlasovaZa(GlasovaZa value) {
             this.glasovaZa = value;
         }
 
@@ -662,10 +697,10 @@ public class Law  extends Element{
          *
          * @return
          *     possible object is
-         *     {@link Law.Head.GlasovaProtiv }
+         *     {@link GlasovaProtiv }
          *
          */
-        public Law.Head.GlasovaProtiv getGlasovaProtiv() {
+        public GlasovaProtiv getGlasovaProtiv() {
             return glasovaProtiv;
         }
 
@@ -674,10 +709,10 @@ public class Law  extends Element{
          *
          * @param value
          *     allowed object is
-         *     {@link Law.Head.GlasovaProtiv }
+         *     {@link GlasovaProtiv }
          *
          */
-        public void setGlasovaProtiv(Law.Head.GlasovaProtiv value) {
+        public void setGlasovaProtiv(GlasovaProtiv value) {
             this.glasovaProtiv = value;
         }
 
@@ -686,10 +721,10 @@ public class Law  extends Element{
          *
          * @return
          *     possible object is
-         *     {@link Law.Head.GlasovaSuzdrzani }
+         *     {@link GlasovaSuzdrzani }
          *
          */
-        public Law.Head.GlasovaSuzdrzani getGlasovaSuzdrzani() {
+        public GlasovaSuzdrzani getGlasovaSuzdrzani() {
             return glasovaSuzdrzani;
         }
 
@@ -698,10 +733,10 @@ public class Law  extends Element{
          *
          * @param value
          *     allowed object is
-         *     {@link Law.Head.GlasovaSuzdrzani }
+         *     {@link GlasovaSuzdrzani }
          *
          */
-        public void setGlasovaSuzdrzani(Law.Head.GlasovaSuzdrzani value) {
+        public void setGlasovaSuzdrzani(GlasovaSuzdrzani value) {
             this.glasovaSuzdrzani = value;
         }
 
@@ -710,10 +745,10 @@ public class Law  extends Element{
          *
          * @return
          *     possible object is
-         *     {@link Law.Head.Podnosilac }
+         *     {@link Podnosilac }
          *
          */
-        public Law.Head.Podnosilac getPodnosilac() {
+        public Podnosilac getPodnosilac() {
             return podnosilac;
         }
 
@@ -722,11 +757,35 @@ public class Law  extends Element{
          *
          * @param value
          *     allowed object is
-         *     {@link Law.Head.Podnosilac }
+         *     {@link Podnosilac }
          *
          */
-        public void setPodnosilac(Law.Head.Podnosilac value) {
+        public void setPodnosilac(Podnosilac value) {
             this.podnosilac = value;
+        }
+
+        /**
+         * Gets the value of the propis property.
+         *
+         * @return
+         *     possible object is
+         *     {@link Propis }
+         *
+         */
+        public Propis getPropis() {
+            return propis;
+        }
+
+        /**
+         * Sets the value of the propis property.
+         *
+         * @param value
+         *     allowed object is
+         *     {@link Propis }
+         *
+         */
+        public void setPropis(Propis value) {
+            this.propis = value;
         }
 
         /**
@@ -1116,6 +1175,82 @@ public class Law  extends Element{
             "ref"
         })
         public static class Podnosilac {
+
+            @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi", required = true)
+            protected Ref ref;
+            @XmlAnyAttribute
+            private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+
+            /**
+             * Gets the value of the ref property.
+             * 
+             * @return
+             *     possible object is
+             *     {@link Ref }
+             *     
+             */
+            public Ref getRef() {
+                return ref;
+            }
+
+            /**
+             * Sets the value of the ref property.
+             * 
+             * @param value
+             *     allowed object is
+             *     {@link Ref }
+             *     
+             */
+            public void setRef(Ref value) {
+                this.ref = value;
+            }
+
+            /**
+             * Gets a map that contains attributes that aren't bound to any typed property on this class.
+             * 
+             * <p>
+             * the map is keyed by the name of the attribute and 
+             * the value is the string value of the attribute.
+             * 
+             * the map returned by this method is live, and you can add new attribute
+             * by updating the map directly. Because of this design, there's no setter.
+             * 
+             * 
+             * @return
+             *     always non-null
+             */
+            public Map<QName, String> getOtherAttributes() {
+                return otherAttributes;
+            }
+
+        }
+
+
+        /**
+         * <p>Java class for anonymous complex type.
+         * 
+         * <p>The following schema fragment specifies the expected content contained within this class.
+         * 
+         * <pre>
+         * &lt;complexType>
+         *   &lt;complexContent>
+         *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+         *       &lt;sequence>
+         *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}ref"/>
+         *       &lt;/sequence>
+         *       &lt;anyAttribute processContents='lax'/>
+         *     &lt;/restriction>
+         *   &lt;/complexContent>
+         * &lt;/complexType>
+         * </pre>
+         * 
+         * 
+         */
+        @XmlAccessorType(XmlAccessType.FIELD)
+        @XmlType(name = "", propOrder = {
+            "ref"
+        })
+        public static class Propis {
 
             @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi", required = true)
             protected Ref ref;
