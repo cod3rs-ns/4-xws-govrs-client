@@ -27,8 +27,8 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
         this.text = text;
         this.preview = preview;
         if (getItem() instanceof Law) {
-            MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/chapter.png"))));
-            MenuItem newDeo = new MenuItem("Nova deo/dio/duo", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/deo.png"))));
+            MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/chapter.png"))));
+            MenuItem newDeo = new MenuItem("Nova deo/dio/duo", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/deo.png"))));
             addMenu.getItems().add(newGlava);
             addMenu.getItems().add(newDeo);
             newGlava.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove vugle!"));
@@ -41,7 +41,7 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
             falseItem.setDisable(true);
         }
         if(getItem() instanceof Part) {
-            MenuItem addMenuItem = new MenuItem("Nova tačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/dot.png"))));
+            MenuItem addMenuItem = new MenuItem("Nova tačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/dot.png"))));
             addMenu.getItems().add(addMenuItem);
             addMenuItem.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove čke!"));
         }
@@ -90,8 +90,8 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                 }
                 ContextMenu addMenu = new ContextMenu();
                 if (getItem() instanceof Law) {
-                    MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/chapter.png"))));
-                    MenuItem newDeo = new MenuItem("Nova deo/dio/duo", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/deo.png"))));
+                    MenuItem newGlava = new MenuItem("Nova vugla", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/chapter.png"))));
+                    MenuItem newDeo = new MenuItem("Nova deo/dio/duo", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/part.png"))));
                     addMenu.getItems().add(newGlava);
                     addMenu.getItems().add(newDeo);
                     newGlava.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove vugle!"));
@@ -104,7 +104,7 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                     falseItem.setDisable(true);
                 }
                 if(getItem() instanceof Part) {
-                    MenuItem addMenuItem = new MenuItem("Nova tačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/dot.png"))));
+                    MenuItem addMenuItem = new MenuItem("Nova tačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/text.png"))));
                     addMenu.getItems().add(addMenuItem);
                     addMenuItem.setOnAction(event -> getTreeItem().getValue().createAndAddChild("Evo nove čke!"));
                 }

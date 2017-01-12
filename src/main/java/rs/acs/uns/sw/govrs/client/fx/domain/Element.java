@@ -7,52 +7,47 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.function.Function;
 
 public abstract class Element {
     private final Function<String, Element> childrenSupplier;
     private final StringProperty elementContent = new SimpleStringProperty();
-    private String image = "/images/dot.png";
     private ObservableList<Element> children = FXCollections.observableArrayList();
 
-    public Element(String name, String image, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
-        this.image = image;
+    public Element(String name, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
         this.children = children;
         this.childrenSupplier = childrenSupplier;
         setName(name);
     }
 
-    public Element(){
+    public Element() {
         this.childrenSupplier = null;
     }
 
-    public Element(String name, String image, ObservableList<Element> children) {
-        this(name, image, children, n -> null);
-    }
-
-    public Element(String name, String image) {
-        this(name, image, FXCollections.observableArrayList(), n -> null);
+    public Element(String name, ObservableList<Element> children) {
+        this(name, children, n -> null);
     }
 
     public Element(String name) {
-        this(name, "/images/dot.png", FXCollections.observableArrayList(), n -> null);
+        this(name, FXCollections.observableArrayList(), n -> null);
     }
 
     public abstract String getName();
+
     public abstract void setName(String name);
+
     public abstract StringProperty nameProperty();
 
     public String getElementContent() {
         return elementContent.get();
     }
 
-    public StringProperty elementContentProperty() {
-        return elementContent;
-    }
-
     public void setElementContent(String elementContent) {
         this.elementContent.set(elementContent);
+    }
+
+    public StringProperty elementContentProperty() {
+        return elementContent;
     }
 
     public ObservableList<Element> getChildren() {
@@ -63,43 +58,46 @@ public abstract class Element {
 
     public abstract void createAndAddChild(String name);
 
+    /**
+     * Selects image by Element instance type.
+     *
+     * @return Image Resource path
+     */
     public String getImage() {
         if (this instanceof Law) {
-            return "/images/law.png";
+            return "/images/tree_images/law.png";
         }
         if (this instanceof Chapter) {
-            return "/images/chapter.png";
+            return "/images/tree_images/chapter.png";
         }
         if (this instanceof Part) {
-            return "/images/part.png";
+            return "/images/tree_images/part.png";
         }
         if (this instanceof Section) {
-            return "/images/section.png";
+            return "/images/tree_images/section.png";
         }
         if (this instanceof Subsection) {
-            return "/images/subsection.png";
+            return "/images/tree_images/subsection.png";
         }
         if (this instanceof Article) {
-            return "/images/article.png";
+            return "/images/tree_images/article.png";
         }
         if (this instanceof Paragraph) {
-            return "/images/paragraph.png";
+            return "/images/tree_images/paragraph.png";
         }
         if (this instanceof Clause) {
-            return "/images/clause.png";
+            return "/images/tree_images/clause.png";
         }
         if (this instanceof Subclause) {
-            return "/images/subclause.png";
+            return "/images/tree_images/subclause.png";
         }
         if (this instanceof Item) {
-            return "/images/item.png";
+            return "/images/tree_images/item.png";
         }
         if (this instanceof StringElement) {
-            return "/images/text.png";
+            return "/images/tree_images/text.png";
         }
-
-
-        return image;
+        return "";
     }
 
     public abstract String createElementOpening();
