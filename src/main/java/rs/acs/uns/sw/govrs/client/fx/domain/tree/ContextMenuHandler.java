@@ -123,7 +123,7 @@ public class ContextMenuHandler {
 
     private ContextMenu createClauseContextMenu(Clause clause) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem newSubclause = new MenuItem("Nova podtačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/sublause.png"))));
+        MenuItem newSubclause = new MenuItem("Nova podtačka", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/subclause.png"))));
         MenuItem newText = new MenuItem("Novi tekst", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/text.png"))));
         contextMenu.getItems().add(newSubclause);
         contextMenu.getItems().add(newText);

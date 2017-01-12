@@ -2,6 +2,7 @@ package rs.acs.uns.sw.govrs.client.fx.editor;
 
 
 import com.gluonhq.connect.GluonObservableObject;
+import com.gluonhq.connect.converter.StringInputConverter;
 import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -127,6 +128,21 @@ public class XMLEditorController {
 
             TreeView<Element> treeView = tree.getTreeView();
             treeContainer.setContent(treeView);
+
+            // create a RestClient to the specific URL
+            RestClient restClientHtml = RestClient.create()
+                    .method("GET")
+                    .host("http://localhost:9000/api")
+                    .path("/laws/html/law01");
+
+            // retrieve a list from the DataProvider
+            GluonObservableObject<String> htmlProperty;
+            StringInputConverter converterString = new StringInputConverter();
+            htmlProperty = DataProvider.retrieveObject(restClientHtml.createObjectDataReader(converterString));
+            htmlProperty.initializedProperty().addListener(((a, ov, nv) -> {
+                preview.getNode().getEngine().loadContent(htmlProperty.get());
+                System.out.println(htmlProperty.get());
+            }));
         }));
 
 

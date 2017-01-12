@@ -32,6 +32,7 @@ public class TreeModel {
                 TreeItem<Element> item = treeView.getSelectionModel().getSelectedItem();
                 System.out.println(item);
                 // TODO create Logic for displaying in text area
+                if (item != null)
                 editorController.area.replaceText(0, editorController.area.getLength(), item.getValue().getName());
             }
         });
