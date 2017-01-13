@@ -80,6 +80,8 @@ public class XMLEditorController {
     // Reference to the main application.
     private MainFXApp mainApp;
 
+    public PropertySheet propertySheet;
+
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
@@ -113,9 +115,12 @@ public class XMLEditorController {
         LawInputConverter converter = new LawInputConverter();
         lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
 
+        propertySheet = new PropertySheet();
+        attributesContainer.setCenter(propertySheet);
+
         lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
             propis = lawProperty.get();
-            propis.initChildrenObservableList();
+            propis.initElement();
             preview = new ActPreview(propis);
             previewContainer.setContent(preview.getNode());
             area.replaceText(0, 0, "");
@@ -125,10 +130,8 @@ public class XMLEditorController {
                     Element::nameProperty,
                     this
             );
-            PropertySheet propertySheet = new PropertySheet();
-            propertySheet.getItems().add(new StringPropertyItem(propis.nameProperty(), "A", "Text", "Description"));
-            propertySheet.getItems().add(new StringPropertyItem(propis.nameProperty(), "B", "BOOL", "Description"));
-            attributesContainer.setCenter(propertySheet);
+
+
 
             TreeView<Element> treeView = tree.getTreeView();
             treeContainer.setContent(treeView);
