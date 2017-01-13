@@ -11,7 +11,7 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringElement;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -52,9 +52,11 @@ public class Subclause extends Element {
     @XmlElementRef(name = "alineja", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Item.class, required = false)
     @XmlMixed
     protected List<Object> content;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
 
     @XmlAttribute(name = "name")
@@ -100,7 +102,7 @@ public class Subclause extends Element {
      *     
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -112,7 +114,11 @@ public class Subclause extends Element {
      *     
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     /**
@@ -144,7 +150,7 @@ public class Subclause extends Element {
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all clauses and all chunks of text content
         for (Object o:getContent()) {
             if (o instanceof Item) {
@@ -159,13 +165,48 @@ public class Subclause extends Element {
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.initChildrenObservableList();
+            e.setParent(this);
+            e.initElement();
+        }
+        createPropertyAttrs();
+    }
+
+
+    @Override
+    public void createAndAddChild(Element element) {
+        if (element instanceof Item || element instanceof StringElement) {
+            element.setParent(this);
+            element.createPropertyAttrs();
+            getContent().add(element);
+            getChildren().add(element);
         }
     }
 
     @Override
-    public void createAndAddChild(String name) {
+    public void removeChild(Element element) {
+        if (element instanceof Item || element instanceof StringElement) {
+            getContent().remove(element);
+            getChildren().remove(element);
+        }
+    }
 
+    @Override
+    public void createPropertyAttrs() {
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                nameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
     }
 
     @Override

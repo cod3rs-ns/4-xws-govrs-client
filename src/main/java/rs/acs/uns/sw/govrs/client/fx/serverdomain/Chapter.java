@@ -8,10 +8,17 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ChapterEnumPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PartEnumPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.ChapterEnumPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.ChapterRoles;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -62,12 +69,13 @@ public class Chapter extends Element {
 
 
     @XmlAttribute(name = "role")
-    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty role;
+    @XmlJavaTypeAdapter(ChapterEnumPropertyAdapter.class)
+    protected ObjectProperty<ChapterRoles> role = new SimpleObjectProperty<>();
 
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
     @XmlAttribute(name = "name")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
@@ -109,7 +117,18 @@ public class Chapter extends Element {
      * {@link String }
      */
     public String getRole() {
-        return role.get();
+        if (role.get() == ChapterRoles.UvodniDeo) {
+            return "uvodni_dio";
+        }
+
+        if (role.get() == ChapterRoles.GlavniDeo) {
+            return "glavni_dio";
+        }
+
+        if (role.get() == ChapterRoles.ZavrsniDeo) {
+            return "zavrsni_dio";
+        }
+        return "";
     }
 
     /**
@@ -119,7 +138,19 @@ public class Chapter extends Element {
      *              {@link String }
      */
     public void setRole(String value) {
-        this.role.set(value);
+        if (value.equals("uvodni_dio")) {
+            this.role.set(ChapterRoles.UvodniDeo);
+        }
+        if (value.equals("glavni_dio")) {
+            this.role.set(ChapterRoles.GlavniDeo);
+        }
+        if (value.equals("zavrsni_dio")) {
+            this.role.set(ChapterRoles.ZavrsniDeo);
+        }
+    }
+
+    public ObjectProperty<ChapterRoles> roleProperty() {
+        return role;
     }
 
     /**
@@ -129,7 +160,7 @@ public class Chapter extends Element {
      * {@link String }
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -139,7 +170,11 @@ public class Chapter extends Element {
      *              {@link String }
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     /**
@@ -162,16 +197,12 @@ public class Chapter extends Element {
         this.name.set(value);
     }
 
-    public StringProperty roleProperty() {
-        return role;
-    }
-
     public StringProperty nameProperty() {
         return name;
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all parts
         for (Element e : getGlava()) {
             getChildren().add(e);
@@ -179,13 +210,57 @@ public class Chapter extends Element {
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.initChildrenObservableList();
+            e.setParent(this);
+            e.initElement();
+        }
+
+        // create property list for context
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+        if (element instanceof Part) {
+            Part p = (Part) element;
+            p.setParent(this);
+            p.createPropertyAttrs();
+            getGlava().add(p);
+            getChildren().add(p);
         }
     }
 
     @Override
-    public void createAndAddChild(String name) {
+    public void removeChild(Element element) {
+        if (element instanceof Part) {
+            Part p = (Part) element;
+            getGlava().remove(p);
+            getChildren().remove(p);
+        }
+    }
 
+    @Override
+    public void createPropertyAttrs() {
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                nameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        ChapterEnumPropertyItem chapterRolesPropertyItem = new ChapterEnumPropertyItem(
+                roleProperty(),
+                "Dodatno",
+                "Vrsta",
+                "Vrsta dela",
+                true);
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
+        getPropertyItems().add(chapterRolesPropertyItem);
     }
 
     @Override
