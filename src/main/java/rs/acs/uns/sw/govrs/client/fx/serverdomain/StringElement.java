@@ -3,6 +3,7 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 
 
 public class StringElement extends Element{
@@ -43,7 +44,7 @@ public class StringElement extends Element{
 
     @Override
     public void initElement() {
-
+        createPropertyAttrs();
     }
 
 
@@ -59,7 +60,13 @@ public class StringElement extends Element{
 
     @Override
     public void createPropertyAttrs() {
-
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                nameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        getPropertyItems().add(namePropertyItem);
     }
 
     @Override

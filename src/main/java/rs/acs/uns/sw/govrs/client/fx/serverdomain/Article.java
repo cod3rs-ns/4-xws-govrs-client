@@ -56,7 +56,7 @@ public class Article extends Element{
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty id;
+    protected StringProperty id = new SimpleStringProperty();
 
     @XmlAttribute(name = "name")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)

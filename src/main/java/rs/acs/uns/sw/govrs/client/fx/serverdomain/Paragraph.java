@@ -11,6 +11,7 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -51,9 +52,11 @@ public class Paragraph extends Element {
     @XmlElementRef(name = "tacka", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Clause.class, required = false)
     @XmlMixed
     protected List<Object> content;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
 
     @XmlAttribute(name = "name")
@@ -99,7 +102,7 @@ public class Paragraph extends Element {
      *     
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -111,7 +114,11 @@ public class Paragraph extends Element {
      *     
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     /**
@@ -160,6 +167,7 @@ public class Paragraph extends Element {
             e.setParent(this);
             e.initElement();
         }
+        createPropertyAttrs();
     }
 
 
@@ -168,6 +176,7 @@ public class Paragraph extends Element {
     public void createAndAddChild(Element element) {
         if (element instanceof Clause || element instanceof StringElement) {
             element.setParent(this);
+            element.createPropertyAttrs();
             getContent().add(element);
             getChildren().add(element);
         }
@@ -183,7 +192,21 @@ public class Paragraph extends Element {
 
     @Override
     public void createPropertyAttrs() {
-
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                nameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
     }
 
     @Override

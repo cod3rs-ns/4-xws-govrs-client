@@ -56,7 +56,7 @@ public class Clause extends Element{
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty id;
+    protected StringProperty id = new SimpleStringProperty();
 
 
     @XmlAttribute(name = "name")
@@ -163,6 +163,7 @@ public class Clause extends Element{
 
         // init observable list for all children
         for (Element e: getChildren()) {
+            e.setParent(this);
             e.initElement();
         }
         createPropertyAttrs();
