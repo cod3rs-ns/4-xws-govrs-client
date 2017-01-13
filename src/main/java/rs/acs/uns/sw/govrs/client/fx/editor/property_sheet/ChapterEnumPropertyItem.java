@@ -25,7 +25,7 @@ public class ChapterEnumPropertyItem implements PropertySheet.Item {
 
     @Override
     public Class<?> getType() {
-        return PartRoles.class;
+        return ChapterRoles.class;
     }
 
     @Override

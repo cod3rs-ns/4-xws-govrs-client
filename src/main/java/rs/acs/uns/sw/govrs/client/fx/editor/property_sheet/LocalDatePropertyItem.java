@@ -25,7 +25,7 @@ public class LocalDatePropertyItem implements PropertySheet.Item {
 
     @Override
     public Class<?> getType() {
-        return property.get().getClass();
+        return LocalDate.class;
     }
 
     @Override

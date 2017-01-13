@@ -148,6 +148,11 @@ public class Item  extends Element{
     }
 
     @Override
+    public void createPropertyAttrs() {
+
+    }
+
+    @Override
     public String createElementOpening() {
         return null;
     }

@@ -166,6 +166,47 @@ public class Law  extends Element{
             e.initElement();
         }
         // create property list for context
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+        // create Part
+        if (element instanceof Part) {
+            Part p = (Part)element;
+            p.setParent(this);
+            p.createPropertyAttrs();
+            getBody().getGlava().add(p);
+            getChildren().add(p);
+        }
+        // create Chapter
+        if (element instanceof Chapter) {
+            Chapter c = (Chapter)element;
+            c.setParent(this);
+            c.createPropertyAttrs();
+            getBody().getDio().add(c);
+            getChildren().add(c);
+        }
+    }
+
+    @Override
+    public void removeChild(Element element) {
+        // create Part
+        if (element instanceof Part) {
+            Part p = (Part)element;
+            getBody().getGlava().remove(p);
+            getChildren().remove(p);
+        }
+        // create Chapter
+        if (element instanceof Chapter) {
+            Chapter c = (Chapter)element;
+            getBody().getDio().remove(c);
+            getChildren().remove(c);
+        }
+    }
+
+    @Override
+    public void createPropertyAttrs() {
         StringPropertyItem idPropertyItem = new StringPropertyItem(
                 idProperty(),
                 "Generalno",
@@ -230,40 +271,6 @@ public class Law  extends Element{
         getPropertyItems().add(noVotesPropertyItem);
         getPropertyItems().add(sustainedVotesPropertyItem);
         getPropertyItems().add(placePropertyItem);
-    }
-
-    @Override
-    public void createAndAddChild(Element element) {
-        // create Part
-        if (element instanceof Part) {
-            Part p = (Part)element;
-            p.setParent(this);
-            getBody().getGlava().add(p);
-            getChildren().add(p);
-        }
-        // create Chapter
-        if (element instanceof Chapter) {
-            Chapter c = (Chapter)element;
-            c.setParent(this);
-            getBody().getDio().add(c);
-            getChildren().add(c);
-        }
-    }
-
-    @Override
-    public void removeChild(Element element) {
-        // create Part
-        if (element instanceof Part) {
-            Part p = (Part)element;
-            getBody().getGlava().remove(p);
-            getChildren().remove(p);
-        }
-        // create Chapter
-        if (element instanceof Chapter) {
-            Chapter c = (Chapter)element;
-            getBody().getDio().remove(c);
-            getChildren().remove(c);
-        }
     }
 
     @Override

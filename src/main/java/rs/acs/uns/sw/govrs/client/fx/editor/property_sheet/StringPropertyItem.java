@@ -23,7 +23,7 @@ public class StringPropertyItem implements PropertySheet.Item {
 
     @Override
     public Class<?> getType() {
-        return property.get().getClass();
+        return String.class;
     }
 
     @Override

@@ -212,6 +212,31 @@ public class Part extends Element{
             e.initElement();
         }
 
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+        if (element instanceof Section) {
+            Section s = (Section) element;
+            s.setParent(this);
+            s.createPropertyAttrs();
+            getOdjeljak().add(s);
+            getChildren().add(s);
+        }
+    }
+
+    @Override
+    public void removeChild(Element element) {
+        if (element instanceof Section) {
+            Section s = (Section) element;
+            getOdjeljak().remove(s);
+            getChildren().remove(s);
+        }
+    }
+
+    @Override
+    public void createPropertyAttrs() {
         // create property list for context
         StringPropertyItem idPropertyItem = new StringPropertyItem(
                 idProperty(),
@@ -234,25 +259,6 @@ public class Part extends Element{
         getPropertyItems().add(idPropertyItem);
         getPropertyItems().add(namePropertyItem);
         getPropertyItems().add(partRolesPropertyItem);
-    }
-
-    @Override
-    public void createAndAddChild(Element element) {
-        if (element instanceof Section) {
-            Section s = (Section) element;
-            s.setParent(this);
-            getOdjeljak().add(s);
-            getChildren().add(s);
-        }
-    }
-
-    @Override
-    public void removeChild(Element element) {
-        if (element instanceof Section) {
-            Section s = (Section) element;
-            getOdjeljak().remove(s);
-            getChildren().remove(s);
-        }
     }
 
     @Override

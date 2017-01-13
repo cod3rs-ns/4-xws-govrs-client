@@ -180,6 +180,11 @@ public class Clause extends Element{
     }
 
     @Override
+    public void createPropertyAttrs() {
+
+    }
+
+    @Override
     public String createElementOpening() {
         return null;
     }

@@ -230,6 +230,11 @@ public class Section extends Element{
     }
 
     @Override
+    public void createPropertyAttrs() {
+
+    }
+
+    @Override
     public String createElementOpening() {
         return null;
     }

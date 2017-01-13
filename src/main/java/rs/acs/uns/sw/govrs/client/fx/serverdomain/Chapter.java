@@ -215,6 +215,31 @@ public class Chapter extends Element {
         }
 
         // create property list for context
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+        if (element instanceof Part) {
+            Part p = (Part) element;
+            p.setParent(this);
+            p.createPropertyAttrs();
+            getGlava().add(p);
+            getChildren().add(p);
+        }
+    }
+
+    @Override
+    public void removeChild(Element element) {
+        if (element instanceof Part) {
+            Part p = (Part) element;
+            getGlava().remove(p);
+            getChildren().remove(p);
+        }
+    }
+
+    @Override
+    public void createPropertyAttrs() {
         StringPropertyItem idPropertyItem = new StringPropertyItem(
                 idProperty(),
                 "Generalno",
@@ -236,25 +261,6 @@ public class Chapter extends Element {
         getPropertyItems().add(idPropertyItem);
         getPropertyItems().add(namePropertyItem);
         getPropertyItems().add(chapterRolesPropertyItem);
-    }
-
-    @Override
-    public void createAndAddChild(Element element) {
-        if (element instanceof Part) {
-            Part p = (Part) element;
-            p.setParent(this);
-            getGlava().add(p);
-            getChildren().add(p);
-        }
-    }
-
-    @Override
-    public void removeChild(Element element) {
-        if (element instanceof Part) {
-            Part p = (Part) element;
-            getGlava().remove(p);
-            getChildren().remove(p);
-        }
     }
 
     @Override

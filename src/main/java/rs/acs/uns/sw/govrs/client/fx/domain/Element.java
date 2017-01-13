@@ -64,6 +64,8 @@ public abstract class Element {
 
     public abstract void removeChild(Element element);
 
+    public abstract void createPropertyAttrs();
+
     public ObservableList<PropertySheet.Item> getPropertyItems() {
         return propertyItems;
     }

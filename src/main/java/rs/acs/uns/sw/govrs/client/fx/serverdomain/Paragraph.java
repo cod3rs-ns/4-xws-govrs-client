@@ -182,6 +182,11 @@ public class Paragraph extends Element {
     }
 
     @Override
+    public void createPropertyAttrs() {
+
+    }
+
+    @Override
     public String createElementOpening() {
         return null;
     }
