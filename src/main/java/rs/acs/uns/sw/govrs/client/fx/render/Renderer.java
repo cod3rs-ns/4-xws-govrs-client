@@ -21,8 +21,8 @@ import java.net.URL;
 public class Renderer {
 
     private String name;
-    private String xhtmlRoot = "/render/";
-    private String xhtmlExtension = "-xhtml.xsl";
+    private final String xhtmlRoot = "/render/";
+    private final String xhtmlExtension = "-xhtml.xsl";
 
     public Renderer() {
         super();

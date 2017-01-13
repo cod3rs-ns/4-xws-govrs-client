@@ -59,7 +59,6 @@ public class HtmlPreview {
             marshaller.marshal(rootElement, writer);
             String xml = writer.toString();
             xhtml = renderer.toHtml(xml);
-            System.out.println(xhtml);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -13,6 +13,7 @@ import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -166,8 +167,10 @@ public class Paragraph extends Element {
                 Clause e = (Clause)o;
                 getChildren().add(e);
             } else {
-                StringElement se = new StringElement(o.toString());
-                getChildren().add(se);
+                if(!StringCleaner.checkIsEmpty(o.toString())){
+                    StringElement se = new StringElement(o.toString());
+                    getChildren().add(se);
+                }
             }
         }
 

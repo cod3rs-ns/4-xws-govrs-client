@@ -14,7 +14,7 @@ import java.util.function.Function;
 public abstract class Element {
     @XmlTransient
     private final Function<String, Element> childrenSupplier;
-    @XmlTransient
+
     private final StringProperty elementContent = new SimpleStringProperty();
     @XmlTransient
     private ObservableList<Element> children = FXCollections.observableArrayList();

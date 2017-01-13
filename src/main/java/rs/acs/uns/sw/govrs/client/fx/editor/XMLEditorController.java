@@ -9,11 +9,14 @@ import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
@@ -25,10 +28,14 @@ import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
+import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.render.Renderer;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Paragraph;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringElement;
 
+import javax.swing.plaf.nimbus.State;
 import java.io.FileNotFoundException;
 import java.util.function.Function;
 
@@ -78,30 +85,36 @@ public class XMLEditorController {
     private ComboBox<Integer> fontSizePicker;
     // -------------------------------------------------
     private Law propis;
+
     // Reference to the main application.
     private MainFXApp mainApp;
 
     public PropertySheet propertySheet;
 
-    public Renderer renderer;
+    private Element activeElement;
+
+    private StateManager stateManager;
+
+    public StateManager getStateManager() {
+        return stateManager;
+    }
+
+    public void setStateManager(StateManager stateManager) {
+        this.stateManager = stateManager;
+    }
 
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
     public XMLEditorController() {
-        try {
-            renderer = new Renderer("propis");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        // setup text area
         area = new StyledTextArea<>(
                 ParStyle.EMPTY, (paragraph, style) -> paragraph.setStyle(style.toCss()),
-                TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Serif").updateTextColor(Color.BLACK),
+                TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Verdana").updateTextColor(Color.BLACK),
                 (text, style) -> text.setStyle(style.toCss()));
         area.setWrapText(true);
         area.setStyleCodecs(ParStyle.CODEC, TextStyle.CODEC);
-
     }
 
     /**
@@ -110,7 +123,17 @@ public class XMLEditorController {
      */
     @FXML
     private void initialize() {
-        //Propis propis = createDummyData();
+
+        // setup additional parameters of area and init actions
+        setupAdditionalAreaParams();
+        initActions();
+
+        // add area to container
+        VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
+        areaContainer.setCenter(vsPane);
+    }
+
+    public void loadData() {
 
         // create a RestClient to the specific URL
         RestClient restClient = RestClient.create()
@@ -122,7 +145,11 @@ public class XMLEditorController {
         GluonObservableObject<Law> lawProperty;
         LawInputConverter converter = new LawInputConverter();
         lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
-
+        ProgressBar pb = new ProgressBar();
+        pb.setPrefWidth(150);
+        stateManager.homeController.getStatusBar().getLeftItems().clear();
+        stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
+        stateManager.homeController.getStatusBar().getLeftItems().add(pb);
         propertySheet = new PropertySheet();
         attributesContainer.setCenter(propertySheet);
 
@@ -139,6 +166,9 @@ public class XMLEditorController {
                     this
             );
 
+            stateManager.homeController.getStatusBar().getLeftItems().clear();
+            stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
+
             TreeView<Element> treeView = tree.getTreeView();
             treeContainer.setContent(treeView);
 
@@ -154,11 +184,13 @@ public class XMLEditorController {
             htmlProperty = DataProvider.retrieveObject(restClientHtml.createObjectDataReader(converterString));
             htmlProperty.initializedProperty().addListener(((a, ov, nv) -> {
                 //preview.getNode().getEngine().loadContent(htmlProperty.get());
-                System.out.println(htmlProperty.get());
+                //System.out.println(htmlProperty.get());
             }));
         }));
 
+    }
 
+    private void setupAdditionalAreaParams() {
         // Populate possible font sizes
         fontSizePicker.setItems(FXCollections.observableArrayList(8, 9, 10, 11, 12, 14, 16, 20, 24, 32, 40));
         fontSizePicker.getSelectionModel().select(4);
@@ -256,12 +288,6 @@ public class XMLEditorController {
                 });
             }
         });
-
-        initActions();
-
-        // Add area to container
-        VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
-        areaContainer.setCenter(vsPane);
     }
 
     /**
@@ -272,7 +298,6 @@ public class XMLEditorController {
     public void setMainApp(MainFXApp mainApp) {
         this.mainApp = mainApp;
     }
-
 
     private void toggleBold() {
         updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))));
@@ -388,6 +413,43 @@ public class XMLEditorController {
 
         fontSizePicker.setOnAction(event -> updateFontSize(fontSizePicker.getValue()));
 
+    }
+
+    public Element getActiveElement() {
+        return activeElement;
+    }
+
+    public void setActiveElement(Element activeElement) {
+        this.activeElement = activeElement;
+        //this.area.replaceText(0, this.area.getLength(), activeElement.getElementName());
+        if (activeElement instanceof StringElement) {
+            area.setDisable(false);
+            StringElement s = (StringElement) activeElement;
+            //System.out.println(s.getElementContent());
+            newListener = createCngLst(s);
+            area.replaceText(0, this.area.getLength()*100, s.getElementContent());
+            if (oldListener != null){
+
+                area.textProperty().removeListener(oldListener);
+            }
+            area.textProperty().addListener(newListener);
+        }else{
+            area.setDisable(true);
+        }
+        this.propertySheet.getItems().clear();
+        this.propertySheet.getItems().addAll(activeElement.getPropertyItems());
+    }
+    public ChangeListener oldListener;
+    public ChangeListener newListener;
+
+    public ChangeListener createCngLst(StringElement s){
+        return new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                s.setElementContent(newValue);
+                oldListener = this;
+            }
+        };
     }
 
 }
