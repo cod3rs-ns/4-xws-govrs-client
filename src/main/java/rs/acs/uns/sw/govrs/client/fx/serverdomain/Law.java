@@ -35,7 +35,7 @@ public class Law  extends Element{
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty id;
+    protected StringProperty id = new SimpleStringProperty();
 
     @XmlAttribute(name = "name")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
@@ -759,7 +759,7 @@ public class Law  extends Element{
             @XmlValue
             @XmlSchemaType(name = "date")
             @XmlJavaTypeAdapter(DatePropertyAdapter.class)
-            protected ObjectProperty<LocalDate> value;
+            protected ObjectProperty<LocalDate> value = new SimpleObjectProperty<>();
 
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
@@ -845,7 +845,7 @@ public class Law  extends Element{
             @XmlValue
             @XmlSchemaType(name = "date")
             @XmlJavaTypeAdapter(DatePropertyAdapter.class)
-            protected ObjectProperty<LocalDate> value;
+            protected ObjectProperty<LocalDate> value = new SimpleObjectProperty<>();
 
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
@@ -932,7 +932,7 @@ public class Law  extends Element{
 
             @XmlValue
             @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
-            protected IntegerProperty value;
+            protected IntegerProperty value = new SimpleIntegerProperty();
 
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
@@ -1003,7 +1003,7 @@ public class Law  extends Element{
 
             @XmlValue
             @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
-            protected IntegerProperty value;
+            protected IntegerProperty value = new SimpleIntegerProperty();
 
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
@@ -1074,7 +1074,7 @@ public class Law  extends Element{
 
             @XmlValue
             @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
-            protected IntegerProperty value;
+            protected IntegerProperty value = new SimpleIntegerProperty();
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
