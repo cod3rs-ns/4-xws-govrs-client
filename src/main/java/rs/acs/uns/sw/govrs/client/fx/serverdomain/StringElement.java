@@ -17,7 +17,7 @@ public class StringElement extends Element{
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -29,12 +29,21 @@ public class StringElement extends Element{
      *     {@link String }
      *
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
+    }
+
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
     }
 
     public StringElement(String content) {
@@ -61,7 +70,7 @@ public class StringElement extends Element{
     @Override
     public void createPropertyAttrs() {
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",

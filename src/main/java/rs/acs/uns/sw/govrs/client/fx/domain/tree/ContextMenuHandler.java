@@ -200,10 +200,10 @@ public class ContextMenuHandler {
 
     private void createDeleteAction(MenuItem deleteItem, Element element) {
         deleteItem.setOnAction(event -> {
-            Alert deleteAlert = CustomDialogCreator.createDeleteConfirmationDialog(element.getName());
+            Alert deleteAlert = CustomDialogCreator.createDeleteConfirmationDialog(element.getElementName());
             Optional<ButtonType> result = deleteAlert.showAndWait();
             if (result.get() == CustomDialogCreator.YES) {
-                element.getParent().removeChild(element);
+                element.getElementParent().removeChild(element);
             }
         });
     }
@@ -213,7 +213,7 @@ public class ContextMenuHandler {
             TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog(promptName);
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> {
-                newElement.setName(name);
+                newElement.setElementName(name);
                 parent.createAndAddChild(newElement);
             });
         });

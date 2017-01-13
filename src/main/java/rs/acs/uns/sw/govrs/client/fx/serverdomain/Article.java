@@ -127,7 +127,7 @@ public class Article extends Element{
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -139,12 +139,20 @@ public class Article extends Element{
      *     {@link String }
      *
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
     }
 
     @Override
@@ -161,7 +169,7 @@ public class Article extends Element{
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.setParent(this);
+            e.setElementParent(this);
             e.initElement();
         }
         createPropertyAttrs();
@@ -172,7 +180,7 @@ public class Article extends Element{
     @Override
     public void createAndAddChild(Element element) {
         if (element instanceof Paragraph || element instanceof StringElement) {
-            element.setParent(this);
+            element.setElementParent(this);
             element.createPropertyAttrs();
             getContent().add(element);
             getChildren().add(element);
@@ -197,7 +205,7 @@ public class Article extends Element{
                 "Jedinstveni identifikator",
                 false);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",

@@ -14,7 +14,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ChapterEnumPropertyItem;
-import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PartEnumPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.ChapterEnumPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
@@ -183,7 +182,7 @@ public class Chapter extends Element {
      * @return possible object is
      * {@link String }
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -193,12 +192,20 @@ public class Chapter extends Element {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
     }
 
     @Override
@@ -210,7 +217,7 @@ public class Chapter extends Element {
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.setParent(this);
+            e.setElementParent(this);
             e.initElement();
         }
 
@@ -222,7 +229,7 @@ public class Chapter extends Element {
     public void createAndAddChild(Element element) {
         if (element instanceof Part) {
             Part p = (Part) element;
-            p.setParent(this);
+            p.setElementParent(this);
             p.createPropertyAttrs();
             getGlava().add(p);
             getChildren().add(p);
@@ -247,7 +254,7 @@ public class Chapter extends Element {
                 "Jedinstveni identifikator",
                 false);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",

@@ -8,20 +8,25 @@ import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
-import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.function.Function;
 
 public abstract class Element {
+    @XmlTransient
     private final Function<String, Element> childrenSupplier;
+    @XmlTransient
     private final StringProperty elementContent = new SimpleStringProperty();
+    @XmlTransient
     private ObservableList<Element> children = FXCollections.observableArrayList();
-    private Element parent;
+    @XmlTransient
+    private Element elementParent;
+    @XmlTransient
     private ObservableList<PropertySheet.Item> propertyItems = FXCollections.observableArrayList();
 
     public Element(String name, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
         this.children = children;
         this.childrenSupplier = childrenSupplier;
-        setName(name);
+        setElementName(name);
     }
 
     public Element() {
@@ -36,11 +41,12 @@ public abstract class Element {
         this(name, FXCollections.observableArrayList(), n -> null);
     }
 
-    public abstract String getName();
+    @XmlTransient
+    public abstract String getElementName();
 
-    public abstract void setName(String name);
+    public abstract void setElementName(String name);
 
-    public abstract StringProperty nameProperty();
+    public abstract StringProperty elementNameProperty();
 
     public String getElementContent() {
         return elementContent.get();
@@ -70,13 +76,13 @@ public abstract class Element {
         return propertyItems;
     }
 
-
-    public Element getParent() {
-        return parent;
+    @XmlTransient
+    public Element getElementParent() {
+        return elementParent;
     }
 
-    public void setParent(Element parent) {
-        this.parent = parent;
+    public void setElementParent(Element elementParent) {
+        this.elementParent = elementParent;
     }
 
     /**

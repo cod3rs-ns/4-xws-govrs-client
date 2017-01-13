@@ -117,7 +117,7 @@ public class Item  extends Element{
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -129,12 +129,21 @@ public class Item  extends Element{
      *     {@link String }
      *
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
+    }
+
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
     }
 
     @Override
@@ -163,7 +172,7 @@ public class Item  extends Element{
                 "Jedinstveni identifikator",
                 false);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",

@@ -129,7 +129,7 @@ public class Paragraph extends Element {
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -141,12 +141,21 @@ public class Paragraph extends Element {
      *     {@link String }
      *
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
+    }
+
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
     }
 
     @Override
@@ -164,7 +173,7 @@ public class Paragraph extends Element {
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.setParent(this);
+            e.setElementParent(this);
             e.initElement();
         }
         createPropertyAttrs();
@@ -175,7 +184,7 @@ public class Paragraph extends Element {
     @Override
     public void createAndAddChild(Element element) {
         if (element instanceof Clause || element instanceof StringElement) {
-            element.setParent(this);
+            element.setElementParent(this);
             element.createPropertyAttrs();
             getContent().add(element);
             getChildren().add(element);
@@ -200,7 +209,7 @@ public class Paragraph extends Element {
                 "Jedinstveni identifikator",
                 false);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",

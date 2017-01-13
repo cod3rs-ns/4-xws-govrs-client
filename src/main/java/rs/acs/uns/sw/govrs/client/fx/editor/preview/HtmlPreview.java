@@ -2,8 +2,7 @@ package rs.acs.uns.sw.govrs.client.fx.editor.preview;
 
 import javafx.scene.web.WebView;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.render.Transformers;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
+import rs.acs.uns.sw.govrs.client.fx.render.Renderer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -13,30 +12,34 @@ import java.io.StringWriter;
 /**
  * WebView preview.
  */
-public class ActPreview {
+public class HtmlPreview {
     private final WebView webView = new WebView();
     private Element rootElement;
-    private Transformers renderer;
+    private Renderer renderer;
+    private Class<?> rootClass;
     private int lastScrollX;
     private int lastScrollY;
 
-    public ActPreview(Element root, String elementName) {
+    public HtmlPreview(Element root, String elementName, Class<?> rootClassType) {
         try {
-            renderer = new Transformers(elementName);
+            renderer = new Renderer(elementName);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         webView.setFocusTraversable(false);
         webView.setPrefSize(300, 800);
         rootElement = root;
+        rootClass = rootClassType;
     }
 
     public WebView getNode() {
         return webView;
     }
 
+    /**
+     * Refreshes view.
+     */
     public void update() {
-        /*
         if (!webView.getEngine().getLoadWorker().isRunning()) {
             Object scrollX = webView.getEngine().executeScript("window.scrollX");
             Object scrollY = webView.getEngine().executeScript("window.scrollY");
@@ -50,7 +53,7 @@ public class ActPreview {
 
         String xhtml = "";
         try {
-            JAXBContext context = JAXBContext.newInstance(Law.class);
+            JAXBContext context = JAXBContext.newInstance(rootClass);
             Marshaller marshaller = context.createMarshaller();
             StringWriter writer = new StringWriter();
             marshaller.marshal(rootElement, writer);
@@ -72,7 +75,5 @@ public class ActPreview {
         sb.append(parts[1]);
 
         webView.getEngine().loadContent(sb.toString());
-        */
     }
-
 }

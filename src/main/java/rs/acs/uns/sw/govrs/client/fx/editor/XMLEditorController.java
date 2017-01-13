@@ -22,13 +22,14 @@ import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
-import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
-import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
+import rs.acs.uns.sw.govrs.client.fx.render.Renderer;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 
+import java.io.FileNotFoundException;
 import java.util.function.Function;
 
 /**
@@ -39,7 +40,7 @@ public class XMLEditorController {
     private static final String PRESSED = "pressed";
     public final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
-    public ActPreview preview;
+    public HtmlPreview preview;
     private TreeModel tree;
     // ------------------ Containers -------------------
     @FXML
@@ -82,11 +83,18 @@ public class XMLEditorController {
 
     public PropertySheet propertySheet;
 
+    public Renderer renderer;
+
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
     public XMLEditorController() {
+        try {
+            renderer = new Renderer("propis");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         area = new StyledTextArea<>(
                 ParStyle.EMPTY, (paragraph, style) -> paragraph.setStyle(style.toCss()),
                 TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Serif").updateTextColor(Color.BLACK),
@@ -121,17 +129,15 @@ public class XMLEditorController {
         lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
             propis = lawProperty.get();
             propis.initElement();
-            preview = new ActPreview(propis);
+            preview = new HtmlPreview(propis, "propis", Law.class);
             previewContainer.setContent(preview.getNode());
             area.replaceText(0, 0, "");
             tree = new TreeModel(
                     propis,
                     Element::getChildren,
-                    Element::nameProperty,
+                    Element::elementNameProperty,
                     this
             );
-
-
 
             TreeView<Element> treeView = tree.getTreeView();
             treeContainer.setContent(treeView);
@@ -147,7 +153,7 @@ public class XMLEditorController {
             StringInputConverter converterString = new StringInputConverter();
             htmlProperty = DataProvider.retrieveObject(restClientHtml.createObjectDataReader(converterString));
             htmlProperty.initializedProperty().addListener(((a, ov, nv) -> {
-                preview.getNode().getEngine().loadContent(htmlProperty.get());
+                //preview.getNode().getEngine().loadContent(htmlProperty.get());
                 System.out.println(htmlProperty.get());
             }));
         }));
