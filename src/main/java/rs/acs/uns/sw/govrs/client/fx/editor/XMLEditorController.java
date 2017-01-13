@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -22,12 +23,11 @@ import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
-import rs.acs.uns.sw.govrs.client.fx.rest.SearchResultInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
 
 import java.util.function.Function;
 
@@ -39,10 +39,8 @@ public class XMLEditorController {
     private static final String PRESSED = "pressed";
     public final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
-
-    private TreeModel tree;
     public ActPreview preview;
-
+    private TreeModel tree;
     // ------------------ Containers -------------------
     @FXML
     private TitledPane treeContainer;
@@ -50,6 +48,8 @@ public class XMLEditorController {
     private TitledPane previewContainer;
     @FXML
     private BorderPane areaContainer;
+    @FXML
+    private BorderPane attributesContainer;
     // -------------------------------------------------
 
     // -------------------- Buttons --------------------
@@ -76,7 +76,7 @@ public class XMLEditorController {
     @FXML
     private ComboBox<Integer> fontSizePicker;
     // -------------------------------------------------
-
+    private Law propis;
     // Reference to the main application.
     private MainFXApp mainApp;
 
@@ -114,7 +114,7 @@ public class XMLEditorController {
         lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
 
         lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-            Law propis = lawProperty.get();
+            propis = lawProperty.get();
             propis.initChildrenObservableList();
             preview = new ActPreview(propis);
             previewContainer.setContent(preview.getNode());
@@ -125,6 +125,10 @@ public class XMLEditorController {
                     Element::nameProperty,
                     this
             );
+            PropertySheet propertySheet = new PropertySheet();
+            propertySheet.getItems().add(new StringPropertyItem(propis.nameProperty(), "A", "Text", "Description"));
+            propertySheet.getItems().add(new StringPropertyItem(propis.nameProperty(), "B", "BOOL", "Description"));
+            attributesContainer.setCenter(propertySheet);
 
             TreeView<Element> treeView = tree.getTreeView();
             treeContainer.setContent(treeView);
@@ -144,7 +148,6 @@ public class XMLEditorController {
                 System.out.println(htmlProperty.get());
             }));
         }));
-
 
 
         // Populate possible font sizes
