@@ -132,7 +132,7 @@ public class Item  extends Element{
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
 
     }
 

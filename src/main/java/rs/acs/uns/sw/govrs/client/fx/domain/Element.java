@@ -5,8 +5,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
+import java.util.List;
 import java.util.function.Function;
 
 public abstract class Element {
@@ -14,6 +16,7 @@ public abstract class Element {
     private final StringProperty elementContent = new SimpleStringProperty();
     private ObservableList<Element> children = FXCollections.observableArrayList();
     private Element parent;
+    private ObservableList<PropertySheet.Item> propertyItems = FXCollections.observableArrayList();
 
     public Element(String name, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
         this.children = children;
@@ -55,11 +58,15 @@ public abstract class Element {
         return children;
     }
 
-    public abstract void initChildrenObservableList();
+    public abstract void initElement();
 
     public abstract void createAndAddChild(Element element);
 
     public abstract void removeChild(Element element);
+
+    public ObservableList<PropertySheet.Item> getPropertyItems() {
+        return propertyItems;
+    }
 
 
     public Element getParent() {

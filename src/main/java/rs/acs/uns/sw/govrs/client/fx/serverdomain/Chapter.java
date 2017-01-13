@@ -171,7 +171,7 @@ public class Chapter extends Element {
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all parts
         for (Element e : getGlava()) {
             getChildren().add(e);
@@ -180,7 +180,7 @@ public class Chapter extends Element {
         // init observable list for all children
         for (Element e: getChildren()) {
             e.setParent(this);
-            e.initChildrenObservableList();
+            e.initElement();
         }
     }
 

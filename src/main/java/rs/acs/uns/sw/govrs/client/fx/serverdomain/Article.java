@@ -11,7 +11,6 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringElement;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -143,7 +142,7 @@ public class Article extends Element{
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all paragraphs
         for (Object o: getContent()) {
             if (o instanceof Paragraph) {
@@ -157,7 +156,7 @@ public class Article extends Element{
         // init observable list for all children
         for (Element e: getChildren()) {
             e.setParent(this);
-            e.initChildrenObservableList();
+            e.initElement();
         }
     }
 

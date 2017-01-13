@@ -1,18 +1,23 @@
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.IntegerPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.LocalDatePropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DatePropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -29,7 +34,8 @@ public class Law  extends Element{
 
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id;
 
     @XmlAttribute(name = "name")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
@@ -95,7 +101,7 @@ public class Law  extends Element{
      *
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -107,8 +113,10 @@ public class Law  extends Element{
      *
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
     }
+
+    public StringProperty idProperty() {return id;}
 
     /**
      * Gets the value of the name property.
@@ -141,7 +149,7 @@ public class Law  extends Element{
 
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all chapters
         for (Element e: getBody().getDio()){
             getChildren().add(e);
@@ -155,8 +163,73 @@ public class Law  extends Element{
         // init observable list for all children
         for (Element e: getChildren()) {
             e.setParent(this);
-            e.initChildrenObservableList();
+            e.initElement();
         }
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                nameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        StringPropertyItem statusPropertyItem = new StringPropertyItem(
+                getHead().getStatus().valueProperty(),
+                "Status",
+                "Status predloga",
+                "Trenutni status Akta na Skupštinskom repertoaru",
+                true);
+        LocalDatePropertyItem  propositionDatePropertyItem = new LocalDatePropertyItem(
+                getHead().getDatumPredloga().valueProperty(),
+                "Status",
+                "Datum predloga",
+                "Datum kada je podnet ovaj pravni Akt",
+                true);
+        LocalDatePropertyItem acceptanceDatePropertyItem = new LocalDatePropertyItem(
+                getHead().getDatumIzglasavanja().valueProperty(),
+                "Status",
+                "Datum izglasavanja",
+                "Datum kada se glasalo o ovom Aktu",
+                true);
+        IntegerPropertyItem yesVotesPropertyItem = new IntegerPropertyItem(
+                getHead().getGlasovaZa().valueProperty(),
+                "Skupština",
+                "Glasova ZA",
+                "Broj poslanika koji su glasali ZA usvajanje ovog Akta",
+                true);
+        IntegerPropertyItem noVotesPropertyItem = new IntegerPropertyItem(
+                getHead().getGlasovaProtiv().valueProperty(),
+                "Skupština",
+                "Glasova PROTIV",
+                "Broj poslanika koji su glasali PROTIV usvajanja ovog Akta",
+                true);
+        IntegerPropertyItem sustainedVotesPropertyItem = new IntegerPropertyItem(
+                getHead().getGlasovaSuzdrzani().valueProperty(),
+                "Skupština",
+                "Suzdržanih",
+                "Broj poslanika koji su bili suzdržani za usvajanje ovog Akta",
+                true);
+        StringPropertyItem placePropertyItem = new StringPropertyItem(
+                getHead().mjestoProperty(),
+                "Skupština",
+                "Mesto",
+                "Mesto gde se nalazi ustanova koja odlučuje o Aktu",
+                false);
+
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
+        getPropertyItems().add(statusPropertyItem);
+        getPropertyItems().add(propositionDatePropertyItem);
+        getPropertyItems().add(acceptanceDatePropertyItem);
+        getPropertyItems().add(yesVotesPropertyItem);
+        getPropertyItems().add(noVotesPropertyItem);
+        getPropertyItems().add(sustainedVotesPropertyItem);
+        getPropertyItems().add(placePropertyItem);
     }
 
     @Override
@@ -539,9 +612,12 @@ public class Law  extends Element{
          *
          */
         public void setMjesto(String value) {
-            this.mjesto.setValue(value);
+            this.mjesto.set(value);
         }
 
+        public StringProperty mjestoProperty() {
+            return mjesto;
+        }
         /**
          * Gets the value of the glasovaZa property.
          *
@@ -682,34 +758,46 @@ public class Law  extends Element{
 
             @XmlValue
             @XmlSchemaType(name = "date")
-            protected XMLGregorianCalendar value;
+            @XmlJavaTypeAdapter(DatePropertyAdapter.class)
+            protected ObjectProperty<LocalDate> value;
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
-
             /**
              * Gets the value of the value property.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getValue() {
-                return value;
+                LocalDate localDate = value.get();
+                GregorianCalendar gregorianCalendar = GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+                try {
+                    return DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+                } catch (DatatypeConfigurationException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
 
             /**
              * Sets the value of the value property.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setValue(XMLGregorianCalendar value) {
-                this.value = value;
+                LocalDate localDate = value.toGregorianCalendar().toZonedDateTime().toLocalDate();
+                this.value.set(localDate);
             }
 
+            public ObjectProperty<LocalDate> valueProperty() {
+                return value;
+            }
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
              * 
@@ -756,7 +844,9 @@ public class Law  extends Element{
 
             @XmlValue
             @XmlSchemaType(name = "date")
-            protected XMLGregorianCalendar value;
+            @XmlJavaTypeAdapter(DatePropertyAdapter.class)
+            protected ObjectProperty<LocalDate> value;
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -769,7 +859,14 @@ public class Law  extends Element{
              *     
              */
             public XMLGregorianCalendar getValue() {
-                return value;
+                LocalDate localDate = value.get();
+                GregorianCalendar gregorianCalendar = GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+                try {
+                    return DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+                } catch (DatatypeConfigurationException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
 
             /**
@@ -781,7 +878,12 @@ public class Law  extends Element{
              *     
              */
             public void setValue(XMLGregorianCalendar value) {
-                this.value = value;
+                LocalDate localDate = value.toGregorianCalendar().toZonedDateTime().toLocalDate();
+                this.value.set(localDate);
+            }
+
+            public ObjectProperty<LocalDate> valueProperty() {
+                return value;
             }
 
             /**
@@ -829,7 +931,9 @@ public class Law  extends Element{
         public static class GlasovaProtiv {
 
             @XmlValue
-            protected int value;
+            @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
+            protected IntegerProperty value;
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -838,7 +942,7 @@ public class Law  extends Element{
              * 
              */
             public int getValue() {
-                return value;
+                return value.get();
             }
 
             /**
@@ -846,7 +950,11 @@ public class Law  extends Element{
              * 
              */
             public void setValue(int value) {
-                this.value = value;
+                this.value.set(value);
+            }
+
+            public IntegerProperty valueProperty() {
+                return value;
             }
 
             /**
@@ -894,7 +1002,9 @@ public class Law  extends Element{
         public static class GlasovaSuzdrzani {
 
             @XmlValue
-            protected int value;
+            @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
+            protected IntegerProperty value;
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -903,7 +1013,7 @@ public class Law  extends Element{
              * 
              */
             public int getValue() {
-                return value;
+                return value.get();
             }
 
             /**
@@ -911,7 +1021,11 @@ public class Law  extends Element{
              * 
              */
             public void setValue(int value) {
-                this.value = value;
+                this.value.set(value);
+            }
+
+            public IntegerProperty valueProperty() {
+                return value;
             }
 
             /**
@@ -959,7 +1073,8 @@ public class Law  extends Element{
         public static class GlasovaZa {
 
             @XmlValue
-            protected int value;
+            @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
+            protected IntegerProperty value;
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -968,7 +1083,7 @@ public class Law  extends Element{
              * 
              */
             public int getValue() {
-                return value;
+                return value.get();
             }
 
             /**
@@ -976,7 +1091,11 @@ public class Law  extends Element{
              * 
              */
             public void setValue(int value) {
-                this.value = value;
+                this.value.set(value);
+            }
+
+            public IntegerProperty valueProperty() {
+                return value;
             }
 
             /**
@@ -1100,7 +1219,9 @@ public class Law  extends Element{
         public static class Status {
 
             @XmlValue
-            protected String value;
+            @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+            protected StringProperty value = new SimpleStringProperty();
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -1113,7 +1234,7 @@ public class Law  extends Element{
              *     
              */
             public String getValue() {
-                return value;
+                return value.get();
             }
 
             /**
@@ -1125,9 +1246,12 @@ public class Law  extends Element{
              *     
              */
             public void setValue(String value) {
-                this.value = value;
+                this.value.set(value);
             }
 
+            public StringProperty valueProperty() {
+                return value;
+            }
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
              * 

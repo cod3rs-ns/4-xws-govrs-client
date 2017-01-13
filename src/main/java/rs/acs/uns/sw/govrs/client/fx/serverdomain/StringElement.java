@@ -42,7 +42,7 @@ public class StringElement extends Element{
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
 
     }
 

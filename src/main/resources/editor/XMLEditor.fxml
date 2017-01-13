@@ -63,7 +63,7 @@
                               </AnchorPane>
                               <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <children>
-                                    <TitledPane collapsible="false" prefHeight="340.0" prefWidth="400.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                    <TitledPane collapsible="false" prefHeight="390.0" prefWidth="400.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                        <content>
                                           <AnchorPane>
                                              <children>
@@ -73,7 +73,7 @@
                                     </TitledPane>
                                  </children>
                               </AnchorPane>
-                              <BorderPane fx:id="areaContainer" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="350.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
+                              <BorderPane fx:id="areaContainer" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
                            </children>
                         </AnchorPane>
                      </content>

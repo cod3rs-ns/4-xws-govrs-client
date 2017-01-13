@@ -174,7 +174,7 @@ public class Section extends Element{
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all articles
         for (Element e:getClan()) {
             getChildren().add(e);
@@ -188,7 +188,7 @@ public class Section extends Element{
         // init observable list for all children
         for (Element e: getChildren()) {
             e.setParent(this);
-            e.initChildrenObservableList();
+            e.initElement();
         }
     }
 

@@ -167,7 +167,7 @@ public class Part extends Element{
     }
 
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         for (Element e : getOdjeljak()) {
             getChildren().add(e);
         }
@@ -175,7 +175,7 @@ public class Part extends Element{
         // init observable list for all children
         for (Element e : getChildren()) {
             e.setParent(this);
-            e.initChildrenObservableList();
+            e.initElement();
         }
     }
 
