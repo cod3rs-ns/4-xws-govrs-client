@@ -46,11 +46,21 @@
     </xsl:template>
 
     <xsl:template match="elem:odjeljak">
-        <h4 style="font-weight: bold; text-align: center; font-size: 14pt">
+        <h3 style="font-weight: bold; text-align: center; font-size: 14pt">
             <xsl:attribute name="id">
                 <xsl:value-of select="@id"/>
             </xsl:attribute>
             <xsl:value-of select="position()"/>. <xsl:value-of select="@name"/>
+        </h3>
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="elem:pododjeljak">
+        <h4 style="font-weight: bold; text-align: center; font-size: 12pt">
+            <xsl:attribute name="id">
+                <xsl:value-of select="@id"/>
+            </xsl:attribute>
+            <xsl:number format="a" select="position()"/>) <xsl:value-of select="@name"/>
         </h4>
         <xsl:apply-templates select="elem:clan"/>
     </xsl:template>
