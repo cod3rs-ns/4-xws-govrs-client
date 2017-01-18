@@ -72,6 +72,8 @@ public abstract class Element {
 
     public abstract void createPropertyAttrs();
 
+    public abstract void preMarshaller();
+
     public ObservableList<PropertySheet.Item> getPropertyItems() {
         return propertyItems;
     }
@@ -127,23 +129,4 @@ public abstract class Element {
         return "";
     }
 
-    public abstract String createElementOpening();
-
-    public abstract String createElementAttrs();
-
-    public abstract String createElementContent();
-
-    public abstract String createElementClosing();
-
-    public String getHtml() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(createElementOpening());
-        sb.append(createElementContent());
-        for (Element child : getChildren()
-                ) {
-            sb.append(child.getHtml());
-        }
-        sb.append(createElementClosing());
-        return sb.toString();
-    }
 }

@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -168,7 +170,7 @@ public class Paragraph extends Element {
                 getChildren().add(e);
             } else {
                 if(!StringCleaner.checkIsEmpty(o.toString())){
-                    StringElement se = new StringElement(o.toString());
+                    StringElement se = new StringElement(o);
                     getChildren().add(se);
                 }
             }
@@ -186,19 +188,31 @@ public class Paragraph extends Element {
 
     @Override
     public void createAndAddChild(Element element) {
-        if (element instanceof Clause || element instanceof StringElement) {
+        if (element instanceof Clause) {
             element.setElementParent(this);
             element.createPropertyAttrs();
             getContent().add(element);
             getChildren().add(element);
+        } else if (element instanceof StringElement) {
+            element.setElementParent(this);
+            element.createPropertyAttrs();
+            getContent().add(((StringElement) element).getWrappedObject());
+            getChildren().add(element);
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid child type.");
         }
     }
 
     @Override
     public void removeChild(Element element) {
-        if (element instanceof Clause || element instanceof StringElement) {
+        if (element instanceof Clause) {
             getContent().remove(element);
             getChildren().remove(element);
+        } else if (element instanceof StringElement) {
+            getChildren().remove(element);
+            getContent().remove(((StringElement)element).getWrappedObject());
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
         }
     }
 
@@ -222,23 +236,21 @@ public class Paragraph extends Element {
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void preMarshaller() {
+        getContent().clear();
+        for (Element e: getChildren()) {
+            if(e instanceof StringElement) {
+                // add TextOnly
+                getContent().add(e.getElementContent());
+            } else {
+                getContent().add(e);
+            }
+            e.preMarshaller();
+        }
     }
 
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
 
-    @Override
-    public String createElementContent() {
-        return null;
-    }
 
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
+
 
 }

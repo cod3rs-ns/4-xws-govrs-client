@@ -53,6 +53,8 @@ public class HtmlPreview {
 
         String xhtml = "";
         try {
+            // do premarshall to populate ContentWith right objects
+            rootElement.preMarshaller();
             JAXBContext context = JAXBContext.newInstance(rootClass);
             Marshaller marshaller = context.createMarshaller();
             StringWriter writer = new StringWriter();

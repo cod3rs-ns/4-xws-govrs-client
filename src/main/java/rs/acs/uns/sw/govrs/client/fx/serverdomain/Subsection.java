@@ -167,9 +167,9 @@ public class Subsection extends Element {
             e.setElementParent(this);
             e.initElement();
         }
+
         createPropertyAttrs();
     }
-
 
     @Override
     public void createAndAddChild(Element element) {
@@ -211,23 +211,10 @@ public class Subsection extends Element {
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
-    }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
 }

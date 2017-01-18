@@ -4,10 +4,17 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 
 public class StringElement extends Element{
     protected StringProperty name = new SimpleStringProperty("Tekst");
+
+    /**
+     * Reference to original Object from parent list List<Object> content.
+     * Used for switching object in-place when content of this changes.
+     */
+    private Object wrappedObject;
 
     /**
      * Gets the value of the name property.
@@ -37,7 +44,6 @@ public class StringElement extends Element{
         return name;
     }
 
-
     public String getName() {
         return name.get();
     }
@@ -46,9 +52,20 @@ public class StringElement extends Element{
         this.name.set(value);
     }
 
-    public StringElement(String content) {
+    public StringElement(Object obj) {
         super();
-        setElementContent(content);
+        // remove unnecessary whitespace
+        String cleaned = StringCleaner.deleteWhitespace(obj.toString());
+        setElementContent(cleaned);
+        wrappedObject = obj;
+    }
+
+    public Object getWrappedObject() {
+        return wrappedObject;
+    }
+
+    public void setWrappedObject(Object wrappedObject) {
+        this.wrappedObject = wrappedObject;
     }
 
     @Override
@@ -79,22 +96,8 @@ public class StringElement extends Element{
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void preMarshaller() {
+
     }
 
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
 }

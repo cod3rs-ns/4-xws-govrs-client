@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -165,7 +167,7 @@ public class Article extends Element{
                 getChildren().add(e);
             } else {
                 if(!StringCleaner.checkIsEmpty(o.toString())){
-                    StringElement se = new StringElement(o.toString());
+                    StringElement se = new StringElement(o);
                     getChildren().add(se);
                 }
             }}
@@ -178,23 +180,33 @@ public class Article extends Element{
         createPropertyAttrs();
     }
 
-
-
     @Override
     public void createAndAddChild(Element element) {
-        if (element instanceof Paragraph || element instanceof StringElement) {
+        if (element instanceof Paragraph) {
             element.setElementParent(this);
             element.createPropertyAttrs();
             getContent().add(element);
+            getChildren().add(element);
+        }
+
+        if (element instanceof StringElement) {
+            element.setElementParent(this);
+            element.createPropertyAttrs();
+            getContent().add(((StringElement) element).getWrappedObject());
             getChildren().add(element);
         }
     }
 
     @Override
     public void removeChild(Element element) {
-        if (element instanceof Paragraph || element instanceof StringElement) {
+        if (element instanceof Paragraph) {
             getContent().remove(element);
             getChildren().remove(element);
+        } else if (element instanceof StringElement) {
+            getChildren().remove(element);
+            getContent().remove(((StringElement)element).getWrappedObject());
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
         }
     }
 
@@ -218,23 +230,16 @@ public class Article extends Element{
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void preMarshaller() {
+        getContent().clear();
+        for (Element child: getChildren()) {
+            if(child instanceof StringElement) {
+                // add TextOnly
+                getContent().add(((StringElement) child).getWrappedObject());
+            } else {
+                getContent().add(child);
+            }
+            child.preMarshaller();
+        }
     }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
-
 }

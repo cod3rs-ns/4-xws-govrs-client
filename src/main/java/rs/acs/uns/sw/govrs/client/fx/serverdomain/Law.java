@@ -128,8 +128,6 @@ public class Law  extends Element{
         this.name.set(value);
     }
 
-
-
     /**
      * Gets the value of the name property.
      *
@@ -177,6 +175,7 @@ public class Law  extends Element{
             e.setElementParent(this);
             e.initElement();
         }
+
         // create property list for context
         createPropertyAttrs();
     }
@@ -286,24 +285,12 @@ public class Law  extends Element{
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.

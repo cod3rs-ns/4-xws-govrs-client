@@ -205,9 +205,9 @@ public class Section extends Element{
             e.setElementParent(this);
             e.initElement();
         }
+
         createPropertyAttrs();
     }
-
 
     @Override
     public void createAndAddChild(Element element) {
@@ -267,23 +267,9 @@ public class Section extends Element{
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
-
 }

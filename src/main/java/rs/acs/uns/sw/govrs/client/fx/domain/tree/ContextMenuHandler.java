@@ -127,7 +127,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(paragraphMenuItem, "Stav", article, new Paragraph());
-        createInsertAction(textMenuItem, "Tekst", article, new StringElement(""));
+        createInsertAction(textMenuItem, "Tekst", article, new StringElement(new String("HUEHUHUE TEST CMH")));
         createDeleteAction(deleteMenuItem, article);
         return contextMenu;
     }
@@ -142,7 +142,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(clauseMenuItem, "Tačka", paragraph, new Clause());
-        createInsertAction(textMenuItem, "Tekst", paragraph, new StringElement(""));
+        createInsertAction(textMenuItem, "Tekst", paragraph, new StringElement("U STAVU SAM blalblballbalb"));
         createDeleteAction(deleteMenuItem, paragraph);
         return contextMenu;
     }

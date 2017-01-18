@@ -182,23 +182,11 @@ public class Item  extends Element{
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void preMarshaller() {
+
+
+
     }
 
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
 
 }

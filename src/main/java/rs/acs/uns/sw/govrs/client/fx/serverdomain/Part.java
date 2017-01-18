@@ -272,23 +272,10 @@ public class Part extends Element{
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
-    }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
 }

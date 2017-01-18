@@ -139,7 +139,7 @@ public class XMLEditorController {
         RestClient restClient = RestClient.create()
                 .method("GET")
                 .host("http://localhost:9000/api")
-                .path("/laws/law01");
+                .path("/laws/law02");
 
         // retrieve a list from the DataProvider
         GluonObservableObject<Law> lawProperty;
@@ -176,7 +176,7 @@ public class XMLEditorController {
             RestClient restClientHtml = RestClient.create()
                     .method("GET")
                     .host("http://localhost:9000/api")
-                    .path("/laws/html/law01");
+                    .path("/laws/html/law02");
 
             // retrieve a list from the DataProvider
             GluonObservableObject<String> htmlProperty;
@@ -434,7 +434,7 @@ public class XMLEditorController {
             }
             area.textProperty().addListener(newListener);
         }else{
-            area.setDisable(true);
+            areaContainer.setDisable(true);
         }
         this.propertySheet.getItems().clear();
         this.propertySheet.getItems().addAll(activeElement.getPropertyItems());
@@ -447,7 +447,7 @@ public class XMLEditorController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 s.setElementContent(newValue);
-                oldListener = this;
+                preview.update();
             }
         };
     }
