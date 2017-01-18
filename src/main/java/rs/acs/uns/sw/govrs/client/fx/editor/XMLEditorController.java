@@ -29,14 +29,10 @@ import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
-import rs.acs.uns.sw.govrs.client.fx.render.Renderer;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Paragraph;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringElement;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 
-import javax.swing.plaf.nimbus.State;
-import java.io.FileNotFoundException;
 import java.util.function.Function;
 
 /**
@@ -422,9 +418,9 @@ public class XMLEditorController {
     public void setActiveElement(Element activeElement) {
         this.activeElement = activeElement;
         //this.area.replaceText(0, this.area.getLength(), activeElement.getElementName());
-        if (activeElement instanceof StringElement) {
+        if (activeElement instanceof StringWrapper) {
             area.setDisable(false);
-            StringElement s = (StringElement) activeElement;
+            StringWrapper s = (StringWrapper) activeElement;
             //System.out.println(s.getElementContent());
             newListener = createCngLst(s);
             area.replaceText(0, this.area.getLength()*100, s.getElementContent());
@@ -442,7 +438,7 @@ public class XMLEditorController {
     public ChangeListener oldListener;
     public ChangeListener newListener;
 
-    public ChangeListener createCngLst(StringElement s){
+    public ChangeListener createCngLst(StringWrapper s){
         return new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

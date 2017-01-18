@@ -123,7 +123,7 @@ public abstract class Element {
         if (this instanceof Item) {
             return "/images/tree_images/item.png";
         }
-        if (this instanceof StringElement) {
+        if (this instanceof StringWrapper) {
             return "/images/tree_images/text.png";
         }
         return "";

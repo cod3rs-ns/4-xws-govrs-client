@@ -170,7 +170,7 @@ public class Paragraph extends Element {
                 getChildren().add(e);
             } else {
                 if(!StringCleaner.checkIsEmpty(o.toString())){
-                    StringElement se = new StringElement(o);
+                    StringWrapper se = new StringWrapper(o);
                     getChildren().add(se);
                 }
             }
@@ -193,10 +193,10 @@ public class Paragraph extends Element {
             element.createPropertyAttrs();
             getContent().add(element);
             getChildren().add(element);
-        } else if (element instanceof StringElement) {
+        } else if (element instanceof StringWrapper) {
             element.setElementParent(this);
             element.createPropertyAttrs();
-            getContent().add(((StringElement) element).getWrappedObject());
+            getContent().add(((StringWrapper) element).getWrappedObject());
             getChildren().add(element);
         } else {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid child type.");
@@ -208,9 +208,9 @@ public class Paragraph extends Element {
         if (element instanceof Clause) {
             getContent().remove(element);
             getChildren().remove(element);
-        } else if (element instanceof StringElement) {
+        } else if (element instanceof StringWrapper) {
             getChildren().remove(element);
-            getContent().remove(((StringElement)element).getWrappedObject());
+            getContent().remove(((StringWrapper)element).getWrappedObject());
         } else {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
         }
@@ -239,7 +239,7 @@ public class Paragraph extends Element {
     public void preMarshaller() {
         getContent().clear();
         for (Element e: getChildren()) {
-            if(e instanceof StringElement) {
+            if(e instanceof StringWrapper) {
                 // add TextOnly
                 getContent().add(e.getElementContent());
             } else {

@@ -7,7 +7,7 @@ import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 
-public class StringElement extends Element{
+public class StringWrapper extends Element{
     protected StringProperty name = new SimpleStringProperty("Tekst");
 
     /**
@@ -52,7 +52,7 @@ public class StringElement extends Element{
         this.name.set(value);
     }
 
-    public StringElement(Object obj) {
+    public StringWrapper(Object obj) {
         super();
         // remove unnecessary whitespace
         String cleaned = StringCleaner.deleteWhitespace(obj.toString());

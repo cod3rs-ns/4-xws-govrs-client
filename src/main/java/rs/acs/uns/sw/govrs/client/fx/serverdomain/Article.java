@@ -167,7 +167,7 @@ public class Article extends Element{
                 getChildren().add(e);
             } else {
                 if(!StringCleaner.checkIsEmpty(o.toString())){
-                    StringElement se = new StringElement(o);
+                    StringWrapper se = new StringWrapper(o);
                     getChildren().add(se);
                 }
             }}
@@ -189,10 +189,10 @@ public class Article extends Element{
             getChildren().add(element);
         }
 
-        if (element instanceof StringElement) {
+        if (element instanceof StringWrapper) {
             element.setElementParent(this);
             element.createPropertyAttrs();
-            getContent().add(((StringElement) element).getWrappedObject());
+            getContent().add(((StringWrapper) element).getWrappedObject());
             getChildren().add(element);
         }
     }
@@ -202,9 +202,9 @@ public class Article extends Element{
         if (element instanceof Paragraph) {
             getContent().remove(element);
             getChildren().remove(element);
-        } else if (element instanceof StringElement) {
+        } else if (element instanceof StringWrapper) {
             getChildren().remove(element);
-            getContent().remove(((StringElement)element).getWrappedObject());
+            getContent().remove(((StringWrapper)element).getWrappedObject());
         } else {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
         }
@@ -233,9 +233,9 @@ public class Article extends Element{
     public void preMarshaller() {
         getContent().clear();
         for (Element child: getChildren()) {
-            if(child instanceof StringElement) {
+            if(child instanceof StringWrapper) {
                 // add TextOnly
-                getContent().add(((StringElement) child).getWrappedObject());
+                getContent().add(((StringWrapper) child).getWrappedObject());
             } else {
                 getContent().add(child);
             }

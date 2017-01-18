@@ -49,8 +49,8 @@ public class ContextMenuHandler {
         if (element instanceof Item) {
             return this.createItemContextMenu((Item) element);
         }
-        if (element instanceof StringElement) {
-            return this.createTextContextMenu((StringElement) element);
+        if (element instanceof StringWrapper) {
+            return this.createTextContextMenu((StringWrapper) element);
         }
         return null;
     }
@@ -127,7 +127,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(paragraphMenuItem, "Stav", article, new Paragraph());
-        createInsertAction(textMenuItem, "Tekst", article, new StringElement(new String("HUEHUHUE TEST CMH")));
+        createInsertAction(textMenuItem, "Tekst", article, new StringWrapper("unutar članka"));
         createDeleteAction(deleteMenuItem, article);
         return contextMenu;
     }
@@ -142,7 +142,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(clauseMenuItem, "Tačka", paragraph, new Clause());
-        createInsertAction(textMenuItem, "Tekst", paragraph, new StringElement("U STAVU SAM blalblballbalb"));
+        createInsertAction(textMenuItem, "Tekst", paragraph, new StringWrapper("unutar stava"));
         createDeleteAction(deleteMenuItem, paragraph);
         return contextMenu;
     }
@@ -157,7 +157,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(subclauseMenuItem, "Podtačka", clause, new Subclause());
-        createInsertAction(textMenuItem, "Tekst", clause, new StringElement(""));
+        createInsertAction(textMenuItem, "Tekst", clause, new StringWrapper(""));
         createDeleteAction(deleteMenuItem, clause);
         return contextMenu;
     }
@@ -172,7 +172,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(itemMenuItem, "Alineja", subclause, new Item());
-        createInsertAction(textMenuItem, "Tekst", subclause, new StringElement(""));
+        createInsertAction(textMenuItem, "Tekst", subclause, new StringWrapper(""));
         createDeleteAction(deleteMenuItem, subclause);
         return contextMenu;
     }
@@ -185,7 +185,7 @@ public class ContextMenuHandler {
         return contextMenu;
     }
 
-    private ContextMenu createTextContextMenu(StringElement text) {
+    private ContextMenu createTextContextMenu(StringWrapper text) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteMenuItem = createDeleteMenuItem();
         contextMenu.getItems().add(deleteMenuItem);

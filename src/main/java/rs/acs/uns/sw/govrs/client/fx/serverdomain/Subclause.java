@@ -170,7 +170,7 @@ public class Subclause extends Element {
                 getChildren().add(e);
             } else {
                 if(!StringCleaner.checkIsEmpty(o.toString())){
-                    StringElement se = new StringElement(o);
+                    StringWrapper se = new StringWrapper(o);
                     getChildren().add(se);
                 }
             }
@@ -192,10 +192,10 @@ public class Subclause extends Element {
             element.createPropertyAttrs();
             getContent().add(element);
             getChildren().add(element);
-        } else if(element instanceof StringElement) {
+        } else if(element instanceof StringWrapper) {
             element.setElementParent(this);
             element.createPropertyAttrs();
-            getContent().add(((StringElement) element).getWrappedObject());
+            getContent().add(((StringWrapper) element).getWrappedObject());
             getChildren().add(element);
         } else {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type child");
@@ -207,8 +207,8 @@ public class Subclause extends Element {
         if (element instanceof Item ) {
             getContent().remove(element);
             getChildren().remove(element);
-        } else if (element instanceof StringElement) {
-            getContent().remove(((StringElement) element).getWrappedObject());
+        } else if (element instanceof StringWrapper) {
+            getContent().remove(((StringWrapper) element).getWrappedObject());
             getChildren().remove(element);
         } else {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
@@ -238,8 +238,8 @@ public class Subclause extends Element {
     public void preMarshaller() {
         getContent().clear();
         for (Element child:getChildren()) {
-            if (child instanceof StringElement) {
-                getContent().add(((StringElement) child).getWrappedObject());
+            if (child instanceof StringWrapper) {
+                getContent().add(((StringWrapper) child).getWrappedObject());
             } else {
                 getContent().add(child);
             }
