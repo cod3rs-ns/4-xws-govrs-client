@@ -51,10 +51,9 @@ public class StateManager {
                 if (newLawPane == null) {
                     newLawPane = loader.load(in);
                     newLawController = loader.getController();
-                    newLawController.setMainApp(app);
                     newLawController.setStateManager(this);
                     // TODO this should not be called outside controller
-                    newLawController.loadData();
+                    newLawController.loadTestData();
                 }
 
                 if (rootContainer.getChildren().size() > 0) {

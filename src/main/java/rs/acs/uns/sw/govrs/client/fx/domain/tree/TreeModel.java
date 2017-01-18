@@ -33,7 +33,7 @@ public class TreeModel {
                 System.out.println(item);
                 // TODO create Logic for displaying in text area
                 if (item != null) {
-                    editorController.setActiveElement(item.getValue());
+                    editorController.setSelectedElement(item.getValue());
                 }
             }
         });
