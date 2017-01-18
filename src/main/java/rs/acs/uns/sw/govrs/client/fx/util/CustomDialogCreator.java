@@ -38,4 +38,25 @@ public class CustomDialogCreator {
                 new Image(MainFXApp.class.getResource("/images/dialog.png").toString()));
         return alert;
     }
+
+    public static Alert createInformationAlert(String title, String header, String text) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(text);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(
+                new Image(MainFXApp.class.getResource("/images/dialog.png").toString()));
+        return alert;
+    }
+    public static Alert createErrorAlert(String title, String header, String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(text);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(
+                new Image(MainFXApp.class.getResource("/images/dialog.png").toString()));
+        return alert;
+    }
 }

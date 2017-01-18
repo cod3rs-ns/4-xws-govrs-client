@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
@@ -33,6 +34,7 @@ import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
+import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -175,7 +177,7 @@ public class XMLEditorController {
         lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
             law = lawProperty.get();
             law.initElement();
-            preview = new HtmlPreview(law, "law", Law.class);
+            preview = new HtmlPreview(law, "propis", Law.class);
             previewContainer.setContent(preview.getNode());
             area.replaceText(0, 0, "");
             tree = new TreeModel(
@@ -441,15 +443,25 @@ public class XMLEditorController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("XML files", "*.xml")
         );
-        // TODO Set owner
-        File file = fileChooser.showOpenDialog(null);
+        Stage stage = (Stage) areaContainer.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             try {
                 JAXBContext context = JAXBContext.newInstance(Law.class);
                 Unmarshaller unMarshaller = context.createUnmarshaller();
                 Law openNew = (Law) unMarshaller.unmarshal(file);
                 switchViewToNewLaw(openNew);
-            } catch (JAXBException e) {
+                CustomDialogCreator.createInformationAlert(
+                        "GovRS",
+                        "Otvaranje XML datoteke",
+                        "Fajl je uspešno otvoren."
+                ).showAndWait();
+            } catch (Exception e) {
+                CustomDialogCreator.createErrorAlert(
+                        "GovRS",
+                        "GREŠKA!",
+                        "Fajl nije moguće otvoriti."
+                ).showAndWait();
                 Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to load file.");
             }
         }
@@ -467,7 +479,17 @@ public class XMLEditorController {
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 marshaller.marshal(law, activeFile);
             }
-        } catch (JAXBException e) {
+            CustomDialogCreator.createInformationAlert(
+                    "GovRS",
+                    "Čuvanje XML datoteke",
+                    "Fajl je uspešno sačuvan."
+            ).showAndWait();
+        } catch (Exception e) {
+            CustomDialogCreator.createErrorAlert(
+                    "GovRS",
+                    "Čucanje XML datoteke",
+                    "Fajl nije uspešno sačuvan."
+            ).showAndWait();
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
         }
     }
@@ -482,14 +504,26 @@ public class XMLEditorController {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("XML files", "*.xml")
         );
-        File file = fileChooser.showSaveDialog(null);
+
+        Stage stage = (Stage) areaContainer.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
                 JAXBContext context = JAXBContext.newInstance(Law.class);
                 Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 marshaller.marshal(law, file);
-            } catch (JAXBException e) {
+                CustomDialogCreator.createInformationAlert(
+                        "GovRS",
+                        "Čuvanje XML datoteke",
+                        "Fajl je uspešno sačuvan."
+                ).showAndWait();
+            } catch (Exception e) {
+                CustomDialogCreator.createErrorAlert(
+                        "GovRS",
+                        "Čuvanje XML datoteke",
+                        "Fajl nije uspešno sačuvan."
+                ).showAndWait();
                 Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
             }
         }
@@ -503,8 +537,6 @@ public class XMLEditorController {
     private void switchViewToNewLaw(Law newLaw) {
         law = newLaw;
         law.initElement();
-        preview = new HtmlPreview(law, "law", Law.class);
-        previewContainer.setContent(preview.getNode());
         preview.setRootElement(law);
         preview.update();
         tree = new TreeModel(
