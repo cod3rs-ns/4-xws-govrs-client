@@ -14,6 +14,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -81,6 +83,13 @@ public class XMLEditorController {
     private ComboBox<Integer> fontSizePicker;
     // -------------------------------------------------
     private Law propis;
+    // ----------- save load buttons --------------
+    @FXML
+    private ImageView openButton;
+    @FXML
+    private ImageView saveButton;
+    @FXML
+    private ImageView saveAsButton;
 
     // Reference to the main application.
     private MainFXApp mainApp;
@@ -119,7 +128,6 @@ public class XMLEditorController {
      */
     @FXML
     private void initialize() {
-
         // setup additional parameters of area and init actions
         setupAdditionalAreaParams();
         initActions();
@@ -127,6 +135,11 @@ public class XMLEditorController {
         // add area to container
         VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
         areaContainer.setCenter(vsPane);
+
+        // create tooltips for file control buttons
+        Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
+        Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
+        Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
     }
 
     public void loadData() {
@@ -408,6 +421,21 @@ public class XMLEditorController {
         linkAction.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.LINK));
 
         fontSizePicker.setOnAction(event -> updateFontSize(fontSizePicker.getValue()));
+
+    }
+
+    @FXML
+    private void openAction() {
+
+    }
+
+    @FXML
+    private void saveAction() {
+
+    }
+
+    @FXML
+    private void saveAsAction() {
 
     }
 

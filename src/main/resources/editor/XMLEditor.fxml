@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Separator?>
@@ -9,8 +10,11 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController">
    <children>
@@ -18,7 +22,7 @@
          <items>
             <AnchorPane maxWidth="350.0" minWidth="250.0" prefWidth="250.0">
                <children>
-                  <TitledPane fx:id="treeContainer" collapsible="false" maxWidth="250.0" minWidth="250.0" prefHeight="598.0" prefWidth="250.0" text="Struktura propisa" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane fx:id="treeContainer" collapsible="false" maxWidth="250.0" minWidth="250.0" prefHeight="598.0" prefWidth="250.0" text="Struktura propisa" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <TreeView />
                      </content>
@@ -26,6 +30,37 @@
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </padding>
                   </TitledPane>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="8.0" top="2.0" />
+                     </padding>
+                     <children>
+                        <ImageView fx:id="openButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#openAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/buttons/open.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="saveButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#saveAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/buttons/save.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="saveAsButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#saveAsAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/buttons/save_as.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
             <AnchorPane maxWidth="550.0" minWidth="470.0" prefWidth="470.0">
