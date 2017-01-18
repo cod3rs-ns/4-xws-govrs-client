@@ -167,6 +167,7 @@ public class Subclause extends Element {
         for (Object o:getContent()) {
             if (o instanceof Item) {
                 Item e = (Item)o;
+                e.setValue(StringCleaner.deleteWhitespace(e.getValue()));
                 ItemWrapper iw = new ItemWrapper(e);
                 getChildren().add(iw);
             } else {
@@ -240,7 +241,7 @@ public class Subclause extends Element {
         getContent().clear();
         for (Element child:getChildren()) {
             if (child instanceof StringWrapper) {
-                getContent().add(((StringWrapper) child).getWrappedObject());
+                getContent().add(child.getElementContent());
             } else if (child instanceof ItemWrapper){
                 getContent().add(((ItemWrapper) child).getWrappedItem());
             }

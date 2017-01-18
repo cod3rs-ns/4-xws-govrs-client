@@ -238,7 +238,7 @@ public class Clause extends Element{
         getContent().clear();
         for (Element child:getChildren()) {
             if (child instanceof StringWrapper) {
-                getContent().add(((StringWrapper) child).getWrappedObject());
+                getContent().add(child.getElementContent());
             } else {
                 getContent().add(child);
             }

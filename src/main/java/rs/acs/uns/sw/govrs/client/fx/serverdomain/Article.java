@@ -235,7 +235,7 @@ public class Article extends Element{
         for (Element child: getChildren()) {
             if(child instanceof StringWrapper) {
                 // add TextOnly
-                getContent().add(((StringWrapper) child).getWrappedObject());
+                getContent().add(child.getElementContent());
             } else {
                 getContent().add(child);
             }
