@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
@@ -35,13 +36,18 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.StringReader;
 import java.util.function.Function;
 
 /**
  * Used for creating Laws.
  */
 public class XMLEditorController {
-
     private static final String PRESSED = "pressed";
     public final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
@@ -83,6 +89,7 @@ public class XMLEditorController {
     private ComboBox<Integer> fontSizePicker;
     // -------------------------------------------------
     private Law propis;
+    private File openedFile = new File(System.getProperty("user.home") + File.separator+ "test_save_xml");
     // ----------- save load buttons --------------
     @FXML
     private ImageView openButton;
@@ -90,6 +97,8 @@ public class XMLEditorController {
     private ImageView saveButton;
     @FXML
     private ImageView saveAsButton;
+
+    final FileChooser fileChooser = new FileChooser();
 
     // Reference to the main application.
     private MainFXApp mainApp;
@@ -116,7 +125,7 @@ public class XMLEditorController {
         // setup text area
         area = new StyledTextArea<>(
                 ParStyle.EMPTY, (paragraph, style) -> paragraph.setStyle(style.toCss()),
-                TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Verdana").updateTextColor(Color.BLACK),
+                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Verdana").updateTextColor(Color.BLACK),
                 (text, style) -> text.setStyle(style.toCss()));
         area.setWrapText(true);
         area.setStyleCodecs(ParStyle.CODEC, TextStyle.CODEC);
@@ -426,17 +435,73 @@ public class XMLEditorController {
 
     @FXML
     private void openAction() {
+        fileChooser.setTitle("Otvori XML propis");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+        );
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML files", "*.xml")
+        );
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            try {
+                JAXBContext context = JAXBContext.newInstance(Law.class);
+                Unmarshaller unMarshaller = context.createUnmarshaller();
+                Law openNew = (Law) unMarshaller.unmarshal(file);
+                switchViewToNewLaw(openNew);
 
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     private void saveAction() {
-
+        try {
+            JAXBContext context = JAXBContext.newInstance(Law.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(propis, openedFile);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void saveAsAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sačuvaj propis kao...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML files", "*.xml")
+        );
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try {
+                JAXBContext context = JAXBContext.newInstance(Law.class);
+                Marshaller marshaller = context.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                marshaller.marshal(propis, file);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    private void switchViewToNewLaw(Law newLaw) {
+        propis = newLaw;
+        propis.initElement();
+        preview.setRootElement(propis);
+        preview.update();
+        tree = new TreeModel(
+                propis,
+                Element::getChildren,
+                Element::elementNameProperty,
+                this
+        );
+
+        TreeView<Element> treeView = tree.getTreeView();
+        treeContainer.setContent(treeView);
     }
 
     public Element getActiveElement() {

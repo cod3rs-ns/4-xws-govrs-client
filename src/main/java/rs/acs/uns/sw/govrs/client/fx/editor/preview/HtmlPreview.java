@@ -77,4 +77,12 @@ public class HtmlPreview {
 
         webView.getEngine().loadContent(sb.toString());
     }
+
+    public Element getRootElement() {
+        return rootElement;
+    }
+
+    public void setRootElement(Element rootElement) {
+        this.rootElement = rootElement;
+    }
 }
