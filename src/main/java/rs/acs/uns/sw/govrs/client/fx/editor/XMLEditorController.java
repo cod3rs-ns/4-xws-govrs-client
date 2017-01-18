@@ -14,7 +14,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -34,6 +33,7 @@ import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 
 import java.util.function.Function;
 
@@ -445,28 +445,31 @@ public class XMLEditorController {
 
     public void setActiveElement(Element activeElement) {
         this.activeElement = activeElement;
-        //this.area.replaceText(0, this.area.getLength(), activeElement.getElementName());
-        if (activeElement instanceof StringWrapper) {
-            area.setDisable(false);
-            StringWrapper s = (StringWrapper) activeElement;
-            //System.out.println(s.getElementContent());
-            newListener = createCngLst(s);
-            area.replaceText(0, this.area.getLength()*100, s.getElementContent());
-            if (oldListener != null){
+        // remove old listener if exist
+        if (changeListener != null){
+            area.textProperty().removeListener(changeListener);
+        }
 
-                area.textProperty().removeListener(oldListener);
-            }
-            area.textProperty().addListener(newListener);
-        }else{
-            areaContainer.setDisable(true);
+        if (activeElement instanceof StringWrapper || activeElement instanceof ItemWrapper) {
+            area.setDisable(false);
+
+            area.clear();
+            area.replaceText(0, -1, activeElement.getElementContent());
+
+            changeListener = createChangeAreaListener(activeElement);
+            area.textProperty().addListener(changeListener);
+
+        }
+        else{
+            area.clear();
+            area.setDisable(true);
         }
         this.propertySheet.getItems().clear();
         this.propertySheet.getItems().addAll(activeElement.getPropertyItems());
     }
-    public ChangeListener oldListener;
-    public ChangeListener newListener;
+    public ChangeListener changeListener;
 
-    public ChangeListener createCngLst(StringWrapper s){
+    public ChangeListener createChangeAreaListener(Element s){
         return new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
