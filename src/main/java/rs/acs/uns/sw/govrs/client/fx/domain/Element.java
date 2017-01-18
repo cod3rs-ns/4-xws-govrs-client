@@ -7,21 +7,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 
-import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.function.Function;
 
 public abstract class Element {
+    @XmlTransient
     private final Function<String, Element> childrenSupplier;
+
     private final StringProperty elementContent = new SimpleStringProperty();
+    @XmlTransient
     private ObservableList<Element> children = FXCollections.observableArrayList();
-    private Element parent;
+    @XmlTransient
+    private Element elementParent;
+    @XmlTransient
     private ObservableList<PropertySheet.Item> propertyItems = FXCollections.observableArrayList();
 
     public Element(String name, ObservableList<Element> children, Function<String, Element> childrenSupplier) {
         this.children = children;
         this.childrenSupplier = childrenSupplier;
-        setName(name);
+        setElementName(name);
     }
 
     public Element() {
@@ -36,11 +42,12 @@ public abstract class Element {
         this(name, FXCollections.observableArrayList(), n -> null);
     }
 
-    public abstract String getName();
+    @XmlTransient
+    public abstract String getElementName();
 
-    public abstract void setName(String name);
+    public abstract void setElementName(String name);
 
-    public abstract StringProperty nameProperty();
+    public abstract StringProperty elementNameProperty();
 
     public String getElementContent() {
         return elementContent.get();
@@ -66,17 +73,19 @@ public abstract class Element {
 
     public abstract void createPropertyAttrs();
 
+    public abstract void preMarshaller();
+
     public ObservableList<PropertySheet.Item> getPropertyItems() {
         return propertyItems;
     }
 
-
-    public Element getParent() {
-        return parent;
+    @XmlTransient
+    public Element getElementParent() {
+        return elementParent;
     }
 
-    public void setParent(Element parent) {
-        this.parent = parent;
+    public void setElementParent(Element elementParent) {
+        this.elementParent = elementParent;
     }
 
     /**
@@ -112,32 +121,13 @@ public abstract class Element {
         if (this instanceof Subclause) {
             return "/images/tree_images/subclause.png";
         }
-        if (this instanceof Item) {
+        if (this instanceof ItemWrapper) {
             return "/images/tree_images/item.png";
         }
-        if (this instanceof StringElement) {
+        if (this instanceof StringWrapper) {
             return "/images/tree_images/text.png";
         }
         return "";
     }
 
-    public abstract String createElementOpening();
-
-    public abstract String createElementAttrs();
-
-    public abstract String createElementContent();
-
-    public abstract String createElementClosing();
-
-    public String getHtml() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(createElementOpening());
-        sb.append(createElementContent());
-        for (Element child : getChildren()
-                ) {
-            sb.append(child.getHtml());
-        }
-        sb.append(createElementClosing());
-        return sb.toString();
-    }
 }

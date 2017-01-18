@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
+import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.laws.LawSearchController;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
@@ -56,6 +57,8 @@ public class HomeController extends AnchorPane implements Initializable {
     private VBox actionContainer;
     @FXML
     private AnchorPane dragPane;
+    @FXML
+    public StatusBar statusBar;
 
     private MainFXApp app;
 
@@ -63,7 +66,7 @@ public class HomeController extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        stateManager = new StateManager();
+        stateManager = new StateManager(this);
         stateManager.setRootContainer(container);
         stateManager.setApp(app);
 
@@ -175,5 +178,26 @@ public class HomeController extends AnchorPane implements Initializable {
     private void logout() {
         app.logout();
     }
+
+    public MainFXApp getApp() {
+        return app;
+    }
+
+    public StatusBar getStatusBar() {
+        return statusBar;
+    }
+
+    public void setStatusBar(StatusBar statusBar) {
+        this.statusBar = statusBar;
+    }
+
+    public StateManager getStateManager() {
+        return stateManager;
+    }
+
+    public void setStateManager(StateManager stateManager) {
+        this.stateManager = stateManager;
+    }
+
 
 }

@@ -29,6 +29,7 @@ public class Law  extends Element{
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
     protected Law.Head head;
+
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
     protected Law.Body body;
 
@@ -118,6 +119,15 @@ public class Law  extends Element{
 
     public StringProperty idProperty() {return id;}
 
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
+    }
+
     /**
      * Gets the value of the name property.
      *
@@ -126,7 +136,7 @@ public class Law  extends Element{
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -139,11 +149,11 @@ public class Law  extends Element{
      *
      */
 
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.setValue(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
     }
 
@@ -162,9 +172,10 @@ public class Law  extends Element{
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.setParent(this);
+            e.setElementParent(this);
             e.initElement();
         }
+
         // create property list for context
         createPropertyAttrs();
     }
@@ -174,7 +185,7 @@ public class Law  extends Element{
         // create Part
         if (element instanceof Part) {
             Part p = (Part)element;
-            p.setParent(this);
+            p.setElementParent(this);
             p.createPropertyAttrs();
             getBody().getGlava().add(p);
             getChildren().add(p);
@@ -182,7 +193,7 @@ public class Law  extends Element{
         // create Chapter
         if (element instanceof Chapter) {
             Chapter c = (Chapter)element;
-            c.setParent(this);
+            c.setElementParent(this);
             c.createPropertyAttrs();
             getBody().getDio().add(c);
             getChildren().add(c);
@@ -214,7 +225,7 @@ public class Law  extends Element{
                 "Jedinstveni identifikator",
                 false);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",
@@ -274,24 +285,12 @@ public class Law  extends Element{
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.

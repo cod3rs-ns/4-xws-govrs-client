@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 
 import java.util.function.Function;
 
@@ -20,10 +20,10 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
     private TextField textField;
     private ContextMenu contextMenu;
     private Function<Element, ObservableValue<String>> text;
-    private ActPreview preview;
+    private HtmlPreview preview;
     private ContextMenuHandler contextMenuHandler;
 
-    public CustomTextFieldTreeCell(Function<Element, ObservableValue<String>> text, ActPreview preview) {
+    public CustomTextFieldTreeCell(Function<Element, ObservableValue<String>> text, HtmlPreview preview) {
         this.text = text;
         this.preview = preview;
         this.contextMenuHandler = new ContextMenuHandler();
@@ -46,7 +46,7 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
     @Override
     public void cancelEdit() {
         super.cancelEdit();
-        setText(getItem().getName());
+        setText(getItem().getElementName());
         setGraphic(new ImageView(new Image(MainFXApp.class.getResourceAsStream(getItem().getImage()))));
     }
 
@@ -61,7 +61,7 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
         } else {
             if (isEditing()) {
                 if (textField != null) {
-                    textField.setText(item.getName());
+                    textField.setText(item.getElementName());
                 }
                 setText("");
                 setGraphic(textField);
@@ -78,10 +78,10 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
     }
 
     private void createTextField() {
-        textField = new TextField(getItem().getName());
+        textField = new TextField(getItem().getElementName());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                getItem().setName(textField.getText());
+                getItem().setElementName(textField.getText());
                 commitEdit(getItem());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();

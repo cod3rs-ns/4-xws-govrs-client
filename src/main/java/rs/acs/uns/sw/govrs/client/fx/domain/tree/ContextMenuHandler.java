@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 
 import java.util.Optional;
@@ -46,11 +47,11 @@ public class ContextMenuHandler {
         if (element instanceof Subclause) {
             return this.createSubclauseContextMenu((Subclause) element);
         }
-        if (element instanceof Item) {
-            return this.createItemContextMenu((Item) element);
+        if (element instanceof ItemWrapper) {
+            return this.createItemContextMenu((ItemWrapper) element);
         }
-        if (element instanceof StringElement) {
-            return this.createTextContextMenu((StringElement) element);
+        if (element instanceof StringWrapper) {
+            return this.createTextContextMenu((StringWrapper) element);
         }
         return null;
     }
@@ -127,7 +128,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(paragraphMenuItem, "Stav", article, new Paragraph());
-        createInsertAction(textMenuItem, "Tekst", article, new StringElement(""));
+        createInsertAction(textMenuItem, "Tekst", article, new StringWrapper("unutar članka"));
         createDeleteAction(deleteMenuItem, article);
         return contextMenu;
     }
@@ -142,7 +143,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(clauseMenuItem, "Tačka", paragraph, new Clause());
-        createInsertAction(textMenuItem, "Tekst", paragraph, new StringElement(""));
+        createInsertAction(textMenuItem, "Tekst", paragraph, new StringWrapper("unutar stava"));
         createDeleteAction(deleteMenuItem, paragraph);
         return contextMenu;
     }
@@ -157,7 +158,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(subclauseMenuItem, "Podtačka", clause, new Subclause());
-        createInsertAction(textMenuItem, "Tekst", clause, new StringElement(""));
+        createInsertAction(textMenuItem, "Tekst", clause, new StringWrapper(""));
         createDeleteAction(deleteMenuItem, clause);
         return contextMenu;
     }
@@ -171,13 +172,13 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(textMenuItem);
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
-        createInsertAction(itemMenuItem, "Alineja", subclause, new Item());
-        createInsertAction(textMenuItem, "Tekst", subclause, new StringElement(""));
+        createInsertAction(itemMenuItem, "Alineja", subclause, new ItemWrapper(new Item()));
+        createInsertAction(textMenuItem, "Tekst", subclause, new StringWrapper(""));
         createDeleteAction(deleteMenuItem, subclause);
         return contextMenu;
     }
 
-    private ContextMenu createItemContextMenu(Item item) {
+    private ContextMenu createItemContextMenu(ItemWrapper item) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteMenuItem = createDeleteMenuItem();
         contextMenu.getItems().add(deleteMenuItem);
@@ -185,7 +186,7 @@ public class ContextMenuHandler {
         return contextMenu;
     }
 
-    private ContextMenu createTextContextMenu(StringElement text) {
+    private ContextMenu createTextContextMenu(StringWrapper text) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteMenuItem = createDeleteMenuItem();
         contextMenu.getItems().add(deleteMenuItem);
@@ -200,10 +201,10 @@ public class ContextMenuHandler {
 
     private void createDeleteAction(MenuItem deleteItem, Element element) {
         deleteItem.setOnAction(event -> {
-            Alert deleteAlert = CustomDialogCreator.createDeleteConfirmationDialog(element.getName());
+            Alert deleteAlert = CustomDialogCreator.createDeleteConfirmationDialog(element.getElementName());
             Optional<ButtonType> result = deleteAlert.showAndWait();
             if (result.get() == CustomDialogCreator.YES) {
-                element.getParent().removeChild(element);
+                element.getElementParent().removeChild(element);
             }
         });
     }
@@ -213,7 +214,7 @@ public class ContextMenuHandler {
             TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog(promptName);
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> {
-                newElement.setName(name);
+                newElement.setElementName(name);
                 parent.createAndAddChild(newElement);
             });
         });

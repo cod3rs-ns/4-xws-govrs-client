@@ -126,7 +126,7 @@ public class Subsection extends Element {
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.getName();
     }
 
@@ -138,12 +138,21 @@ public class Subsection extends Element {
      *     {@link String }
      *
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
+    }
+
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
     }
 
     @Override
@@ -155,18 +164,18 @@ public class Subsection extends Element {
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.setParent(this);
+            e.setElementParent(this);
             e.initElement();
         }
+
         createPropertyAttrs();
     }
-
 
     @Override
     public void createAndAddChild(Element element) {
         if (element instanceof Article) {
             Article a = (Article) element;
-            a.setParent(this);
+            a.setElementParent(this);
             a.createPropertyAttrs();
             getClan().add(a);
             getChildren().add(a);
@@ -192,7 +201,7 @@ public class Subsection extends Element {
                 "Jedinstveni identifikator",
                 false);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",
@@ -202,23 +211,10 @@ public class Subsection extends Element {
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
-    }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
 }

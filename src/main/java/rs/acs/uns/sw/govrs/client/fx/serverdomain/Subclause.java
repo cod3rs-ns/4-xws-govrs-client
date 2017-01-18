@@ -13,11 +13,15 @@ import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
+import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -129,7 +133,7 @@ public class Subclause extends Element {
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -141,12 +145,20 @@ public class Subclause extends Element {
      *     {@link String }
      *
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
     }
 
     @Override
@@ -155,17 +167,20 @@ public class Subclause extends Element {
         for (Object o:getContent()) {
             if (o instanceof Item) {
                 Item e = (Item)o;
-                // TODO fix this issue
-                getChildren().add(e);
+                e.setValue(StringCleaner.deleteWhitespace(e.getValue()));
+                ItemWrapper iw = new ItemWrapper(e);
+                getChildren().add(iw);
             } else {
-                StringElement se = new StringElement(o.toString());
-                getChildren().add(se);
+                if(!StringCleaner.checkIsEmpty(o.toString())){
+                    StringWrapper se = new StringWrapper(o);
+                    getChildren().add(se);
+                }
             }
         }
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.setParent(this);
+            e.setElementParent(this);
             e.initElement();
         }
         createPropertyAttrs();
@@ -174,19 +189,31 @@ public class Subclause extends Element {
 
     @Override
     public void createAndAddChild(Element element) {
-        if (element instanceof Item || element instanceof StringElement) {
-            element.setParent(this);
+        if (element instanceof ItemWrapper) {
+            element.setElementParent(this);
             element.createPropertyAttrs();
-            getContent().add(element);
+            getContent().add(((ItemWrapper) element).getWrappedItem());
             getChildren().add(element);
+        } else if(element instanceof StringWrapper) {
+            element.setElementParent(this);
+            element.createPropertyAttrs();
+            getContent().add(((StringWrapper) element).getWrappedObject());
+            getChildren().add(element);
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type child");
         }
     }
 
     @Override
     public void removeChild(Element element) {
-        if (element instanceof Item || element instanceof StringElement) {
-            getContent().remove(element);
+        if (element instanceof ItemWrapper) {
+            getContent().remove(((ItemWrapper) element).getWrappedItem());
             getChildren().remove(element);
+        } else if (element instanceof StringWrapper) {
+            getContent().remove(((StringWrapper) element).getWrappedObject());
+            getChildren().remove(element);
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
         }
     }
 
@@ -200,7 +227,7 @@ public class Subclause extends Element {
                 "Jedinstveni identifikator",
                 false);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
-                nameProperty(),
+                elementNameProperty(),
                 "Generalno",
                 "Naziv",
                 "Naziv elementa",
@@ -210,23 +237,16 @@ public class Subclause extends Element {
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
-    }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+    public void preMarshaller() {
+        getContent().clear();
+        for (Element child:getChildren()) {
+            if (child instanceof StringWrapper) {
+                getContent().add(child.getElementContent());
+            } else if (child instanceof ItemWrapper){
+                getContent().add(((ItemWrapper) child).getWrappedItem());
+            }
+            child.preMarshaller();
+        }
     }
 
 }
