@@ -8,10 +8,16 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PartEnumPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.PartEnumPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.PartRoles;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -62,12 +68,13 @@ public class Part extends Element{
 
 
     @XmlAttribute(name = "role")
-    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty role;
+    @XmlJavaTypeAdapter(PartEnumPropertyAdapter.class)
+    protected ObjectProperty<PartRoles> role = new SimpleObjectProperty<>();
 
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
     @XmlAttribute(name = "name")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
@@ -109,7 +116,18 @@ public class Part extends Element{
      * {@link String }
      */
     public String getRole() {
-        return role.get();
+        if (this.role.get() == PartRoles.UvodneOdredbe) {
+            return "uvodne_odredbe";
+        }
+
+        if (this.role.get() == PartRoles.OpsteOdredbe) {
+            return "opste_odredbe";
+        }
+
+        if (this.role.get() == PartRoles.ZavrsneOdredbe) {
+            return "zavrsne_odredbe";
+        }
+        return "";
     }
 
     /**
@@ -119,7 +137,19 @@ public class Part extends Element{
      *              {@link String }
      */
     public void setRole(String value) {
-        this.role.set(value);
+        if (value.equals("uvodne_odredbe")) {
+            this.role.set(PartRoles.UvodneOdredbe);
+        }
+        if (value.equals("opste_odredbe")) {
+            this.role.set(PartRoles.OpsteOdredbe);
+        }
+        if (value.equals("zavrsne_odredbe")) {
+            this.role.set(PartRoles.ZavrsneOdredbe);
+        }
+    }
+
+    public ObjectProperty<PartRoles> roleProperty() {
+        return this.role;
     }
 
     /**
@@ -129,7 +159,7 @@ public class Part extends Element{
      * {@link String }
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -139,7 +169,11 @@ public class Part extends Element{
      *              {@link String }
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return this.id;
     }
 
     /**
@@ -148,7 +182,7 @@ public class Part extends Element{
      * @return possible object is
      * {@link String }
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -158,49 +192,90 @@ public class Part extends Element{
      * @param value allowed object is
      *              {@link String }
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.setValue(value);
     }
 
-    public StringProperty nameProperty() {
-        return name;
+    public StringProperty elementNameProperty() {
+        return this.name;
     }
 
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String value) {
+        this.name.set(value);
+    }
+
+
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         for (Element e : getOdjeljak()) {
             getChildren().add(e);
         }
 
         // init observable list for all children
         for (Element e : getChildren()) {
-            e.initChildrenObservableList();
+            e.setElementParent(this);
+            e.initElement();
+        }
+
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+        if (element instanceof Section) {
+            Section s = (Section) element;
+            s.setElementParent(this);
+            s.createPropertyAttrs();
+            getOdjeljak().add(s);
+            getChildren().add(s);
         }
     }
 
     @Override
-    public void createAndAddChild(String name) {
-
+    public void removeChild(Element element) {
+        if (element instanceof Section) {
+            Section s = (Section) element;
+            getOdjeljak().remove(s);
+            getChildren().remove(s);
+        }
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void createPropertyAttrs() {
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                elementNameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        PartEnumPropertyItem partRolesPropertyItem = new PartEnumPropertyItem(
+                roleProperty(),
+                "Dodatno",
+                "Vrsta",
+                "Vrsta odredbe",
+                true);
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
+        getPropertyItems().add(partRolesPropertyItem);
     }
 
     @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
 }

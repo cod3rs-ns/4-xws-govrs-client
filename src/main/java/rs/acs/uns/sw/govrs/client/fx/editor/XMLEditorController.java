@@ -9,50 +9,65 @@ import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
-import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
-import rs.acs.uns.sw.govrs.client.fx.editor.preview.ActPreview;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
+import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
-import rs.acs.uns.sw.govrs.client.fx.rest.SearchResultInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
+import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Used for creating Laws.
  */
 public class XMLEditorController {
-
+    /** Attribute for CSS change of buttons*/
     private static final String PRESSED = "pressed";
-    public final StyledTextArea<ParStyle, TextStyle> area;
+
+    /** Styled Text Area attributes **/
+    private final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
 
-    private TreeModel tree;
-    public ActPreview preview;
-
-    // ------------------ Containers -------------------
+    // ---------------- ui-containers ------------------
     @FXML
     private TitledPane treeContainer;
     @FXML
     private TitledPane previewContainer;
     @FXML
     private BorderPane areaContainer;
+    @FXML
+    private BorderPane attributesContainer;
     // -------------------------------------------------
 
-    // -------------------- Buttons --------------------
+    // ----------- text area commands ------------------
     @FXML
     private Button undoAction;
     @FXML
@@ -75,33 +90,72 @@ public class XMLEditorController {
     private Button linkAction;
     @FXML
     private ComboBox<Integer> fontSizePicker;
+
+    // ------------ file control buttons ---------------
+    @FXML
+    private ImageView openButton;
+    @FXML
+    private ImageView saveButton;
+    @FXML
+    private ImageView saveAsButton;
     // -------------------------------------------------
 
-    // Reference to the main application.
-    private MainFXApp mainApp;
+    // ------------------ components -------------------
+    public HtmlPreview preview;
+    private TreeModel tree;
+    private PropertySheet propertySheet;
+    // -------------------------------------------------
+
+    /** Injected StateManger - parent component **/
+    private StateManager stateManager;
+
+    /** Active Law element **/
+    private Law law;
+
+    /** Represents file on disk, if opened, currently initialized to some value for testing **/
+    private File activeFile = new File(System.getProperty("user.home") + File.separator+ "test_save_xml");
+
+    /** Selected element on Tree **/
+    private Element selectedElement;
+
+    /** Change Listener for Text Area **/
+    private ChangeListener textAreaChangeListener;
 
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
     public XMLEditorController() {
+        // setup text area
         area = new StyledTextArea<>(
                 ParStyle.EMPTY, (paragraph, style) -> paragraph.setStyle(style.toCss()),
-                TextStyle.EMPTY.updateFontSize(12).updateFontFamily("Serif").updateTextColor(Color.BLACK),
+                TextStyle.EMPTY.updateFontSize(10).updateFontFamily("Verdana").updateTextColor(Color.BLACK),
                 (text, style) -> text.setStyle(style.toCss()));
         area.setWrapText(true);
         area.setStyleCodecs(ParStyle.CODEC, TextStyle.CODEC);
-
     }
 
     /**
      * Initializes the controller class. This method is automatically called
-     * after the fxml file has been loaded.
+     * after the FXML file has been loaded.
      */
     @FXML
     private void initialize() {
-        //Propis propis = createDummyData();
+        // setup additional parameters of area and init actions
+        setupAdditionalAreaParams();
+        connectTextAreaActions();
 
+        // add area to container
+        VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
+        areaContainer.setCenter(vsPane);
+
+        // create tooltips for file control buttons
+        Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
+        Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
+        Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
+    }
+
+    public void loadTestData() {
         // create a RestClient to the specific URL
         RestClient restClient = RestClient.create()
                 .method("GET")
@@ -112,19 +166,29 @@ public class XMLEditorController {
         GluonObservableObject<Law> lawProperty;
         LawInputConverter converter = new LawInputConverter();
         lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+        ProgressBar pb = new ProgressBar();
+        pb.setPrefWidth(150);
+        stateManager.homeController.getStatusBar().getLeftItems().clear();
+        stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
+        stateManager.homeController.getStatusBar().getLeftItems().add(pb);
+        propertySheet = new PropertySheet();
+        attributesContainer.setCenter(propertySheet);
 
         lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-            Law propis = lawProperty.get();
-            propis.initChildrenObservableList();
-            preview = new ActPreview(propis);
+            law = lawProperty.get();
+            law.initElement();
+            preview = new HtmlPreview(law, "propis", Law.class);
             previewContainer.setContent(preview.getNode());
             area.replaceText(0, 0, "");
             tree = new TreeModel(
-                    propis,
+                    law,
                     Element::getChildren,
-                    Element::nameProperty,
+                    Element::elementNameProperty,
                     this
             );
+
+            stateManager.homeController.getStatusBar().getLeftItems().clear();
+            stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
 
             TreeView<Element> treeView = tree.getTreeView();
             treeContainer.setContent(treeView);
@@ -140,13 +204,18 @@ public class XMLEditorController {
             StringInputConverter converterString = new StringInputConverter();
             htmlProperty = DataProvider.retrieveObject(restClientHtml.createObjectDataReader(converterString));
             htmlProperty.initializedProperty().addListener(((a, ov, nv) -> {
-                preview.getNode().getEngine().loadContent(htmlProperty.get());
-                System.out.println(htmlProperty.get());
+                //preview.getNode().getEngine().loadContent(htmlProperty.get());
+                //System.out.println(htmlProperty.get());
             }));
         }));
 
+    }
 
-
+    /**
+     * Creates all actions of <strong>TextArea</strong> and initializes all remaining properties.
+     * Shouldn't be changed further.
+     */
+    private void setupAdditionalAreaParams() {
         // Populate possible font sizes
         fontSizePicker.setItems(FXCollections.observableArrayList(8, 9, 10, 11, 12, 14, 16, 20, 24, 32, 40));
         fontSizePicker.getSelectionModel().select(4);
@@ -244,24 +313,9 @@ public class XMLEditorController {
                 });
             }
         });
-
-        initActions();
-
-        // Add area to container
-        VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
-        areaContainer.setCenter(vsPane);
     }
 
-    /**
-     * Is called by the main application to give a reference back to itself.
-     *
-     * @param mainApp Main Application instance
-     */
-    public void setMainApp(MainFXApp mainApp) {
-        this.mainApp = mainApp;
-    }
-
-
+    // ------------------------------------------ TextArea actions ---------------------------------------------------//
     private void toggleBold() {
         updateStyleInSelection(spans -> TextStyle.bold(!spans.styleStream().allMatch(style -> style.bold.orElse(false))));
     }
@@ -313,9 +367,12 @@ public class XMLEditorController {
             area.setStyleSpans(selection.getStart(), newStyles);
         }
     }
+    // END--------------------------------------- TextArea actions ---------------------------------------------------//
 
-    private void initActions() {
-
+    /**
+     * Connects TextArea actions.
+     */
+    private void connectTextAreaActions() {
         undoAction.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.UNDO));
         undoAction.setOnAction(event -> {
             Runnable action = area::undo;
@@ -371,11 +428,176 @@ public class XMLEditorController {
             action.run();
             area.requestFocus();
         });
-
         linkAction.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.LINK));
-
         fontSizePicker.setOnAction(event -> updateFontSize(fontSizePicker.getValue()));
+    }
 
+    /**
+     * Opens XML file from disk.
+     */
+    @FXML
+    private void openAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Otvori XML propis");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML files", "*.xml")
+        );
+        Stage stage = (Stage) areaContainer.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            try {
+                JAXBContext context = JAXBContext.newInstance(Law.class);
+                Unmarshaller unMarshaller = context.createUnmarshaller();
+                Law openNew = (Law) unMarshaller.unmarshal(file);
+                switchViewToNewLaw(openNew);
+                CustomDialogCreator.createInformationAlert(
+                        "GovRS",
+                        "Otvaranje XML datoteke",
+                        "Fajl je uspešno otvoren."
+                ).showAndWait();
+            } catch (Exception e) {
+                CustomDialogCreator.createErrorAlert(
+                        "GovRS",
+                        "GREŠKA!",
+                        "Fajl nije moguće otvoriti."
+                ).showAndWait();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to load file.");
+            }
+        }
+    }
+
+    /**
+     * Saves active file to disk.
+     */
+    @FXML
+    private void saveAction() {
+        try {
+            if (activeFile != null) {
+                JAXBContext context = JAXBContext.newInstance(Law.class);
+                Marshaller marshaller = context.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                marshaller.marshal(law, activeFile);
+            }
+            CustomDialogCreator.createInformationAlert(
+                    "GovRS",
+                    "Čuvanje XML datoteke",
+                    "Fajl je uspešno sačuvan."
+            ).showAndWait();
+        } catch (Exception e) {
+            CustomDialogCreator.createErrorAlert(
+                    "GovRS",
+                    "Čucanje XML datoteke",
+                    "Fajl nije uspešno sačuvan."
+            ).showAndWait();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
+        }
+    }
+
+    /**
+     * Selects and saves active Law to file.
+     */
+    @FXML
+    private void saveAsAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sačuvaj law kao...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML files", "*.xml")
+        );
+
+        Stage stage = (Stage) areaContainer.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            try {
+                JAXBContext context = JAXBContext.newInstance(Law.class);
+                Marshaller marshaller = context.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                marshaller.marshal(law, file);
+                CustomDialogCreator.createInformationAlert(
+                        "GovRS",
+                        "Čuvanje XML datoteke",
+                        "Fajl je uspešno sačuvan."
+                ).showAndWait();
+            } catch (Exception e) {
+                CustomDialogCreator.createErrorAlert(
+                        "GovRS",
+                        "Čuvanje XML datoteke",
+                        "Fajl nije uspešno sačuvan."
+                ).showAndWait();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
+            }
+        }
+    }
+
+    /**
+     * Updates context when new Law is opened.
+     *
+     * @param newLaw newly opened Law
+     */
+    private void switchViewToNewLaw(Law newLaw) {
+        law = newLaw;
+        law.initElement();
+        preview.setRootElement(law);
+        preview.update();
+        tree = new TreeModel(
+                law,
+                Element::getChildren,
+                Element::elementNameProperty,
+                this
+        );
+
+        TreeView<Element> treeView = tree.getTreeView();
+        treeContainer.setContent(treeView);
+    }
+
+    public Element getSelectedElement() {
+        return selectedElement;
+    }
+
+    public void setStateManager(StateManager stateManager) {
+        this.stateManager = stateManager;
+    }
+
+    /**
+     * This method should be called when on Tree Element change, to trigger context change.
+     *
+     * @param selectedElement newly selected Element
+     */
+    public void setSelectedElement(Element selectedElement) {
+        this.selectedElement = selectedElement;
+        // remove old listener if exist
+        if (textAreaChangeListener != null) {
+            area.textProperty().removeListener(textAreaChangeListener);
+        }
+
+        // displays content of text elements
+        if (selectedElement instanceof StringWrapper || selectedElement instanceof ItemWrapper) {
+            area.setDisable(false);
+
+            area.clear();
+            area.replaceText(0, -1, selectedElement.getElementContent());
+
+            textAreaChangeListener = createChangeAreaListener(selectedElement);
+            area.textProperty().addListener(textAreaChangeListener);
+        } else {
+            area.clear();
+            area.setDisable(true);
+        }
+        this.propertySheet.getItems().clear();
+        this.propertySheet.getItems().addAll(selectedElement.getPropertyItems());
+    }
+
+    /**
+     * Creates new Listener for newly selected Element
+     *
+     * @param selElement newly selected Element
+     * @return ChangeListener instance
+     */
+    private ChangeListener createChangeAreaListener(Element selElement) {
+        return (ChangeListener<String>) (observable, oldValue, newValue) -> {
+            selElement.setElementContent(newValue);
+            preview.update();
+        };
     }
 
 }

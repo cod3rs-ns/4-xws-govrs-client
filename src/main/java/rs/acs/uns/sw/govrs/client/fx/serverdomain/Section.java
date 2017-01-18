@@ -11,6 +11,7 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -54,9 +55,11 @@ public class Section extends Element{
     protected List<Article> clan;
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi")
     protected List<Subsection> pododjeljak;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
     @XmlAttribute(name = "name")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
@@ -129,7 +132,7 @@ public class Section extends Element{
      *     
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -141,9 +144,12 @@ public class Section extends Element{
      *     
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
     }
 
+    public StringProperty idProperty() {
+        return id;
+    }
 
     /**
      * Gets the value of the name property.
@@ -153,7 +159,7 @@ public class Section extends Element{
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -165,16 +171,25 @@ public class Section extends Element{
      *     {@link String }
      *
      */
+    public void setElementName(String value) {
+        this.name.set(value);
+    }
+
+    public StringProperty elementNameProperty() {
+        return name;
+    }
+
+
+    public String getName() {
+        return name.get();
+    }
+
     public void setName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
-
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all articles
         for (Element e:getClan()) {
             getChildren().add(e);
@@ -187,33 +202,74 @@ public class Section extends Element{
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.initChildrenObservableList();
+            e.setElementParent(this);
+            e.initElement();
+        }
+
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+        // add new article
+        if (element instanceof Article) {
+            Article a = (Article)element;
+            a.setElementParent(this);
+            a.createPropertyAttrs();
+            getClan().add(a);
+            getChildren().add(a);
+        }
+
+        // add new subsection
+        if (element instanceof Subsection) {
+            Subsection s = (Subsection)element;
+            s.setElementParent(this);
+            s.createPropertyAttrs();
+            getPododjeljak().add(s);
+            getChildren().add(s);
         }
     }
 
     @Override
-    public void createAndAddChild(String name) {
+    public void removeChild(Element element) {
+        // remove article
+        if (element instanceof Article) {
+            Article a = (Article)element;
+            getClan().remove(a);
+            getChildren().remove(a);
+        }
 
+        // remove subsection
+        if (element instanceof Subsection) {
+            Subsection s = (Subsection) element;
+            getPododjeljak().remove(s);
+            getChildren().remove(s);
+        }
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void createPropertyAttrs() {
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                elementNameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
     }
 
     @Override
-    public String createElementAttrs() {
-        return null;
+    public void preMarshaller() {
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
-
 }

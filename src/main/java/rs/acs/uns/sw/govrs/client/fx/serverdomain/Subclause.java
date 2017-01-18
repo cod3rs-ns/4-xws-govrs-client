@@ -11,13 +11,17 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringElement;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
+import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -52,9 +56,11 @@ public class Subclause extends Element {
     @XmlElementRef(name = "alineja", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Item.class, required = false)
     @XmlMixed
     protected List<Object> content;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
 
     @XmlAttribute(name = "name")
@@ -100,7 +106,7 @@ public class Subclause extends Element {
      *     
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -112,7 +118,11 @@ public class Subclause extends Element {
      *     
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     /**
@@ -123,7 +133,7 @@ public class Subclause extends Element {
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -135,57 +145,108 @@ public class Subclause extends Element {
      *     {@link String }
      *
      */
+    public void setElementName(String value) {
+        this.name.set(value);
+    }
+
+    public StringProperty elementNameProperty() {
+        return name;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
     public void setName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
-
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all clauses and all chunks of text content
         for (Object o:getContent()) {
             if (o instanceof Item) {
                 Item e = (Item)o;
-                // TODO fix this issue
-                getChildren().add(e);
+                e.setValue(StringCleaner.deleteWhitespace(e.getValue()));
+                ItemWrapper iw = new ItemWrapper(e);
+                getChildren().add(iw);
             } else {
-                StringElement se = new StringElement(o.toString());
-                getChildren().add(se);
+                if(!StringCleaner.checkIsEmpty(o.toString())){
+                    StringWrapper se = new StringWrapper(o);
+                    getChildren().add(se);
+                }
             }
         }
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.initChildrenObservableList();
+            e.setElementParent(this);
+            e.initElement();
+        }
+        createPropertyAttrs();
+    }
+
+
+    @Override
+    public void createAndAddChild(Element element) {
+        if (element instanceof ItemWrapper) {
+            element.setElementParent(this);
+            element.createPropertyAttrs();
+            getContent().add(((ItemWrapper) element).getWrappedItem());
+            getChildren().add(element);
+        } else if(element instanceof StringWrapper) {
+            element.setElementParent(this);
+            element.createPropertyAttrs();
+            getContent().add(((StringWrapper) element).getWrappedObject());
+            getChildren().add(element);
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type child");
         }
     }
 
     @Override
-    public void createAndAddChild(String name) {
-
+    public void removeChild(Element element) {
+        if (element instanceof ItemWrapper) {
+            getContent().remove(((ItemWrapper) element).getWrappedItem());
+            getChildren().remove(element);
+        } else if (element instanceof StringWrapper) {
+            getContent().remove(((StringWrapper) element).getWrappedObject());
+            getChildren().remove(element);
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
+        }
     }
 
     @Override
-    public String createElementOpening() {
-        return null;
+    public void createPropertyAttrs() {
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                elementNameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
     }
 
     @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+    public void preMarshaller() {
+        getContent().clear();
+        for (Element child:getChildren()) {
+            if (child instanceof StringWrapper) {
+                getContent().add(child.getElementContent());
+            } else if (child instanceof ItemWrapper){
+                getContent().add(((ItemWrapper) child).getWrappedItem());
+            }
+            child.preMarshaller();
+        }
     }
 
 }

@@ -55,7 +55,7 @@ public class LawSearchController extends AnchorPane implements Initializable {
                         lawsContainer.getChildren().add(singlePrev);
                         // Give the controller access to the main app.
                         SingleLaw controller = loader.getController();
-                        controller.setInfo(l.getName(), l.getId(), "Miloš Milošević", "11.1.2016", "Ovo je isečak iz zakona o tome i tome i tome lkjdsalkčsdaflčsadlkklasdflkasdjfčasdkjflčajflajflajčlafjlksadjflkjaflaf");
+                        controller.setInfo(l.getElementName(), l.getId(), "Miloš Milošević", "11.1.2016", "Ovo je isečak iz zakona o tome i tome i tome lkjdsalkčsdaflčsadlkklasdflkasdjfčasdkjflčajflajflajčlafjlksadjflkjaflaf");
                     } catch (IOException e) {
                         Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
                     }

@@ -11,13 +11,16 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringElement;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -52,9 +55,11 @@ public class Paragraph extends Element {
     @XmlElementRef(name = "tacka", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Clause.class, required = false)
     @XmlMixed
     protected List<Object> content;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
 
     @XmlAttribute(name = "name")
@@ -100,7 +105,7 @@ public class Paragraph extends Element {
      *     
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -112,7 +117,11 @@ public class Paragraph extends Element {
      *     
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     /**
@@ -123,7 +132,7 @@ public class Paragraph extends Element {
      *     {@link String }
      *
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
@@ -135,57 +144,113 @@ public class Paragraph extends Element {
      *     {@link String }
      *
      */
+    public void setElementName(String value) {
+        this.name.set(value);
+    }
+
+    public StringProperty elementNameProperty() {
+        return name;
+    }
+
+
+    public String getName() {
+        return name.get();
+    }
+
     public void setName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
-
     @Override
-    public void initChildrenObservableList() {
+    public void initElement() {
         // add all clauses and all chunks of text content
         for (Object o:getContent()) {
             if (o instanceof Clause) {
                 Clause e = (Clause)o;
                 getChildren().add(e);
             } else {
-                StringElement se = new StringElement(o.toString());
-                getChildren().add(se);
+                if(!StringCleaner.checkIsEmpty(o.toString())){
+                    StringWrapper se = new StringWrapper(o);
+                    getChildren().add(se);
+                }
             }
         }
 
         // init observable list for all children
         for (Element e: getChildren()) {
-            e.initChildrenObservableList();
+            e.setElementParent(this);
+            e.initElement();
+        }
+        createPropertyAttrs();
+    }
+
+
+
+    @Override
+    public void createAndAddChild(Element element) {
+        if (element instanceof Clause) {
+            element.setElementParent(this);
+            element.createPropertyAttrs();
+            getContent().add(element);
+            getChildren().add(element);
+        } else if (element instanceof StringWrapper) {
+            element.setElementParent(this);
+            element.createPropertyAttrs();
+            getContent().add(((StringWrapper) element).getWrappedObject());
+            getChildren().add(element);
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid child type.");
+        }
+    }
+
+    @Override
+    public void removeChild(Element element) {
+        if (element instanceof Clause) {
+            getContent().remove(element);
+            getChildren().remove(element);
+        } else if (element instanceof StringWrapper) {
+            getChildren().remove(element);
+            getContent().remove(((StringWrapper)element).getWrappedObject());
+        } else {
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
+        }
+    }
+
+    @Override
+    public void createPropertyAttrs() {
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                elementNameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
+    }
+
+    @Override
+    public void preMarshaller() {
+        getContent().clear();
+        for (Element e: getChildren()) {
+            if(e instanceof StringWrapper) {
+                // add TextOnly
+                getContent().add(e.getElementContent());
+            } else {
+                getContent().add(e);
+            }
+            e.preMarshaller();
         }
     }
 
 
-    @Override
-    public void createAndAddChild(String name) {
 
-    }
 
-    @Override
-    public String createElementOpening() {
-        return null;
-    }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
-    }
 
 }

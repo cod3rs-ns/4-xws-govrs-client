@@ -10,7 +10,6 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 
 import javax.xml.bind.annotation.*;
@@ -19,9 +18,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>Java class for alineja element declaration.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;element name="alineja">
  *   &lt;complexType>
@@ -33,20 +32,20 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexType>
  * &lt;/element>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "content"
+        "value"
 })
 @XmlRootElement(name = "alineja", namespace = "http://www.parlament.gov.rs/schema/elementi")
-public class Item  extends Element{
+public class Item {
+    @XmlValue
+    protected String value;
 
-    protected String content;
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
 
 
     @XmlAttribute(name = "name")
@@ -56,109 +55,78 @@ public class Item  extends Element{
 
     /**
      * Gets the value of the content property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
-    public String getContent() {
-        return content;
+    public String getValue() {
+        return value;
     }
 
     /**
      * Sets the value of the content property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
-    public void setContent(String value) {
-        this.content = value;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
     }
 
+    public StringProperty idProperty() {
+        return id;
+    }
 
     /**
      * Gets the value of the name property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+     * @return possible object is
+     * {@link String }
      */
-    public String getName() {
+    public String getElementName() {
         return name.get();
     }
 
     /**
      * Sets the value of the name property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+     * @param value allowed object is
+     *              {@link String }
      */
-    public void setName(String value) {
+    public void setElementName(String value) {
         this.name.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty elementNameProperty() {
         return name;
     }
 
-    @Override
-    public void initChildrenObservableList() {
-
+    public String getName() {
+        return name.get();
     }
 
-    @Override
-    public void createAndAddChild(String name) {
-
-    }
-
-    @Override
-    public String createElementOpening() {
-        return null;
-    }
-
-    @Override
-    public String createElementAttrs() {
-        return null;
-    }
-
-    @Override
-    public String createElementContent() {
-        return null;
-    }
-
-    @Override
-    public String createElementClosing() {
-        return null;
+    public void setName(String value) {
+        this.name.set(value);
     }
 
 }

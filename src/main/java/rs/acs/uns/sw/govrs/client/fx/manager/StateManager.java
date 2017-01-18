@@ -24,6 +24,11 @@ public class StateManager {
     private BorderPane rootContainer;
     private MainFXApp app;
 
+    public HomeController homeController;
+
+    public StateManager(HomeController hc) {
+        homeController = hc;
+    }
 
     public void switchState(String fxml) {
         FXMLLoader loader = new FXMLLoader();
@@ -46,7 +51,9 @@ public class StateManager {
                 if (newLawPane == null) {
                     newLawPane = loader.load(in);
                     newLawController = loader.getController();
-                    newLawController.setMainApp(app);
+                    newLawController.setStateManager(this);
+                    // TODO this should not be called outside controller
+                    newLawController.loadTestData();
                 }
 
                 if (rootContainer.getChildren().size() > 0) {
