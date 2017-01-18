@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 
 import java.util.Optional;
@@ -46,8 +47,8 @@ public class ContextMenuHandler {
         if (element instanceof Subclause) {
             return this.createSubclauseContextMenu((Subclause) element);
         }
-        if (element instanceof Item) {
-            return this.createItemContextMenu((Item) element);
+        if (element instanceof ItemWrapper) {
+            return this.createItemContextMenu((ItemWrapper) element);
         }
         if (element instanceof StringWrapper) {
             return this.createTextContextMenu((StringWrapper) element);
@@ -171,13 +172,13 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(textMenuItem);
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
-        createInsertAction(itemMenuItem, "Alineja", subclause, new Item());
+        createInsertAction(itemMenuItem, "Alineja", subclause, new ItemWrapper(new Item()));
         createInsertAction(textMenuItem, "Tekst", subclause, new StringWrapper(""));
         createDeleteAction(deleteMenuItem, subclause);
         return contextMenu;
     }
 
-    private ContextMenu createItemContextMenu(Item item) {
+    private ContextMenu createItemContextMenu(ItemWrapper item) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteMenuItem = createDeleteMenuItem();
         contextMenu.getItems().add(deleteMenuItem);

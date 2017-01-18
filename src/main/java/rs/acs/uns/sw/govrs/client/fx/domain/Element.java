@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.function.Function;
@@ -120,7 +121,7 @@ public abstract class Element {
         if (this instanceof Subclause) {
             return "/images/tree_images/subclause.png";
         }
-        if (this instanceof Item) {
+        if (this instanceof ItemWrapper) {
             return "/images/tree_images/item.png";
         }
         if (this instanceof StringWrapper) {
