@@ -2,10 +2,9 @@ package rs.acs.uns.sw.govrs.client.fx.home;
 
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,16 +12,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
-import rs.acs.uns.sw.govrs.client.fx.laws.LawSearchController;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -32,13 +29,14 @@ import java.util.logging.Logger;
  * Home stage for every user.
  */
 public class HomeController extends AnchorPane implements Initializable {
+    @FXML
+    public StatusBar statusBar;
     // === window controls and drag info ===
     private double mouseDragOffsetX = 0;
     private double mouseDragOffsetY = 0;
     private Rectangle2D winBounds = null;
-    private boolean maximized = false;
     // =====================================
-
+    private boolean maximized = false;
     @FXML
     private Button closeButton;
     @FXML
@@ -58,11 +56,16 @@ public class HomeController extends AnchorPane implements Initializable {
     @FXML
     private AnchorPane dragPane;
     @FXML
-    public StatusBar statusBar;
+    private AnchorPane rootAnchorPane;
+    @FXML
+    private Region resizeButton;
 
     private MainFXApp app;
 
     private StateManager stateManager;
+    private double resizeDragOffsetX, resizeDragOffsetY;
+    private double minWidth = 1200;
+    private double minHeight = 600;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -84,26 +87,8 @@ public class HomeController extends AnchorPane implements Initializable {
             app.getStage().setX(event.getScreenX() - mouseDragOffsetX);
             app.getStage().setY(event.getScreenY() - mouseDragOffsetY);
         });
+        connectResizeButton();
 
-    }
-
-    public void setApp(MainFXApp app) {
-        this.app = app;
-        switch (app.getLoggedUser().getType()) {
-            case Constants.PRESIDENT:
-                setPresidentActions();
-                break;
-            case Constants.ALDERMAN:
-                setAldermanActions();
-                break;
-            default:
-                actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
-                break;
-        }
-
-        this.userLabel.setText(app.getLoggedUser().getFirstName() + ' ' + app.getLoggedUser().getLastName());
-        this.userTypeLabel.setText(app.getLoggedUser().getType());
-        stateManager.switchState(Constants.LAW_SEARCH_FXML);
     }
 
     private void toggleMax() {
@@ -183,6 +168,25 @@ public class HomeController extends AnchorPane implements Initializable {
         return app;
     }
 
+    public void setApp(MainFXApp app) {
+        this.app = app;
+        switch (app.getLoggedUser().getType()) {
+            case Constants.PRESIDENT:
+                setPresidentActions();
+                break;
+            case Constants.ALDERMAN:
+                setAldermanActions();
+                break;
+            default:
+                actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
+                break;
+        }
+
+        this.userLabel.setText(app.getLoggedUser().getFirstName() + ' ' + app.getLoggedUser().getLastName());
+        this.userTypeLabel.setText(app.getLoggedUser().getType());
+        stateManager.switchState(Constants.LAW_SEARCH_FXML);
+    }
+
     public StatusBar getStatusBar() {
         return statusBar;
     }
@@ -199,5 +203,29 @@ public class HomeController extends AnchorPane implements Initializable {
         this.stateManager = stateManager;
     }
 
-
+    private void connectResizeButton() {
+        resizeButton.setId("window-resize-button");
+        resizeButton.setPrefSize(11, 11);
+        resizeButton.setOnMousePressed(e -> {
+            maximized = false;
+            resizeDragOffsetX = (app.getStage().getX() + app.getStage().getWidth()) - e.getScreenX();
+            resizeDragOffsetY = (app.getStage().getY() + app.getStage().getHeight()) - e.getScreenY();
+            e.consume();
+        });
+        resizeButton.setOnMouseDragged(e -> {
+            ObservableList<Screen> screens = Screen.getScreensForRectangle(app.getStage().getX(), app.getStage().getY(), 1, 1);
+            final Screen screen;
+            if (screens.size() > 0) {
+                screen = Screen.getScreensForRectangle(app.getStage().getX(), app.getStage().getY(), 1, 1).get(0);
+            } else {
+                screen = Screen.getScreensForRectangle(0, 0, 1, 1).get(0);
+            }
+            Rectangle2D visualBounds = screen.getVisualBounds();
+            double maxX = Math.min(visualBounds.getMaxX(), e.getScreenX() + resizeDragOffsetX);
+            double maxY = Math.min(visualBounds.getMaxY(), e.getScreenY() - resizeDragOffsetY);
+            app.getStage().setWidth(Math.max(minWidth, maxX - app.getStage().getX()));
+            app.getStage().setHeight(Math.max(minHeight, maxY - app.getStage().getY()));
+            e.consume();
+        });
+    }
 }
