@@ -42,6 +42,8 @@ public class MainFXApp extends Application {
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         this.stage.setTitle("GovRS client");
+        this.stage.setX(200);
+        this.stage.setY(200);
         this.stage.initStyle(StageStyle.UNDECORATED);
         gotoLogin();
         this.stage.show();

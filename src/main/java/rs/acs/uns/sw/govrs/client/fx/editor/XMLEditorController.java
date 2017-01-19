@@ -13,6 +13,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -35,12 +36,14 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.ObjectCreator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,6 +101,8 @@ public class XMLEditorController {
     private ImageView saveButton;
     @FXML
     private ImageView saveAsButton;
+    @FXML
+    private ImageView newLawButton;
     // -------------------------------------------------
 
     // ------------------ components -------------------
@@ -462,7 +467,7 @@ public class XMLEditorController {
                         "GREŠKA!",
                         "Fajl nije moguće otvoriti."
                 ).showAndWait();
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to load file.");
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to load file.", e);
             }
         }
     }
@@ -529,12 +534,23 @@ public class XMLEditorController {
         }
     }
 
+    @FXML
+    private void createNewLaw() {
+        TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Propis");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> {
+            Law newl = ObjectCreator.createNewLaw();
+            switchViewToNewLaw(newl);
+        });
+    }
+
     /**
      * Updates context when new Law is opened.
      *
      * @param newLaw newly opened Law
      */
     private void switchViewToNewLaw(Law newLaw) {
+        selectedElement = null;
         law = newLaw;
         law.initElement();
         preview.setRootElement(law);

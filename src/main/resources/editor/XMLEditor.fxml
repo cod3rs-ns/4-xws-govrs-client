@@ -35,6 +35,17 @@
                         <Insets bottom="2.0" left="2.0" right="8.0" top="2.0" />
                      </padding>
                      <children>
+                        <ImageView fx:id="newButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#createNewLaw" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../images/buttons/new_law.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
                         <ImageView fx:id="openButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#openAction" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/buttons/open.png" />
