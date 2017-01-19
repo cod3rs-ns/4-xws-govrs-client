@@ -3,6 +3,12 @@
     -fx-border-color: white;
 }
 
+.window-resize-button {
+    -fx-background-image: url("../images/window-corner.png");
+    -fx-background-position: right 1px bottom 1px;
+    -fx-background-repeat: no-repeat;
+}
+
 .a-all {
     -fx-font-size: 1px;
     -fx-background-color: null;
