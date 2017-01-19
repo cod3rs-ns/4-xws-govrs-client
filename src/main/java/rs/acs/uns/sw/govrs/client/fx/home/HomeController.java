@@ -80,12 +80,16 @@ public class HomeController extends AnchorPane implements Initializable {
 
         // add window dragging
         dragPane.setOnMousePressed(event -> {
-            mouseDragOffsetX = event.getSceneX();
-            mouseDragOffsetY = event.getSceneY();
+            if (!maximized){
+                mouseDragOffsetX = event.getSceneX();
+                mouseDragOffsetY = event.getSceneY();
+            }
         });
         dragPane.setOnMouseDragged(event -> {
-            app.getStage().setX(event.getScreenX() - mouseDragOffsetX);
-            app.getStage().setY(event.getScreenY() - mouseDragOffsetY);
+            if(!maximized){
+                app.getStage().setX(event.getScreenX() - mouseDragOffsetX);
+                app.getStage().setY(event.getScreenY() - mouseDragOffsetY);
+            }
         });
         connectResizeButton();
 
