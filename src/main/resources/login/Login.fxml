@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -68,6 +69,9 @@
                               <Font size="13.0" />
                            </font></Tooltip>
                      </tooltip>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
                   <Hyperlink fx:id="citizenHyperlink" alignment="CENTER" layoutX="47.0" layoutY="141.0" text="Uloguj se kao građanin" textFill="WHITE" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" />
                </children>
