@@ -85,7 +85,6 @@ public class HomeController extends AnchorPane implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // create and init State Manager
         stateManager = new StateManager(this);
-        stateManager.setApp(app);
 
         // replaced standard window buttons and their actions
         closeButton.setOnAction(event -> Platform.exit());
@@ -276,4 +275,7 @@ public class HomeController extends AnchorPane implements Initializable {
         return statusBar;
     }
 
+    public MainFXApp getApp() {
+        return app;
+    }
 }

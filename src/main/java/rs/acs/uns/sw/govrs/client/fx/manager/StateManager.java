@@ -16,19 +16,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StateManager {
+    /**
+     * Main controller of rootContainer;
+     */
+    public HomeController homeController;
+    /**
+     * Search State components
+     **/
     private AnchorPane searchPane;
     private LawSearchController searchController;
-
+    /**
+     * Law Editor State components
+     **/
     private AnchorPane newLawPane;
     private XMLEditorController newLawController;
+    /**
+     * Root container.
+     */
     private BorderPane rootContainer;
+    /**
+     * Main Application ref.
+     */
     private MainFXApp app;
 
-    public HomeController homeController;
-
-    public StateManager(HomeController hc) {
-        homeController = hc;
-        rootContainer = hc.getMainRootContainer();
+    public StateManager(HomeController homeCtrl) {
+        homeController = homeCtrl;
+        rootContainer = homeCtrl.getMainRootContainer();
+        app = homeCtrl.getApp();
     }
 
     public void switchState(String fxml) {
@@ -46,8 +60,7 @@ public class StateManager {
                     rootContainer.getChildren().remove(0);
                 }
                 rootContainer.setCenter(searchPane);
-            }
-            if (fxml.equals(Constants.LAW_EDITOR_FXML)) {
+            } else if (fxml.equals(Constants.LAW_EDITOR_FXML)) {
 
                 if (newLawPane == null) {
                     newLawPane = loader.load(in);
@@ -61,26 +74,17 @@ public class StateManager {
                     rootContainer.getChildren().remove(0);
                 }
                 rootContainer.setCenter(newLawPane);
+            } else {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unsupported State!");
             }
 
         } catch (IOException e) {
-            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Invalid FXML specs.", e);
         }
-    }
-
-    public BorderPane getRootContainer() {
-        return rootContainer;
-    }
-
-    public void setRootContainer(BorderPane rootContainer) {
-        this.rootContainer = rootContainer;
     }
 
     public MainFXApp getApp() {
         return app;
     }
 
-    public void setApp(MainFXApp app) {
-        this.app = app;
-    }
 }
