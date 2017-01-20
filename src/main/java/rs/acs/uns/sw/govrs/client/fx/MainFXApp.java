@@ -8,15 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 import rs.acs.uns.sw.govrs.client.fx.domain.User;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -39,45 +34,46 @@ public class MainFXApp extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
-        this.stage = stage;
-        this.stage.setTitle("GovRS client");
-        this.stage.setX(200);
-        this.stage.setY(200);
-        this.stage.initStyle(StageStyle.UNDECORATED);
+    public void start(Stage primaryStage) throws IOException {
+        stage = primaryStage;
+        stage.setTitle("GovRS client");
+        stage.setX(200);
+        stage.setY(200);
+        stage.initStyle(StageStyle.UNDECORATED);
         gotoLogin();
-        this.stage.show();
+        stage.show();
     }
 
-    private void testRest() throws ParserConfigurationException, IOException, SAXException {
-        String url = "http://localhost:9011/api/laws/name0";
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(url);
-        System.out.println(doc.getTextContent());
-    }
-
+    /**
+     * Switch scene to Login.
+     */
     private void gotoLogin() {
         try {
             LoginController login = (LoginController) replaceSceneContent("/login/Login.fxml");
             login.setApp(this);
         } catch (Exception ex) {
-            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, "Login FXML problem", ex);
         }
     }
 
+    /**
+     * Switch scene to Home.
+     */
     private void gotoHome() {
         try {
             HomeController home = (HomeController) replaceSceneContent("/home/Home.fxml");
-            home.setApp(this);
-
-            //String a = RESTClient.testRest("name0");
-            //System.out.println(a);
+            home.setAppAndInitializeActions(this);
         } catch (Exception ex) {
-            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, "Home FXML problem", ex);
         }
     }
 
+    /**
+     * Replaces current scene content.
+     *
+     * @param fxml FXML file specifying scene content
+     * @return scene controller
+     */
     private Initializable replaceSceneContent(String fxml) {
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -88,7 +84,7 @@ public class MainFXApp extends Application {
             stage.setScene(scene);
             stage.sizeToScene();
         } catch (IOException ex) {
-            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainFXApp.class.getName()).log(Level.SEVERE, "Problem with scene changing", ex);
         }
         return (Initializable) loader.getController();
     }

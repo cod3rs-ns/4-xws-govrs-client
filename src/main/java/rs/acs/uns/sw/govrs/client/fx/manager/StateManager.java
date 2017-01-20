@@ -28,6 +28,7 @@ public class StateManager {
 
     public StateManager(HomeController hc) {
         homeController = hc;
+        rootContainer = hc.getMainRootContainer();
     }
 
     public void switchState(String fxml) {
@@ -46,7 +47,7 @@ public class StateManager {
                 }
                 rootContainer.setCenter(searchPane);
             }
-            if (fxml.equals(Constants.NEW_LAW_FXML)) {
+            if (fxml.equals(Constants.LAW_EDITOR_FXML)) {
 
                 if (newLawPane == null) {
                     newLawPane = loader.load(in);

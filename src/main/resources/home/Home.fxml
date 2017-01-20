@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.StatusBar?>
 
-<AnchorPane fx:id="rootAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="1200" prefHeight="700.0" prefWidth="1300.0" styleClass="background" stylesheets="@home.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.home.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="1200" prefHeight="700.0" prefWidth="1300.0" styleClass="background" stylesheets="@home.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.home.HomeController">
    <children>
       <BorderPane prefHeight="800.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -70,7 +70,7 @@
             </AnchorPane>
          </left>
          <center>
-            <BorderPane fx:id="container" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER" />
+            <BorderPane fx:id="mainRootContainer" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
             <StatusBar fx:id="statusBar" text="" BorderPane.alignment="CENTER">
