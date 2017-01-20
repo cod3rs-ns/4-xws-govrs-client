@@ -8,12 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
@@ -29,6 +31,11 @@ import java.util.logging.Logger;
  * Home stage for every user.
  */
 public class HomeController extends AnchorPane implements Initializable {
+    /**
+     * App's status bar. Providing feedback to active user.
+     */
+    @FXML
+    public StatusBar statusBar;
     // ===== window controls and drag info =====
     private double mouseDragOffsetX = 0;
     private double mouseDragOffsetY = 0;
@@ -37,52 +44,40 @@ public class HomeController extends AnchorPane implements Initializable {
     private double resizeDragOffsetY;
     private double minWidth = 1200;
     private double minHeight = 600;
-    private boolean maximized = false;
     // =========================================
-
+    private boolean maximized = false;
     // ======== window's action buttons ========
     @FXML
     private Button closeButton;
     @FXML
     private Button minButton;
+    // =========================================
     @FXML
     private Button maxButton;
-    // =========================================
-
     // ============= user info ui ==============
     @FXML
     private Label userLabel;
     @FXML
     private Label userTypeLabel;
+    // =========================================
     @FXML
     private ImageView userImage;
-    // =========================================
-
     // ======== resize and movement ui =========
     @FXML
     private AnchorPane dragPane;
+    // =========================================
     @FXML
     private Region resizeButton;
-    // =========================================
-
     /**
      * Component which contains main active UI element dependent of state.
      */
     @FXML
     private BorderPane mainRootContainer;
-
     /**
      * Side actions container.
      */
     @FXML
     private VBox actionContainer;
-
-    /**
-     * App's status bar. Providing feedback to active user.
-     */
-    @FXML
-    public StatusBar statusBar;
-
     private MainFXApp app;
     private StateManager stateManager;
 
@@ -99,13 +94,13 @@ public class HomeController extends AnchorPane implements Initializable {
 
         // add window dragging
         dragPane.setOnMousePressed(event -> {
-            if (!maximized){
+            if (!maximized) {
                 mouseDragOffsetX = event.getSceneX();
                 mouseDragOffsetY = event.getSceneY();
             }
         });
         dragPane.setOnMouseDragged(event -> {
-            if(!maximized){
+            if (!maximized) {
                 app.getStage().setX(event.getScreenX() - mouseDragOffsetX);
                 app.getStage().setY(event.getScreenY() - mouseDragOffsetY);
             }
@@ -148,15 +143,19 @@ public class HomeController extends AnchorPane implements Initializable {
 
     /**
      * Utility function for creating Button object.
-     * @param type      type of button
-     * @param action    action which will be executed on mouse click
-     * @return  created Button
+     *
+     * @param type   type of button
+     * @param action action which will be executed on mouse click
+     * @return created Button
      */
-    private Button createButton(String type, Runnable action) {
+    private Button createButton(String type, Runnable action, String tooltipText) {
         Button button = new Button();
         button.setPrefHeight(50);
         button.setPrefWidth(50);
         button.getStyleClass().add(type);
+        Tooltip t = new Tooltip(tooltipText);
+        t.setFont(new Font("System", 12));
+        Tooltip.install(button, t);
         button.setOnAction(event ->
                 action.run()
         );
@@ -189,26 +188,27 @@ public class HomeController extends AnchorPane implements Initializable {
      * Initializes actions for user - Alderman.
      */
     private void setAldermanActions() {
-        actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction));
-        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction));
-        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
-        actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
+        actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action, "Amandman"));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
     }
 
     /**
      * Initializes actions for user - President.
      */
     private void setPresidentActions() {
-        actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction));
-        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction));
-        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
-        actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
-        actionContainer.getChildren().add(createButton(Constants.VOTE, this::action));
+        actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action, "Amandman"));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
+        actionContainer.getChildren().add(createButton(Constants.VOTE, this::action, "Skupština"));
     }
 
     /**
      * Method that <strong>MUST</strong> be called after initialize();
-     * @param app  main application reference
+     *
+     * @param app main application reference
      */
     public void setAppAndInitializeActions(MainFXApp app) {
         this.app = app;
@@ -220,7 +220,7 @@ public class HomeController extends AnchorPane implements Initializable {
                 setAldermanActions();
                 break;
             default:
-                actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction));
+                actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
                 break;
         }
         // user info
