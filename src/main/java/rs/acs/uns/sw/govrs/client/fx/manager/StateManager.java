@@ -5,6 +5,7 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
+import rs.acs.uns.sw.govrs.client.fx.amendments.AmendmentsController;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.laws.LawSearchController;
@@ -30,6 +31,11 @@ public class StateManager {
      **/
     private AnchorPane newLawPane;
     private XMLEditorController newLawController;
+
+    /** Amendments editor state components */
+    private AnchorPane amendmentsPane;
+    private AmendmentsController amendmentsController;
+
     /**
      * Root container.
      */
@@ -74,6 +80,17 @@ public class StateManager {
                     rootContainer.getChildren().remove(0);
                 }
                 rootContainer.setCenter(newLawPane);
+            } else if (fxml.equals(Constants.AMENDMENTS_EDITOR_FXML)) {
+                if (amendmentsPane == null) {
+                    amendmentsPane = loader.load(in);
+                    amendmentsController = loader.getController();
+                    amendmentsController.setStateManager(this);
+                    amendmentsController.loadTestData();
+                }
+                if (rootContainer.getChildren().size() > 0) {
+                    rootContainer.getChildren().remove(0);
+                }
+                rootContainer.setCenter(amendmentsPane);
             } else {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unsupported State!");
             }

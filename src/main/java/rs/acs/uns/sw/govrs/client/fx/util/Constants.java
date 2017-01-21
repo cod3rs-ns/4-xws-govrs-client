@@ -19,6 +19,7 @@ public class Constants {
     // FXML
     public static final String LAW_SEARCH_FXML = "/laws/LawsListing.fxml";
     public static final String LAW_EDITOR_FXML = "/editor/XMLEditor.fxml";
+    public static final String AMENDMENTS_EDITOR_FXML = "/amendments/Amendments.fxml";
 
 
     private Constants() {
