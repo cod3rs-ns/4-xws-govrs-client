@@ -13,6 +13,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -42,6 +43,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import java.awt.*;
 import java.io.File;
 import java.util.Optional;
 import java.util.function.Function;
@@ -165,6 +167,7 @@ public class XMLEditorController {
         RestClient restClient = RestClient.create()
                 .method("GET")
                 .host("http://localhost:9000/api")
+                .header("Accept", "application/xml")
                 .path("/laws/law01");
 
         // retrieve a list from the DataProvider
