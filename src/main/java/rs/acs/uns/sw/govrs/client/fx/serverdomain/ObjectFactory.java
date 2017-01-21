@@ -366,37 +366,6 @@ public class ObjectFactory {
         return new Amendments.Head.Propis();
     }
 
-    /**
-     * Create an instance of {@link Explanation.Razlog }
-     * 
-     */
-    public Explanation.Razlog createExplanationRazlog() {
-        return new Explanation.Razlog();
-    }
-
-    /**
-     * Create an instance of {@link Explanation.ObjasnjenePredlozenogRjesenja }
-     * 
-     */
-    public Explanation.ObjasnjenePredlozenogRjesenja createExplanationObjasnjenePredlozenogRjesenja() {
-        return new Explanation.ObjasnjenePredlozenogRjesenja();
-    }
-
-    /**
-     * Create an instance of {@link Explanation.Cilj }
-     * 
-     */
-    public Explanation.Cilj createExplanationCilj() {
-        return new Explanation.Cilj();
-    }
-
-    /**
-     * Create an instance of {@link Explanation.UticajNaBudzetskaSredstva }
-     * 
-     */
-    public Explanation.UticajNaBudzetskaSredstva createExplanationUticajNaBudzetskaSredstva() {
-        return new Explanation.UticajNaBudzetskaSredstva();
-    }
 
     /**
      * Create an instance of {@link Amendment.Body.Odredba }

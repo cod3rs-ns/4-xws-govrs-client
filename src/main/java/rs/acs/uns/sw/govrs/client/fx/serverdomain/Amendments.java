@@ -8,13 +8,24 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.*;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.IntegerPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.LocalDatePropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DatePropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 
 /**
@@ -157,17 +168,22 @@ import java.util.Map;
     "body"
 })
 @XmlRootElement(name = "amandmani", namespace = "http://www.parlament.gov.rs/schema/amandman")
-public class Amendments {
+public class Amendments extends Element {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     protected Head head;
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     protected Body body;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
+
     @XmlAttribute(name = "name")
-    protected String name;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty name = new SimpleStringProperty();
+
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -228,7 +244,7 @@ public class Amendments {
      *
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -240,7 +256,11 @@ public class Amendments {
      *
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     /**
@@ -252,7 +272,7 @@ public class Amendments {
      *
      */
     public String getName() {
-        return name;
+        return name.get();
     }
 
     /**
@@ -264,7 +284,11 @@ public class Amendments {
      *
      */
     public void setName(String value) {
-        this.name = value;
+        this.name.set(value);
+    }
+
+    public StringProperty nameProperty() {
+        return name;
     }
 
     /**
@@ -283,6 +307,114 @@ public class Amendments {
      */
     public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
+    }
+
+    @Override
+    public String getElementName() {
+        return name.get();
+    }
+
+    @Override
+    public void setElementName(String name) {
+        this.name.set(name);
+    }
+
+    @Override
+    public StringProperty elementNameProperty() {
+        return name;
+    }
+
+    @Override
+    public void initElement() {
+        for (Amendment a: getBody().getAmandman()) {
+            getChildren().add(a);
+            a.createPropertyAttrs();
+        }
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+
+    }
+
+    @Override
+    public void removeChild(Element element) {
+
+    }
+
+    @Override
+    public void createPropertyAttrs() {
+
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                elementNameProperty(),
+                "Generalno",
+                "Naziv",
+                "Naziv elementa",
+                true);
+        StringPropertyItem statusPropertyItem = new StringPropertyItem(
+                getHead().getStatus().valueProperty(),
+                "Status",
+                "Status predloga",
+                "Trenutni status Akta na Skupštinskom repertoaru",
+                true);
+        LocalDatePropertyItem propositionDatePropertyItem = new LocalDatePropertyItem(
+                getHead().getDatumPredloga().valueProperty(),
+                "Status",
+                "Datum predloga",
+                "Datum kada je podnet ovaj pravni Akt",
+                true);
+        LocalDatePropertyItem acceptanceDatePropertyItem = new LocalDatePropertyItem(
+                getHead().getDatumIzglasavanja().valueProperty(),
+                "Status",
+                "Datum izglasavanja",
+                "Datum kada se glasalo o ovom Aktu",
+                true);
+        IntegerPropertyItem yesVotesPropertyItem = new IntegerPropertyItem(
+                getHead().getGlasovaZa().valueProperty(),
+                "Skupština",
+                "Glasova ZA",
+                "Broj poslanika koji su glasali ZA usvajanje ovog Akta",
+                true);
+        IntegerPropertyItem noVotesPropertyItem = new IntegerPropertyItem(
+                getHead().getGlasovaProtiv().valueProperty(),
+                "Skupština",
+                "Glasova PROTIV",
+                "Broj poslanika koji su glasali PROTIV usvajanja ovog Akta",
+                true);
+        IntegerPropertyItem sustainedVotesPropertyItem = new IntegerPropertyItem(
+                getHead().getGlasovaSuzdrzani().valueProperty(),
+                "Skupština",
+                "Suzdržanih",
+                "Broj poslanika koji su bili suzdržani za usvajanje ovog Akta",
+                true);
+        StringPropertyItem placePropertyItem = new StringPropertyItem(
+                getHead().mjestoProperty(),
+                "Skupština",
+                "Mesto",
+                "Mesto gde se nalazi ustanova koja odlučuje o Aktu",
+                false);
+
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
+        getPropertyItems().add(statusPropertyItem);
+        getPropertyItems().add(propositionDatePropertyItem);
+        getPropertyItems().add(acceptanceDatePropertyItem);
+        getPropertyItems().add(yesVotesPropertyItem);
+        getPropertyItems().add(noVotesPropertyItem);
+        getPropertyItems().add(sustainedVotesPropertyItem);
+        getPropertyItems().add(placePropertyItem);
+    }
+
+    @Override
+    public void preMarshaller() {
+
     }
 
 
@@ -557,8 +689,11 @@ public class Amendments {
         protected DatumIzglasavanja datumIzglasavanja;
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
         protected Status status;
+
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-        protected String mjesto;
+        @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+        protected StringProperty mjesto = new SimpleStringProperty("Novi Sad");
+
         @XmlElement(name = "glasova_za", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
         protected GlasovaZa glasovaZa;
         @XmlElement(name = "glasova_protiv", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
@@ -653,7 +788,7 @@ public class Amendments {
          *
          */
         public String getMjesto() {
-            return mjesto;
+            return mjesto.get();
         }
 
         /**
@@ -665,9 +800,12 @@ public class Amendments {
          *
          */
         public void setMjesto(String value) {
-            this.mjesto = value;
+            this.mjesto.set(value);
         }
 
+        public StringProperty mjestoProperty() {
+            return mjesto;
+        }
         /**
          * Gets the value of the glasovaZa property.
          *
@@ -832,32 +970,46 @@ public class Amendments {
 
             @XmlValue
             @XmlSchemaType(name = "date")
-            protected XMLGregorianCalendar value;
+            @XmlJavaTypeAdapter(DatePropertyAdapter.class)
+            protected ObjectProperty<LocalDate> value = new SimpleObjectProperty<>();
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
             /**
              * Gets the value of the value property.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getValue() {
-                return value;
+                LocalDate localDate = value.get();
+                GregorianCalendar gregorianCalendar = GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+                try {
+                    return DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+                } catch (DatatypeConfigurationException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
 
             /**
              * Sets the value of the value property.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setValue(XMLGregorianCalendar value) {
-                this.value = value;
+                LocalDate localDate = value.toGregorianCalendar().toZonedDateTime().toLocalDate();
+                this.value.set(localDate);
+            }
+
+            public ObjectProperty<LocalDate> valueProperty() {
+                return value;
             }
 
             /**
@@ -906,32 +1058,46 @@ public class Amendments {
 
             @XmlValue
             @XmlSchemaType(name = "date")
-            protected XMLGregorianCalendar value;
+            @XmlJavaTypeAdapter(DatePropertyAdapter.class)
+            protected ObjectProperty<LocalDate> value = new SimpleObjectProperty<>();
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
             /**
              * Gets the value of the value property.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getValue() {
-                return value;
+                LocalDate localDate = value.get();
+                GregorianCalendar gregorianCalendar = GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+                try {
+                    return DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+                } catch (DatatypeConfigurationException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
 
             /**
              * Sets the value of the value property.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setValue(XMLGregorianCalendar value) {
-                this.value = value;
+                LocalDate localDate = value.toGregorianCalendar().toZonedDateTime().toLocalDate();
+                this.value.set(localDate);
+            }
+
+            public ObjectProperty<LocalDate> valueProperty() {
+                return value;
             }
 
             /**
@@ -979,26 +1145,32 @@ public class Amendments {
         public static class GlasovaProtiv {
 
             @XmlValue
-            protected int value;
+            @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
+            protected IntegerProperty value = new SimpleIntegerProperty(-1);
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
+
             /**
              * Gets the value of the value property.
-             * 
+             *
              */
             public int getValue() {
-                return value;
+                return value.get();
             }
 
             /**
              * Sets the value of the value property.
-             * 
+             *
              */
             public void setValue(int value) {
-                this.value = value;
+                this.value.set(value);
             }
 
+            public IntegerProperty valueProperty() {
+                return value;
+            }
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
              * 
@@ -1044,26 +1216,31 @@ public class Amendments {
         public static class GlasovaSuzdrzani {
 
             @XmlValue
-            protected int value;
+            @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
+            protected IntegerProperty value = new SimpleIntegerProperty(-1);
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
             /**
              * Gets the value of the value property.
-             * 
+             *
              */
             public int getValue() {
-                return value;
+                return value.get();
             }
 
             /**
              * Sets the value of the value property.
-             * 
+             *
              */
             public void setValue(int value) {
-                this.value = value;
+                this.value.set(value);
             }
 
+            public IntegerProperty valueProperty() {
+                return value;
+            }
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
              * 
@@ -1109,26 +1286,32 @@ public class Amendments {
         public static class GlasovaZa {
 
             @XmlValue
-            protected int value;
+            @XmlJavaTypeAdapter(IntegerPropertyAdapter.class)
+            protected IntegerProperty value = new SimpleIntegerProperty(-1);
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
+
             /**
              * Gets the value of the value property.
-             * 
+             *
              */
             public int getValue() {
-                return value;
+                return value.get();
             }
 
             /**
              * Sets the value of the value property.
-             * 
+             *
              */
             public void setValue(int value) {
-                this.value = value;
+                this.value.set(value);
             }
 
+            public IntegerProperty valueProperty() {
+                return value;
+            }
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
              * 
@@ -1326,7 +1509,9 @@ public class Amendments {
         public static class Status {
 
             @XmlValue
-            protected String value;
+            @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+            protected StringProperty value = new SimpleStringProperty("kreiran");
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -1339,7 +1524,7 @@ public class Amendments {
              *     
              */
             public String getValue() {
-                return value;
+                return value.get();
             }
 
             /**
@@ -1351,7 +1536,11 @@ public class Amendments {
              *     
              */
             public void setValue(String value) {
-                this.value = value;
+                this.value.set(value);
+            }
+
+            public StringProperty valueProperty(){
+                return value;
             }
 
             /**

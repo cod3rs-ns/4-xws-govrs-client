@@ -8,7 +8,18 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.control.Button;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ButtonPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PartEnumPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -94,17 +105,21 @@ import javax.xml.bind.annotation.*;
     "body"
 })
 @XmlRootElement(name = "amandman", namespace = "http://www.parlament.gov.rs/schema/amandman")
-public class Amendment {
+public class Amendment extends Element {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     protected Head head;
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     protected Body body;
+
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")
-    protected String id;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty id = new SimpleStringProperty();
+
     @XmlAttribute(name = "name")
-    protected String name;
+    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    protected StringProperty name = new SimpleStringProperty("Amandman");
 
     /**
      * Gets the value of the head property.
@@ -153,7 +168,6 @@ public class Amendment {
     public void setBody(Body value) {
         this.body = value;
     }
-
     /**
      * Gets the value of the id property.
      *
@@ -163,7 +177,7 @@ public class Amendment {
      *
      */
     public String getId() {
-        return id;
+        return id.get();
     }
 
     /**
@@ -175,7 +189,11 @@ public class Amendment {
      *
      */
     public void setId(String value) {
-        this.id = value;
+        this.id.set(value);
+    }
+
+    public StringProperty idProperty() {
+        return id;
     }
 
     /**
@@ -187,7 +205,7 @@ public class Amendment {
      *
      */
     public String getName() {
-        return name;
+        return name.get();
     }
 
     /**
@@ -199,9 +217,110 @@ public class Amendment {
      *
      */
     public void setName(String value) {
-        this.name = value;
+        this.name.set(value);
     }
 
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    @Override
+    public String getElementName() {
+        return name.get();
+    }
+
+    @Override
+    public void setElementName(String name) {
+        this.name.set(name);
+    }
+
+    @Override
+    public StringProperty elementNameProperty() {
+        return name;
+    }
+
+    @Override
+    public void initElement() {
+        createPropertyAttrs();
+    }
+
+    @Override
+    public void createAndAddChild(Element element) {
+
+    }
+
+    @Override
+    public void removeChild(Element element) {
+
+    }
+
+    @Override
+    public void createPropertyAttrs() {
+        // create property list for context
+        StringPropertyItem idPropertyItem = new StringPropertyItem(
+                idProperty(),
+                "Generalno",
+                "ID ",
+                "Jedinstveni identifikator amandmana",
+                false);
+        StringPropertyItem namePropertyItem = new StringPropertyItem(
+                nameProperty(),
+                "Generalno",
+                "Naziv ",
+                "Naziv amandmana",
+                true);
+        StringPropertyItem rjesenjePropertyItem = new StringPropertyItem(
+                getHead().rjesenjeProperty(),
+                "Generalno",
+                "Rešenje",
+                "Predlog rešenja",
+                true);
+        // create property list for context
+        StringPropertyItem razlogPropertyItem = new StringPropertyItem(
+                getBody().getObrazlozenje().razlogProperty(),
+                "Objašnjenje",
+                "Razlog ",
+                "Razlog podnetog amandmana",
+                true);
+        StringPropertyItem objasnjenjePropertyItem = new StringPropertyItem(
+                getBody().getObrazlozenje().objasnjenjePredlozenogRjesenjaProperty(),
+                "Objašnjenje",
+                "Objašnjenje rešenja",
+                "Obrazloženje podnetog rešenja",
+                true);
+        StringPropertyItem ciljPropertyItem = new StringPropertyItem(
+                getBody().getObrazlozenje().ciljProperty(),
+                "Objašnjenje",
+                "Cilj",
+                "Obrazloženje cilja",
+                true);
+        StringPropertyItem uticajPropertyItem = new StringPropertyItem(
+                getBody().getObrazlozenje().uticajNaBudzetskaSredstvaProperty(),
+                "Objašnjenje",
+                "Uticaj na budžet",
+                "Uticaj na budžetska sredstva",
+                true);
+        ButtonPropertyItem elementPickerPropertyItem = new ButtonPropertyItem(
+                new SimpleObjectProperty<Element>( new Article()),
+                "Propis",
+                "Element",
+                "Element na koji se odnosi",
+                true
+        );
+        getPropertyItems().add(idPropertyItem);
+        getPropertyItems().add(namePropertyItem);
+        getPropertyItems().add(rjesenjePropertyItem);
+        getPropertyItems().add(razlogPropertyItem);
+        getPropertyItems().add(objasnjenjePropertyItem);
+        getPropertyItems().add(ciljPropertyItem);
+        getPropertyItems().add(uticajPropertyItem);
+        getPropertyItems().add(elementPickerPropertyItem);
+    }
+
+    @Override
+    public void preMarshaller() {
+
+    }
 
     /**
      * <p>Java class for anonymous complex type.
@@ -513,7 +632,8 @@ public class Amendment {
     public static class Head {
 
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-        protected String rjesenje;
+        @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+        protected StringProperty rjesenje = new SimpleStringProperty();
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
         protected Predmet predmet;
 
@@ -526,7 +646,7 @@ public class Amendment {
          *
          */
         public String getRjesenje() {
-            return rjesenje;
+            return rjesenje.get();
         }
 
         /**
@@ -538,7 +658,11 @@ public class Amendment {
          *
          */
         public void setRjesenje(String value) {
-            this.rjesenje = value;
+            this.rjesenje.set(value);
+        }
+
+        public StringProperty rjesenjeProperty() {
+            return rjesenje;
         }
 
         /**
