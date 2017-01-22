@@ -15,6 +15,7 @@ import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.ResultInputConverter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendment;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
@@ -55,11 +56,12 @@ public class AmendmentsController {
     private ImageView saveButton;
     @FXML
     private ImageView saveAsButton;
-    // -------------------------------------------------
     @FXML
-    private ImageView newLawButton;
+    private ImageView newAmendmentsButton;
     @FXML
     private ImageView uploadButton;
+    @FXML
+    private ImageView addButton;
     // -------------------------------------------------
     /**
      * Injected StateManger - parent component
@@ -96,7 +98,9 @@ public class AmendmentsController {
         Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
         Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
         Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
+        Tooltip.install(newAmendmentsButton, new Tooltip("Kreirajte novi amandman"));
         Tooltip.install(uploadButton, new Tooltip("Postavite amandmand"));
+        Tooltip.install(addButton, new Tooltip("Dodaj novi amandman"));
 
         amendmentsTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -252,12 +256,12 @@ public class AmendmentsController {
     }
 
     @FXML
-    private void createNewLaw() {
-        TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Propis");
+    private void createNewAmendments() {
+        TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Neki novi amandmani");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            Law newl = ObjectCreator.createNewLaw();
-            //switchViewToNewAmendment(newl);
+            Amendments newl = ObjectCreator.createNewAmendments();
+            switchViewToNewAmendment(newl);
         });
     }
 
@@ -307,17 +311,13 @@ public class AmendmentsController {
         amendmentsTable.setItems(amendments.getChildren());
         generalProperties.getItems().clear();
         generalProperties.getItems().addAll(amendments.getPropertyItems());
-        /**
-         tree = new TreeModel(
-         amendments,
-         Element::getChildren,
-         Element::elementNameProperty,
-         this
-         );*/
-
-        //TreeView<Element> treeView = tree.getTreeView();
-        //treeContainer.setContent(treeView);
     }
+
+    @FXML
+    private void addAmendment() {
+        amendments.createAndAddChild(ObjectCreator.createOneAmendment());
+    }
+
 
 
     public void setStateManager(StateManager stateManager) {

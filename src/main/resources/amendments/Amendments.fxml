@@ -36,6 +36,17 @@
                         <Insets bottom="2.0" left="2.0" right="8.0" top="2.0" />
                      </padding>
                      <children>
+                        <ImageView fx:id="addButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#addAmendment" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/plus.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets right="40.0" />
+                           </HBox.margin>
+                        </ImageView>
                         <ImageView fx:id="uploadButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#uploadAmendment" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/upload.png" />
@@ -44,7 +55,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="newButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#createNewLaw" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="newAmendmentsButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#createNewAmendments" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>

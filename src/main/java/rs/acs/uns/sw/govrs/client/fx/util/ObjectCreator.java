@@ -67,5 +67,24 @@ public class ObjectCreator {
         amendments.getHead().setGlasovaZa(factory.createAmendmentsHeadGlasovaZa());
         amendments.getHead().setStatus(factory.createAmendmentsHeadStatus());
         amendments.getHead().setPodnosilac(factory.createAmendmentsHeadPodnosilac());
+        amendments.getHead().setPropis(factory.createAmendmentsHeadPropis());
+        amendments.getHead().getPropis().setRef(factory.createRef());
+        amendments.getHead().getPropis().getRef().setId("law01");
+        return amendments;
+    }
+
+    public static Amendment createOneAmendment() {
+        ObjectFactory factory = new ObjectFactory();
+        Amendment amendment = factory.createAmendment();
+        amendment.setId("aa_id");
+        amendment.setName("novi amandman");
+        amendment.setHead(factory.createAmendmentHead());
+        amendment.setBody(factory.createAmendmentBody());
+        amendment.getHead().setPredmet(factory.createAmendmentHeadPredmet());
+        amendment.getHead().getPredmet().setRef(factory.createRef());
+        amendment.getHead().getPredmet().getRef().setId("article01");
+        amendment.getBody().setObrazlozenje(factory.createExplanation());
+        amendment.getHead().setRjesenje("");
+        return amendment;
     }
 }

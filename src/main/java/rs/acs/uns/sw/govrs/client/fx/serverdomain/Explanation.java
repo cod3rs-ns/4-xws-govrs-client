@@ -94,19 +94,19 @@ public class Explanation {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty razlog = new SimpleStringProperty();
+    protected StringProperty razlog = new SimpleStringProperty("");
 
     @XmlElement(name = "objasnjene_predlozenog_rjesenja", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty objasnjenePredlozenogRjesenja = new SimpleStringProperty();
+    protected StringProperty objasnjenePredlozenogRjesenja = new SimpleStringProperty("");
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty cilj = new SimpleStringProperty();
+    protected StringProperty cilj = new SimpleStringProperty("");
 
     @XmlElement(name = "uticaj_na_budzetska_sredstva", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-    protected StringProperty uticajNaBudzetskaSredstva = new SimpleStringProperty();
+    protected StringProperty uticajNaBudzetskaSredstva = new SimpleStringProperty("");
 
     /**
      * Gets the value of the razlog property.

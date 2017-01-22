@@ -355,7 +355,10 @@ public class Amendments extends Element {
 
     @Override
     public void createAndAddChild(Element element) {
-
+        element.setElementParent(this);
+        element.createPropertyAttrs();
+        getChildren().add(element);
+        getBody().getAmandman().add((Amendment)element);
     }
 
     @Override

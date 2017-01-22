@@ -9,10 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rs.acs.uns.sw.govrs.client.fx.amendments.ElementPicker;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Article;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Clause;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Item;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Subclause;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 
 import java.util.function.Function;
@@ -37,10 +34,12 @@ public class SelectorTree {
         treeView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 TreeItem<Element> item = treeView.getSelectionModel().getSelectedItem();
-                Element element = item.getValue();
-                if (element instanceof Article || element instanceof Clause || element instanceof Subclause || element instanceof ItemWrapper) {
-                    controller.selectedLabel.setText(element.idProperty().get());
-                    controller.setSelectedId(element.idProperty().get());
+                if (item != null) {
+                    Element element = item.getValue();
+                    if (element instanceof Article || element instanceof Paragraph || element instanceof Clause || element instanceof Subclause || element instanceof ItemWrapper) {
+                        controller.selectedLabel.setText(element.idProperty().get());
+                        controller.setSelectedId(element.idProperty().get());
+                    }
                 }
             }
         });
