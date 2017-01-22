@@ -13,13 +13,16 @@ import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.*;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentsStatusPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.IntegerPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.LocalDatePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentsStatusAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DatePropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentsStatus;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -381,7 +384,7 @@ public class Amendments extends Element {
                 "Naziv",
                 "Naziv elementa",
                 true);
-        StringPropertyItem statusPropertyItem = new StringPropertyItem(
+        AmendmentsStatusPropertyItem statusPropertyItem = new AmendmentsStatusPropertyItem(
                 getHead().getStatus().valueProperty(),
                 "Status",
                 "Status predloga",
@@ -1532,8 +1535,8 @@ public class Amendments extends Element {
         public static class Status {
 
             @XmlValue
-            @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-            protected StringProperty value = new SimpleStringProperty("kreiran");
+            @XmlJavaTypeAdapter(AmendmentsStatusAdapter.class)
+            protected ObjectProperty<AmendmentsStatus> value = new SimpleObjectProperty<>(AmendmentsStatus.Predlozen);
 
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
@@ -1547,7 +1550,18 @@ public class Amendments extends Element {
              *     
              */
             public String getValue() {
-                return value.get();
+                if (value.get() == AmendmentsStatus.Predlozen) {
+                    return "predložen";
+                }
+
+                if (value.get() == AmendmentsStatus.Prihvacen) {
+                    return "prihvaćen";
+                }
+
+                if (value.get() == AmendmentsStatus.Odbijen) {
+                    return "odbijen";
+                }
+                return "";
             }
 
             /**
@@ -1559,10 +1573,18 @@ public class Amendments extends Element {
              *     
              */
             public void setValue(String value) {
-                this.value.set(value);
+                if (value.equals("predložen")) {
+                    this.value.set(AmendmentsStatus.Predlozen);
+                }
+                if (value.equals("prihvaćen")) {
+                    this.value.set(AmendmentsStatus.Prihvacen);
+                }
+                if (value.equals("odbijen")) {
+                    this.value.set(AmendmentsStatus.Odbijen);
+                }
             }
 
-            public StringProperty valueProperty(){
+            public ObjectProperty<AmendmentsStatus> valueProperty(){
                 return value;
             }
 

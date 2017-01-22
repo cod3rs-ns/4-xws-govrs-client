@@ -8,16 +8,22 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentTypePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ButtonPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PartEnumPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentTypeAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentsStatusAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.ALAContainer;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentType;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentsStatus;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -270,7 +276,7 @@ public class Amendment extends Element {
                 "Naziv ",
                 "Naziv amandmana",
                 true);
-        StringPropertyItem rjesenjePropertyItem = new StringPropertyItem(
+        AmendmentTypePropertyItem rjesenjePropertyItem = new AmendmentTypePropertyItem(
                 getHead().rjesenjeProperty(),
                 "Generalno",
                 "Rešenje",
@@ -638,8 +644,9 @@ public class Amendment extends Element {
     public static class Head {
 
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-        @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-        protected StringProperty rjesenje = new SimpleStringProperty();
+        @XmlJavaTypeAdapter(AmendmentTypeAdapter.class)
+        protected ObjectProperty<AmendmentType> rjesenje = new SimpleObjectProperty<>(AmendmentType.Brisanje);
+
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
         protected Predmet predmet;
 
@@ -652,7 +659,18 @@ public class Amendment extends Element {
          *
          */
         public String getRjesenje() {
-            return rjesenje.get();
+            if (rjesenje.get() == AmendmentType.Dopuna) {
+                return "dopuna";
+            }
+
+            if (rjesenje.get() == AmendmentType.Izmena) {
+                return "izmjena";
+            }
+
+            if (rjesenje.get() == AmendmentType.Brisanje) {
+                return "brisanje";
+            }
+            return "";
         }
 
         /**
@@ -664,10 +682,18 @@ public class Amendment extends Element {
          *
          */
         public void setRjesenje(String value) {
-            this.rjesenje.set(value);
+            if (value.equals("dopuna")) {
+                this.rjesenje.set(AmendmentType.Dopuna);
+            }
+            if (value.equals("izmjena")) {
+                this.rjesenje.set(AmendmentType.Izmena);
+            }
+            if (value.equals("brisanje")) {
+                this.rjesenje.set(AmendmentType.Brisanje);
+            }
         }
 
-        public StringProperty rjesenjeProperty() {
+        public ObjectProperty<AmendmentType> rjesenjeProperty() {
             return rjesenje;
         }
 
