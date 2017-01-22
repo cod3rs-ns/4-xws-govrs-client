@@ -52,10 +52,19 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
         btnEditor.setOnAction((ActionEvent event) -> {
             displayPopupEditor();
         });
+
+        PopupButtonPropertyItem pbpi = (PopupButtonPropertyItem) item;
+        pbpi.property.addListener(observable -> {
+            value.setValue(pbpi.property.get());
+            if (!value.get().isCreateNew() ) {
+                btnEditor.setText(value.get().getElement().getElementName());
+            } else {
+                btnEditor.setText("<nije izabran>");
+            }
+        });
     }
 
     private void displayPopupEditor() {
-
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(MainFXApp.class.getResource("/editor/EditorPopup.fxml"));
@@ -63,19 +72,6 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
             rootPane = loader.load(in);
             controller = loader.getController();
             controller.initElements(getValue());
-            /*
-            SelectorTree tree = new SelectorTree(
-                    law,
-                    Element::getChildren,
-                    Element::elementNameProperty,
-                    controller
-            );
-
-            TreeView<Element> treeView = tree.getTreeView();
-            controller.treeContainer.setCenter(treeView);
-            });
-            */
-
             Stage stage = new Stage();
             stage.setScene(new Scene(rootPane));
             stage.setTitle("Izaberite predmet amandmana");
@@ -84,11 +80,9 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(btnEditor.getScene().getWindow());
-
             stage.showAndWait();
-
         } catch (Exception e) {
-
+            System.out.println("WTF");
         }
 
 
@@ -107,7 +101,12 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
 
     @Override
     public void setValue(PopupEditorInit value) {
-        System.out.println(value.toString());
+        this.value.set(value);
+        if (!value.isCreateNew() ) {
+            btnEditor.setText(value.getElement().getElementName());
+        } else {
+            btnEditor.setText("<nije izabran>");
+        }
     }
 
 }

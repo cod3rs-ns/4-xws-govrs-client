@@ -22,6 +22,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentTypeAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.ALAContainer;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentType;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.managers.AmendmentStateManager;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -274,12 +275,6 @@ public class Amendment extends Element {
                 "Naziv ",
                 "Naziv amandmana",
                 true);
-        AmendmentTypePropertyItem rjesenjePropertyItem = new AmendmentTypePropertyItem(
-                getHead().rjesenjeProperty(),
-                "Generalno",
-                "Rešenje",
-                "Predlog rešenja",
-                true);
         // create property list for context
         StringPropertyItem razlogPropertyItem = new StringPropertyItem(
                 getBody().getObrazlozenje().razlogProperty(),
@@ -305,37 +300,16 @@ public class Amendment extends Element {
                 "Uticaj na budžet",
                 "Uticaj na budžetska sredstva",
                 true);
-        ALAContainer container = new ALAContainer(
-                ((Amendments)getElementParent()).getHead().getPropis().getRef().getId(),
-                getHead().getPredmet().getRef().getId(),
-                this
-        );
-        ButtonPropertyItem elementPickerPropertyItem = new ButtonPropertyItem(
-                new SimpleObjectProperty<ALAContainer>(container),
-                "Propis",
-                "Element",
-                "Element na koji se odnosi",
-                true
-        );
-        Element e = getBody().getOdredba().getClan();
-        e.initElement();
-        PopupEditorInit editor = new PopupEditorInit("string", false, e);
-        PopupButtonPropertyItem elementEditorPropertyItem = new PopupButtonPropertyItem(
-                new SimpleObjectProperty<PopupEditorInit>(editor),
-                "Propis",
-                "Odredba",
-                "Nova ili izmenjena odredba",
-                true
-        );
+        AmendmentStateManager stateManager = new AmendmentStateManager(this);
         getPropertyItems().add(idPropertyItem);
         getPropertyItems().add(namePropertyItem);
-        getPropertyItems().add(rjesenjePropertyItem);
+        getPropertyItems().add(stateManager.getResenjePropertyItem());
         getPropertyItems().add(razlogPropertyItem);
         getPropertyItems().add(objasnjenjePropertyItem);
         getPropertyItems().add(ciljPropertyItem);
         getPropertyItems().add(uticajPropertyItem);
-        getPropertyItems().add(elementPickerPropertyItem);
-        getPropertyItems().add(elementEditorPropertyItem);
+        getPropertyItems().add(stateManager.getPredmetPickerPropertyItem());
+        getPropertyItems().add(stateManager.getOdredbaEditorPropertyItem());
     }
 
     @Override

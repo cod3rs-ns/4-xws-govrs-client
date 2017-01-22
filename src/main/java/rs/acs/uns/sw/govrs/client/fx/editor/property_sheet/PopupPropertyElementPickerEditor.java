@@ -56,6 +56,17 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<ALAConta
         btnEditor.setOnAction((ActionEvent event) -> {
             displayPopupEditor();
         });
+
+        ButtonPropertyItem bpi = (ButtonPropertyItem) item;
+        bpi.property.addListener(observable -> {
+            value.setValue(bpi.property.get());
+            value.setValue(bpi.property.get());
+            if (value.get().currentElementId != null) {
+                btnEditor.setText(value.get().currentElementId);
+            } else {
+                btnEditor.setText("<nije izabran>");
+            }
+        });
     }
 
     private void displayPopupEditor() {
@@ -130,7 +141,7 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<ALAConta
 
     @Override
     public void setValue(ALAContainer value) {
-        System.out.println(value.toString());
+        this.value.set(value);
     }
 
 }

@@ -13,7 +13,7 @@ public class PopupButtonPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    private ObjectProperty<PopupEditorInit> property;
+    public ObjectProperty<PopupEditorInit> property;
 
     public PopupButtonPropertyItem(ObjectProperty<PopupEditorInit> property, String category, String name, String description, boolean editable) {
         this.property = property;
@@ -50,12 +50,13 @@ public class PopupButtonPropertyItem implements PropertySheet.Item {
 
     @Override
     public void setValue(Object value) {
+        System.out.println("property");
         property.set((PopupEditorInit) value);
     }
 
     @Override
     public Optional<ObservableValue<? extends Object>> getObservableValue() {
-        return Optional.empty();
+        return Optional.of(property);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class ButtonPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    private ObjectProperty<ALAContainer> property;
+    public ObjectProperty<ALAContainer> property;
 
     public ButtonPropertyItem(ObjectProperty<ALAContainer> property, String category, String name, String description, boolean editable) {
         this.property = property;

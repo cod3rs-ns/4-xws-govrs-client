@@ -26,6 +26,7 @@ import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Article;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 
@@ -135,7 +136,8 @@ public class PopupEditorController implements TreeController{
     public void initElements(PopupEditorInit init) {
         initObject = init;
         if (initObject.isCreateNew()) {
-
+            init.setElement(new Article());
+            init.getElement().createPropertyAttrs();
         } else {
 
         }
