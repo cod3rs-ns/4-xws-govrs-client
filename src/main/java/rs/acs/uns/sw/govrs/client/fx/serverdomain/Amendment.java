@@ -17,6 +17,7 @@ import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ButtonPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PartEnumPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.ALAContainer;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -300,8 +301,13 @@ public class Amendment extends Element {
                 "Uticaj na budžet",
                 "Uticaj na budžetska sredstva",
                 true);
+        ALAContainer container = new ALAContainer(
+                ((Amendments)getElementParent()).getHead().getPropis().getRef().getId(),
+                getHead().getPredmet().getRef().getId(),
+                this
+        );
         ButtonPropertyItem elementPickerPropertyItem = new ButtonPropertyItem(
-                new SimpleObjectProperty<Element>( new Article()),
+                new SimpleObjectProperty<ALAContainer>(container),
                 "Propis",
                 "Element",
                 "Element na koji se odnosi",

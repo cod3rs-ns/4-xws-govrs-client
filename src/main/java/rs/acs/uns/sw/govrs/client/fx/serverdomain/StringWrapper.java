@@ -100,4 +100,9 @@ public class StringWrapper extends Element{
 
     }
 
+    @Override
+    public StringProperty idProperty() {
+        return new SimpleStringProperty("text");
+    }
+
 }

@@ -8,11 +8,15 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import com.gluonhq.connect.GluonObservableObject;
+import com.gluonhq.connect.provider.DataProvider;
+import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.*;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.IntegerPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.LocalDatePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DatePropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
@@ -327,10 +331,26 @@ public class Amendments extends Element {
     @Override
     public void initElement() {
         for (Amendment a: getBody().getAmandman()) {
+            a.setElementParent(this);
             getChildren().add(a);
             a.createPropertyAttrs();
         }
         createPropertyAttrs();
+    }
+
+    public GluonObservableObject<Law> getLaw() {
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000/api")
+                .header("Accept", "application/xml")
+                .path("/laws/" + getHead().getPropis().getRef().getId());
+
+        // retrieve a list from the DataProvider
+        GluonObservableObject<Law> lawProperty;
+        LawInputConverter converter = new LawInputConverter();
+        lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+        return lawProperty;
     }
 
     @Override
