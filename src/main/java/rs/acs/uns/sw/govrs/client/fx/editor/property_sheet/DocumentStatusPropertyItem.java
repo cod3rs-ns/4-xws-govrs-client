@@ -3,18 +3,18 @@ package rs.acs.uns.sw.govrs.client.fx.editor.property_sheet;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import org.controlsfx.control.PropertySheet;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentsStatus;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
 
 import java.util.Optional;
 
-public class AmendmentsStatusPropertyItem implements PropertySheet.Item {
+public class DocumentStatusPropertyItem implements PropertySheet.Item {
     private String category;
     private String name;
     private String description;
     private boolean editable;
-    private ObjectProperty<AmendmentsStatus> property;
+    private ObjectProperty<DocumentStatus> property;
 
-    public AmendmentsStatusPropertyItem(ObjectProperty property, String category, String name, String description, boolean editable) {
+    public DocumentStatusPropertyItem(ObjectProperty property, String category, String name, String description, boolean editable) {
         this.property = property;
         this.category = category;
         this.description = description;
@@ -24,7 +24,7 @@ public class AmendmentsStatusPropertyItem implements PropertySheet.Item {
 
     @Override
     public Class<?> getType() {
-        return AmendmentsStatus.class;
+        return DocumentStatus.class;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class AmendmentsStatusPropertyItem implements PropertySheet.Item {
 
     @Override
     public void setValue(Object value) {
-        property.set((AmendmentsStatus) value);
+        property.set((DocumentStatus) value);
     }
 
     @Override

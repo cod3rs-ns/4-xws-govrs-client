@@ -13,16 +13,16 @@ import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.*;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentsStatusPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.DocumentStatusPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.IntegerPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.LocalDatePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentsStatusAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DatePropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DocumentStatusAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentsStatus;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -384,7 +384,7 @@ public class Amendments extends Element {
                 "Naziv",
                 "Naziv elementa",
                 true);
-        AmendmentsStatusPropertyItem statusPropertyItem = new AmendmentsStatusPropertyItem(
+        DocumentStatusPropertyItem statusPropertyItem = new DocumentStatusPropertyItem(
                 getHead().getStatus().valueProperty(),
                 "Status",
                 "Status predloga",
@@ -1535,8 +1535,8 @@ public class Amendments extends Element {
         public static class Status {
 
             @XmlValue
-            @XmlJavaTypeAdapter(AmendmentsStatusAdapter.class)
-            protected ObjectProperty<AmendmentsStatus> value = new SimpleObjectProperty<>(AmendmentsStatus.Predlozen);
+            @XmlJavaTypeAdapter(DocumentStatusAdapter.class)
+            protected ObjectProperty<DocumentStatus> value = new SimpleObjectProperty<>(DocumentStatus.Predlozen);
 
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
@@ -1550,15 +1550,15 @@ public class Amendments extends Element {
              *     
              */
             public String getValue() {
-                if (value.get() == AmendmentsStatus.Predlozen) {
+                if (value.get() == DocumentStatus.Predlozen) {
                     return "predložen";
                 }
 
-                if (value.get() == AmendmentsStatus.Prihvacen) {
+                if (value.get() == DocumentStatus.Prihvacen) {
                     return "prihvaćen";
                 }
 
-                if (value.get() == AmendmentsStatus.Odbijen) {
+                if (value.get() == DocumentStatus.Odbijen) {
                     return "odbijen";
                 }
                 return "";
@@ -1574,17 +1574,17 @@ public class Amendments extends Element {
              */
             public void setValue(String value) {
                 if (value.equals("predložen")) {
-                    this.value.set(AmendmentsStatus.Predlozen);
+                    this.value.set(DocumentStatus.Predlozen);
                 }
                 if (value.equals("prihvaćen")) {
-                    this.value.set(AmendmentsStatus.Prihvacen);
+                    this.value.set(DocumentStatus.Prihvacen);
                 }
                 if (value.equals("odbijen")) {
-                    this.value.set(AmendmentsStatus.Odbijen);
+                    this.value.set(DocumentStatus.Odbijen);
                 }
             }
 
-            public ObjectProperty<AmendmentsStatus> valueProperty(){
+            public ObjectProperty<DocumentStatus> valueProperty(){
                 return value;
             }
 

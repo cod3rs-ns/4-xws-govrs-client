@@ -1,7 +1,7 @@
 package rs.acs.uns.sw.govrs.client.fx.serverdomain.enums;
 
 
-public enum AmendmentsStatus {
+public enum DocumentStatus {
     Predlozen {
         public String toString() {
             return "predložen";
