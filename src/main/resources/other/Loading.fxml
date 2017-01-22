@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="200.0" maxWidth="200.0" minHeight="200.0" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ECEFF1; -fx-border-color: #1976D2; -fx-border-width: 5px;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ProgressIndicator layoutX="71.0" layoutY="80.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <Label alignment="CENTER" layoutX="86.0" layoutY="169.0" text="Komunikacija sa serverom u toku..." AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font></Label>
+   </children>
+   <cursor>
+      <Cursor fx:constant="WAIT" />
+   </cursor>
+   <effect>
+      <Reflection fraction="0.31" topOpacity="0.25" />
+   </effect>
+</AnchorPane>

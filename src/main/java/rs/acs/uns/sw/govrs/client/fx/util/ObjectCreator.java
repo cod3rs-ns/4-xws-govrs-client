@@ -43,4 +43,29 @@ public class ObjectCreator {
 
         return law;
     }
+
+    public static Amendments createNewAmendments() {
+        ObjectFactory factory = new ObjectFactory();
+        GregorianCalendar gregorianCalendar = GregorianCalendar.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
+        XMLGregorianCalendar dateTest = null;
+        try {
+            dateTest = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+        } catch (DatatypeConfigurationException e) {
+            e.printStackTrace();
+        }
+        Amendments amendments = factory.createAmendments();
+        amendments.setHead(factory.createAmendmentsHead());
+        amendments.setBody(factory.createAmendmentsBody());
+        amendments.setId("novi_id");
+        amendments.setName("Neki novi amandmani");
+        amendments.getHead().setDatumIzglasavanja(factory.createAmendmentsHeadDatumIzglasavanja());
+        amendments.getHead().getDatumIzglasavanja().setValue(dateTest);
+        amendments.getHead().setDatumPredloga(factory.createAmendmentsHeadDatumPredloga());
+        amendments.getHead().getDatumPredloga().setValue(dateTest);
+        amendments.getHead().setGlasovaProtiv(factory.createAmendmentsHeadGlasovaProtiv());
+        amendments.getHead().setGlasovaSuzdrzani(factory.createAmendmentsHeadGlasovaSuzdrzani());
+        amendments.getHead().setGlasovaZa(factory.createAmendmentsHeadGlasovaZa());
+        amendments.getHead().setStatus(factory.createAmendmentsHeadStatus());
+        amendments.getHead().setPodnosilac(factory.createAmendmentsHeadPodnosilac());
+    }
 }

@@ -371,7 +371,7 @@ public class Amendments extends Element {
                 "Generalno",
                 "ID ",
                 "Jedinstveni identifikator",
-                false);
+                true);
         StringPropertyItem namePropertyItem = new StringPropertyItem(
                 elementNameProperty(),
                 "Generalno",

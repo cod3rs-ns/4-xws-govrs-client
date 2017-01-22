@@ -36,6 +36,14 @@
                         <Insets bottom="2.0" left="2.0" right="8.0" top="2.0" />
                      </padding>
                      <children>
+                        <ImageView fx:id="uploadButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#uploadAmendment" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/upload.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
                         <ImageView fx:id="newButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#createNewLaw" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
                               <Insets />
@@ -88,7 +96,7 @@
                                           <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                        </padding>
                                        <children>
-                                          <PropertySheet fx:id="amendmentProperties" layoutX="50.0" layoutY="38.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+                                          <PropertySheet fx:id="amendmentProperties" layoutX="50.0" layoutY="38.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -101,7 +109,7 @@
                                  <content>
                                     <AnchorPane>
                                        <children>
-                                          <PropertySheet fx:id="generalProperties" layoutX="66.0" layoutY="115.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+                                          <PropertySheet fx:id="generalProperties" layoutX="66.0" layoutY="115.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                        <padding>
                                           <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

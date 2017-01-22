@@ -1,5 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.amendments;
 
+import com.gluonhq.connect.ConnectState;
 import com.gluonhq.connect.GluonObservableObject;
 import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
@@ -16,13 +17,16 @@ import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.ResultInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.Loader;
 import rs.acs.uns.sw.govrs.client.fx.util.ObjectCreator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.StringWriter;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +58,8 @@ public class AmendmentsController {
     // -------------------------------------------------
     @FXML
     private ImageView newLawButton;
+    @FXML
+    private ImageView uploadButton;
     // -------------------------------------------------
     /**
      * Injected StateManger - parent component
@@ -90,6 +96,7 @@ public class AmendmentsController {
         Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
         Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
         Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
+        Tooltip.install(uploadButton, new Tooltip("Postavite amandmand"));
 
         amendmentsTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -252,6 +259,38 @@ public class AmendmentsController {
             Law newl = ObjectCreator.createNewLaw();
             //switchViewToNewAmendment(newl);
         });
+    }
+
+    @FXML
+    private void uploadAmendment() {
+        try {
+            JAXBContext context = JAXBContext.newInstance(Amendments.class);
+            Marshaller marshaller = context.createMarshaller();
+            StringWriter writer = new StringWriter();
+            marshaller.marshal(amendments, writer);
+            String a = writer.toString();
+            // create a RestClient to the specific URL
+            RestClient restClient = RestClient.create()
+                    .method("POST")
+                    .host("http://localhost:9000/api")
+                    .contentType("application/xml")
+                    .path("/amendments/")
+                    .dataString(a);
+            // retrieve a list from the DataProvider
+            GluonObservableObject<Object> amendmentsProperty;
+            ResultInputConverter converter = new ResultInputConverter(Amendments.class);
+            amendmentsProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+            Stage stage = Loader.createLoader(amendmentsTable.getScene());
+            stage.show();
+
+            amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                stage.close();
+            }));
+        }
+         catch (Exception e) {
+             System.out.println("aaaaaa");
+        }
+
     }
 
     /**
