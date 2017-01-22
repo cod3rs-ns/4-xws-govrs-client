@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -21,14 +20,14 @@ import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeController;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
-import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorInit;
+import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorOptions;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Article;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
 
 import java.util.function.Function;
 
@@ -78,7 +77,7 @@ public class PopupEditorController implements TreeController{
     @FXML
     private PropertySheet propertySheet;
 
-    private PopupEditorInit initObject;
+    private PopupEditorOptions initObject;
 
     private TreeModel tree;
     // -------------------------------------------------
@@ -133,13 +132,29 @@ public class PopupEditorController implements TreeController{
 
     }
 
-    public void initElements(PopupEditorInit init) {
+    public void initElements(PopupEditorOptions init) {
         initObject = init;
+        Element element = null;
         if (initObject.isCreateNew()) {
-            init.setElement(new Article());
+            if (init.getTypeOfElement() == ElementTypes.Article) {
+                element = new Article();
+            } else if (init.getTypeOfElement() == ElementTypes.Paragraph) {
+                element = new Paragraph();
+            } else if (init.getTypeOfElement() == ElementTypes.Clause) {
+                element = new Clause();
+            } else if (init.getTypeOfElement() == ElementTypes.Subclause) {
+                element = new Subclause();
+            } else if (init.getTypeOfElement() == ElementTypes.Item) {
+                Item i = new Item();
+                element = new ItemWrapper(i);
+            } else {
+                System.out.println("Something went wrong in initElements");
+            }
+            init.setElement(element);
+            init.setCreateNew(false);
+            System.out.println(init.getElement());
+            init.getElement().idProperty().set("A");
             init.getElement().createPropertyAttrs();
-        } else {
-
         }
         tree = new TreeModel(
                 init.getElement(),

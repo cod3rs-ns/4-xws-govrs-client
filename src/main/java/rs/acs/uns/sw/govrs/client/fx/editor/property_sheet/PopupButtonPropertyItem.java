@@ -4,7 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
-import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorInit;
+import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorOptions;
 
 import java.util.Optional;
 
@@ -13,9 +13,9 @@ public class PopupButtonPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    public ObjectProperty<PopupEditorInit> property;
+    public ObjectProperty<PopupEditorOptions> property;
 
-    public PopupButtonPropertyItem(ObjectProperty<PopupEditorInit> property, String category, String name, String description, boolean editable) {
+    public PopupButtonPropertyItem(ObjectProperty<PopupEditorOptions> property, String category, String name, String description, boolean editable) {
         this.property = property;
         this.category = category;
         this.description = description;
@@ -51,7 +51,7 @@ public class PopupButtonPropertyItem implements PropertySheet.Item {
     @Override
     public void setValue(Object value) {
         System.out.println("property");
-        property.set((PopupEditorInit) value);
+        property.set((PopupEditorOptions) value);
     }
 
     @Override

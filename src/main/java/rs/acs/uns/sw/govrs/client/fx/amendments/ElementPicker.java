@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
 
 import java.net.URL;
@@ -22,6 +23,7 @@ public class ElementPicker extends AnchorPane implements Initializable {
 
     private String selectedId;
     private ElementTypes selectedType;
+    private Element selectedElement;
 
     /**
      * Initializes the controller class. This method is automatically called
@@ -51,5 +53,13 @@ public class ElementPicker extends AnchorPane implements Initializable {
 
     public void setSelectedType(ElementTypes selectedType) {
         this.selectedType = selectedType;
+    }
+
+    public Element getSelectedElement() {
+        return selectedElement;
+    }
+
+    public void setSelectedElement(Element selectedElement) {
+        this.selectedElement = selectedElement;
     }
 }

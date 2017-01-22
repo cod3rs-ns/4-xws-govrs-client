@@ -42,6 +42,7 @@ public class SelectorTree {
                     if (element instanceof Article || element instanceof Paragraph || element instanceof Clause || element instanceof Subclause || element instanceof ItemWrapper) {
                         controller.selectedLabel.setText(element.idProperty().get());
                         controller.setSelectedId(element.idProperty().get());
+                        controller.setSelectedElement(element);
                         if (element instanceof Article) {
                             controller.setSelectedType(ElementTypes.Article);
                         } else if (element instanceof Paragraph) {

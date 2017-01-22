@@ -29,7 +29,7 @@ public class SearchResultInputConverter extends InputStreamInputConverter<Search
                     writer.write(line);
                 }
             }
-            Logger.getLogger(SearchResultInputConverter.class.getName()).log(Level.INFO, stringWriter.toString());
+            //Logger.getLogger(SearchResultInputConverter.class.getName()).log(Level.INFO, stringWriter.toString());
             JAXBContext context = JAXBContext.newInstance(SearchResult.class);
             Unmarshaller unMarshaller = context.createUnmarshaller();
             return (SearchResult) unMarshaller.unmarshal(new StringReader(stringWriter.toString()));

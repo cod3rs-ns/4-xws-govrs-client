@@ -41,8 +41,8 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
     public PopupPropertyElementPickerEditor(PropertySheet.Item item) {
         this.item = item;
         SelectionInfo cont = (SelectionInfo)item.getValue();
-        if (cont != null && cont.elementId != null) {
-            btnEditor = new Button(cont.elementId);
+        if (cont != null && cont.getElementId() != null) {
+            btnEditor = new Button(cont.getElementId());
             value.set((SelectionInfo) item.getValue());
         } else {
             btnEditor = new Button("<nije_izabran>");
@@ -55,9 +55,8 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
         ButtonPropertyItem bpi = (ButtonPropertyItem) item;
         bpi.property.addListener(observable -> {
             value.setValue(bpi.property.get());
-            value.setValue(bpi.property.get());
-            if (value.get().elementId != null) {
-                btnEditor.setText(value.get().elementId);
+            if (value.get().getElementId() != null) {
+                btnEditor.setText(value.get().getElementId());
             } else {
                 btnEditor.setText("<nije izabran>");
             }
@@ -77,7 +76,7 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
                     .method("GET")
                     .host("http://localhost:9000/api")
                     .header("Accept", "application/xml")
-                    .path("/laws/" + value.get().lawId);
+                    .path("/laws/" + value.get().getLawId());
 
             // retrieve a list from the DataProvider
             GluonObservableObject<Law> lawProperty;
@@ -109,9 +108,13 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
                 stage.close();
                 if(picker.getSelectedId() != null) {
                     btnEditor.setText(picker.getSelectedId());
-                    value.get().elementId = picker.getSelectedId();
-                    value.get().elementType = picker.getSelectedType();
-                    System.out.println(value.get().elementType);
+                    value.get().setElementId(picker.getSelectedId());
+                    value.get().setElementType(picker.getSelectedType());
+                    value.get().setElement(picker.getSelectedElement());
+                    value.get().setSaved(true);
+                    System.out.println("...... sl .......");
+                    System.out.println(value.get());
+
                 }
             });
             stage.showAndWait();

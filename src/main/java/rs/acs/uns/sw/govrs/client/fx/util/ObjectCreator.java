@@ -1,5 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.util;
 
+import javafx.beans.property.ObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -86,5 +87,11 @@ public class ObjectCreator {
         amendment.getBody().setObrazlozenje(factory.createExplanation());
         amendment.getHead().setRjesenje("");
         return amendment;
+    }
+
+    public static Amendment.Body.Odredba createOdredba() {
+        ObjectFactory factory = new ObjectFactory();
+        Amendment.Body.Odredba odredba = factory.createAmendmentBodyOdredba();
+        return odredba;
     }
 }

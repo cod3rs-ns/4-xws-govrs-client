@@ -1,8 +1,5 @@
 package rs.acs.uns.sw.govrs.client.fx.editor.property_sheet;
 
-import com.gluonhq.connect.GluonObservableObject;
-import com.gluonhq.connect.provider.DataProvider;
-import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -12,7 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -21,30 +17,26 @@ import javafx.stage.StageStyle;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
-import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.domain.tree.SelectorTree;
 import rs.acs.uns.sw.govrs.client.fx.editor.PopupEditorController;
-import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorInit;
-import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
+import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorOptions;
 
 import java.io.InputStream;
 
-public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEditorInit> {
+public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEditorOptions> {
 
     private final Button btnEditor;
     private final PropertySheet.Item item;
-    private final ObjectProperty<PopupEditorInit> value = new SimpleObjectProperty<>();
+    private final ObjectProperty<PopupEditorOptions> value = new SimpleObjectProperty<>();
 
     private PopupEditorController controller;
     private AnchorPane rootPane;
 
     public PopupPropertyElementEditorEditor(PropertySheet.Item item) {
         this.item = item;
-        PopupEditorInit cont = (PopupEditorInit)item.getValue();
+        PopupEditorOptions cont = (PopupEditorOptions)item.getValue();
         if (cont != null && !cont.isCreateNew() ) {
             btnEditor = new Button(cont.getElement().getElementName());
-            value.set((PopupEditorInit) item.getValue());
+            value.set((PopupEditorOptions) item.getValue());
         } else {
             btnEditor = new Button("<nije izabran>");
         }
@@ -81,7 +73,13 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
             stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(btnEditor.getScene().getWindow());
             stage.showAndWait();
+            getValue().setElement(controller.getSelectedElement());
+            if (getValue().getElement() != null) {
+                getValue().setCreateNew(false);
+            }
+            btnEditor.setText("<" + getValue().getTypeOfElement() + "> " + getValue().getElement().getElementName() + " (" + getValue().getElement().idProperty().get() + ")" );
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("WTF");
         }
 
@@ -95,12 +93,12 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
     }
 
     @Override
-    public PopupEditorInit getValue() {
+    public PopupEditorOptions getValue() {
         return value.get();
     }
 
     @Override
-    public void setValue(PopupEditorInit value) {
+    public void setValue(PopupEditorOptions value) {
         this.value.set(value);
         if (!value.isCreateNew() ) {
             btnEditor.setText(value.getElement().getElementName());
