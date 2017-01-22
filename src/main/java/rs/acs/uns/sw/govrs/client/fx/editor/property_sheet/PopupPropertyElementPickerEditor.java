@@ -12,12 +12,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
@@ -26,29 +23,27 @@ import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.amendments.ElementPicker;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.SelectorTree;
-import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
-import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.ALAContainer;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.SelectionInfo;
 
 import java.io.InputStream;
 
-public class PopupPropertyElementPickerEditor implements PropertyEditor<ALAContainer> {
+public class PopupPropertyElementPickerEditor implements PropertyEditor<SelectionInfo> {
 
     private final Button btnEditor;
     private final PropertySheet.Item item;
-    private final ObjectProperty<ALAContainer> value = new SimpleObjectProperty<>();
+    private final ObjectProperty<SelectionInfo> value = new SimpleObjectProperty<>();
 
     private ElementPicker picker;
     private AnchorPane pickerPane;
 
     public PopupPropertyElementPickerEditor(PropertySheet.Item item) {
         this.item = item;
-        ALAContainer cont = (ALAContainer)item.getValue();
-        if (cont != null && !cont.currentElementId.equals("")) {
-            btnEditor = new Button(cont.currentElementId);
-            value.set((ALAContainer) item.getValue());
+        SelectionInfo cont = (SelectionInfo)item.getValue();
+        if (cont != null && !cont.elementId.equals("")) {
+            btnEditor = new Button(cont.elementId);
+            value.set((SelectionInfo) item.getValue());
         } else {
             btnEditor = new Button("<nije_izabran>");
         }
@@ -61,8 +56,8 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<ALAConta
         bpi.property.addListener(observable -> {
             value.setValue(bpi.property.get());
             value.setValue(bpi.property.get());
-            if (value.get().currentElementId != null) {
-                btnEditor.setText(value.get().currentElementId);
+            if (value.get().elementId != null) {
+                btnEditor.setText(value.get().elementId);
             } else {
                 btnEditor.setText("<nije izabran>");
             }
@@ -114,7 +109,9 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<ALAConta
                 stage.close();
                 if(picker.getSelectedId() != null) {
                     btnEditor.setText(picker.getSelectedId());
-                    value.get().currentElementId = picker.getSelectedId();
+                    value.get().elementId = picker.getSelectedId();
+                    value.get().elementType = picker.getSelectedType();
+                    System.out.println(value.get().elementType);
                 }
             });
             stage.showAndWait();
@@ -135,12 +132,12 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<ALAConta
     }
 
     @Override
-    public ALAContainer getValue() {
+    public SelectionInfo getValue() {
         return value.get();
     }
 
     @Override
-    public void setValue(ALAContainer value) {
+    public void setValue(SelectionInfo value) {
         this.value.set(value);
     }
 

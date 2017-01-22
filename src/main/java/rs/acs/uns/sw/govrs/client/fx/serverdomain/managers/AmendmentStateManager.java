@@ -10,7 +10,7 @@ import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ButtonPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PopupButtonPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendment;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.ALAContainer;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.SelectionInfo;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentType;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
 
@@ -20,9 +20,9 @@ public class AmendmentStateManager {
     private PopupButtonPropertyItem odredbaEditorPropertyItem;
     private AmendmentTypePropertyItem resenjePropertyItem;
     private PopupEditorInit editorAttrs;
-    private ALAContainer alac;
+    private SelectionInfo alac;
     private ObjectProperty<AmendmentType> resenjeProperty;
-    private ObjectProperty<ALAContainer> alacProperty;
+    private ObjectProperty<SelectionInfo> alacProperty;
     private ObjectProperty<PopupEditorInit>  editorAttrsProperty;
 
     public AmendmentStateManager(Amendment amendment) {
@@ -35,10 +35,10 @@ public class AmendmentStateManager {
                 "Predlog rešenja",
                 true);
 
-        alac = new ALAContainer(
+        alac = new SelectionInfo(
                 ((Amendments)amendment.getElementParent()).getHead().getPropis().getRef().getId(),
                 amendment.getHead().getPredmet().getRef().getId(),
-                amendment
+                ElementTypes.Article
         );
         alacProperty = new SimpleObjectProperty<>(alac);
         predmetPickerPropertyItem= new ButtonPropertyItem(
@@ -63,10 +63,10 @@ public class AmendmentStateManager {
             System.out.println(newValue);
 
             editorAttrs = new PopupEditorInit("string", true, null, ElementTypes.Article);
-            alac = new ALAContainer(
+            alac = new SelectionInfo(
                     ((Amendments)amendment.getElementParent()).getHead().getPropis().getRef().getId(),
                     null,
-                    amendment
+                    ElementTypes.Article
             );
 
             odredbaEditorPropertyItem.property.set(editorAttrs);
@@ -94,7 +94,7 @@ public class AmendmentStateManager {
         return editorAttrs;
     }
 
-    public ALAContainer getAlac() {
+    public SelectionInfo getAlac() {
         return alac;
     }
 }

@@ -4,7 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.ALAContainer;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.SelectionInfo;
 
 import java.util.Optional;
 
@@ -13,9 +13,9 @@ public class ButtonPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    public ObjectProperty<ALAContainer> property;
+    public ObjectProperty<SelectionInfo> property;
 
-    public ButtonPropertyItem(ObjectProperty<ALAContainer> property, String category, String name, String description, boolean editable) {
+    public ButtonPropertyItem(ObjectProperty<SelectionInfo> property, String category, String name, String description, boolean editable) {
         this.property = property;
         this.category = category;
         this.description = description;
@@ -50,7 +50,7 @@ public class ButtonPropertyItem implements PropertySheet.Item {
 
     @Override
     public void setValue(Object value) {
-        property.set((ALAContainer) value);
+        property.set((SelectionInfo) value);
     }
 
     @Override
