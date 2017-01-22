@@ -8,19 +8,21 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.IndexRange;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeController;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
+import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorInit;
+import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
@@ -29,7 +31,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 
 import java.util.function.Function;
 
-public class PopupEditorController {
+public class PopupEditorController implements TreeController{
     /**
      * Attribute for CSS change of buttons
      */
@@ -74,6 +76,8 @@ public class PopupEditorController {
 
     @FXML
     private PropertySheet propertySheet;
+
+    private PopupEditorInit initObject;
 
     private TreeModel tree;
     // -------------------------------------------------
@@ -128,13 +132,28 @@ public class PopupEditorController {
 
     }
 
-    public void initElements() {
+    public void initElements(PopupEditorInit init) {
+        initObject = init;
+        if (initObject.isCreateNew()) {
 
+        } else {
+
+        }
+        tree = new TreeModel(
+                init.getElement(),
+                Element::getChildren,
+                Element::elementNameProperty,
+                this
+        );
+
+        TreeView<Element> treeView = tree.getTreeView();
+        treeContainer.setContent(treeView);
     }
 
     @FXML
     public void saveAction() {
-
+        initObject.setSaved(true);
+        ((Stage)treeContainer.getScene().getWindow()).close();
     }
     @FXML
     public void cancelAction() {
@@ -362,6 +381,11 @@ public class PopupEditorController {
 
     public Element getSelectedElement() {
         return selectedElement;
+    }
+
+    @Override
+    public HtmlPreview getPreview() {
+        return null;
     }
 
     /**

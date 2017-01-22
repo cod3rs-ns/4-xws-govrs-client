@@ -27,6 +27,7 @@ import org.fxmisc.richtext.StyledTextArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeController;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
@@ -53,7 +54,7 @@ import java.util.logging.Logger;
 /**
  * Used for creating Laws.
  */
-public class XMLEditorController {
+public class XMLEditorController implements TreeController{
     /** Attribute for CSS change of buttons*/
     private static final String PRESSED = "pressed";
 
@@ -108,7 +109,7 @@ public class XMLEditorController {
     // -------------------------------------------------
 
     // ------------------ components -------------------
-    public HtmlPreview preview;
+    private HtmlPreview preview;
     private TreeModel tree;
     private PropertySheet propertySheet;
     // -------------------------------------------------
@@ -617,6 +618,10 @@ public class XMLEditorController {
             selElement.setElementContent(newValue);
             preview.update();
         };
+    }
+
+    public HtmlPreview getPreview() {
+        return preview;
     }
 
 }

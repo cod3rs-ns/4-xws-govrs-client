@@ -317,7 +317,9 @@ public class Amendment extends Element {
                 "Element na koji se odnosi",
                 true
         );
-        PopupEditorInit editor = new PopupEditorInit("string", true, null);
+        Element e = getBody().getOdredba().getClan();
+        e.initElement();
+        PopupEditorInit editor = new PopupEditorInit("string", false, e);
         PopupButtonPropertyItem elementEditorPropertyItem = new PopupButtonPropertyItem(
                 new SimpleObjectProperty<PopupEditorInit>(editor),
                 "Propis",

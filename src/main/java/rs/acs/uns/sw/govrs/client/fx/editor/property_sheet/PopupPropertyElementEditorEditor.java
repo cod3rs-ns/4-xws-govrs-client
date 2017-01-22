@@ -62,7 +62,7 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
         try (InputStream in = MainFXApp.class.getResourceAsStream("/editor/EditorPopup.fxml")) {
             rootPane = loader.load(in);
             controller = loader.getController();
-
+            controller.initElements(getValue());
             /*
             SelectorTree tree = new SelectorTree(
                     law,
