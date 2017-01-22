@@ -34,7 +34,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.ALAContainer;
 
 import java.io.InputStream;
 
-public class PopupPropertyEditor implements PropertyEditor<ALAContainer> {
+public class PopupPropertyElementPickerEditor implements PropertyEditor<ALAContainer> {
 
     private final Button btnEditor;
     private final PropertySheet.Item item;
@@ -43,10 +43,10 @@ public class PopupPropertyEditor implements PropertyEditor<ALAContainer> {
     private ElementPicker picker;
     private AnchorPane pickerPane;
 
-    public PopupPropertyEditor(PropertySheet.Item item) {
+    public PopupPropertyElementPickerEditor(PropertySheet.Item item) {
         this.item = item;
         ALAContainer cont = (ALAContainer)item.getValue();
-        if (cont != null || !cont.currentElementId.equals("")) {
+        if (cont != null && !cont.currentElementId.equals("")) {
             btnEditor = new Button(cont.currentElementId);
             value.set((ALAContainer) item.getValue());
         } else {

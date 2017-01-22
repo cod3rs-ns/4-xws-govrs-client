@@ -13,8 +13,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorInit;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentTypePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ButtonPropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PopupButtonPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentTypeAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
@@ -315,6 +317,14 @@ public class Amendment extends Element {
                 "Element na koji se odnosi",
                 true
         );
+        PopupEditorInit editor = new PopupEditorInit("string", true, null);
+        PopupButtonPropertyItem elementEditorPropertyItem = new PopupButtonPropertyItem(
+                new SimpleObjectProperty<PopupEditorInit>(editor),
+                "Propis",
+                "Odredba",
+                "Nova ili izmenjena odredba",
+                true
+        );
         getPropertyItems().add(idPropertyItem);
         getPropertyItems().add(namePropertyItem);
         getPropertyItems().add(rjesenjePropertyItem);
@@ -323,6 +333,7 @@ public class Amendment extends Element {
         getPropertyItems().add(ciljPropertyItem);
         getPropertyItems().add(uticajPropertyItem);
         getPropertyItems().add(elementPickerPropertyItem);
+        getPropertyItems().add(elementEditorPropertyItem);
     }
 
     @Override
