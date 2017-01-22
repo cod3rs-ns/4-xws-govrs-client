@@ -53,6 +53,9 @@ public class ContextMenuHandler {
         if (element instanceof StringWrapper) {
             return this.createTextContextMenu((StringWrapper) element);
         }
+        if (element instanceof Amendment) {
+            return this.createDeleteAmendmentContextMenu((Amendment) element);
+        }
         return null;
     }
 
@@ -183,6 +186,20 @@ public class ContextMenuHandler {
         MenuItem deleteMenuItem = createDeleteMenuItem();
         contextMenu.getItems().add(deleteMenuItem);
         createDeleteAction(deleteMenuItem, item);
+        return contextMenu;
+    }
+
+    private ContextMenu createDeleteAmendmentContextMenu(Amendment amendment) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deleteMenuItem = createDeleteMenuItem();
+        contextMenu.getItems().add(deleteMenuItem);
+        deleteMenuItem.setOnAction(event -> {
+            Alert deleteAlert = CustomDialogCreator.createDeleteConfirmationDialog(amendment.getElementName());
+            Optional<ButtonType> result = deleteAlert.showAndWait();
+            if (result.get() == CustomDialogCreator.YES) {
+                amendment.getElementParent().removeChild(amendment);
+            }
+        });
         return contextMenu;
     }
 

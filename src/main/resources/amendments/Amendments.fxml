@@ -17,16 +17,16 @@
    <children>
       <SplitPane dividerPositions="0.2234982332155477, 0.6439929328621908" prefHeight="600.0" prefWidth="1134.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <AnchorPane maxWidth="350.0" minWidth="250.0" prefWidth="250.0">
+            <AnchorPane maxWidth="244.0" minWidth="244.0" prefWidth="244.0">
                <children>
-                  <TitledPane fx:id="tableContainer" collapsible="false" maxWidth="250.0" minWidth="250.0" prefHeight="598.0" prefWidth="250.0" text="Struktura amandmana" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane collapsible="false" maxWidth="244.0" minWidth="244.0" prefHeight="598.0" prefWidth="244.0" text="Struktura amandmana" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </padding>
                      <content>
-                        <TableView fx:id="amendmentsTable" prefHeight="150.0" prefWidth="200.0">
+                        <TableView fx:id="amendmentsTable" onContextMenuRequested="#createTableContextMenu" prefWidth="244.0">
                           <columns>
-                            <TableColumn fx:id="amendmentNameColumn" maxWidth="-1.0" minWidth="240.0" prefWidth="300.0" resizable="false" text="Naziv" />
+                            <TableColumn fx:id="amendmentNameColumn" maxWidth="244.0" minWidth="244.0" prefWidth="244.0" resizable="false" text="Naziv" />
                           </columns>
                         </TableView>
                      </content>

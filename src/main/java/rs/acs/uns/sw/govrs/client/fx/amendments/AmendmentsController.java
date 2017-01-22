@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.domain.tree.ContextMenuHandler;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.ResultInputConverter;
@@ -318,6 +319,16 @@ public class AmendmentsController {
         amendments.createAndAddChild(ObjectCreator.createOneAmendment());
     }
 
+    @FXML
+    private void createTableContextMenu() {
+        Element element = amendmentsTable.getSelectionModel().selectedItemProperty().get();
+        if (element != null) {
+            Amendment a = (Amendment)element;
+            ContextMenuHandler cmh = new ContextMenuHandler();
+            ContextMenu contextMenu = cmh.createContextMenu(a);
+            amendmentsTable.setContextMenu(contextMenu);
+        }
+    }
 
 
     public void setStateManager(StateManager stateManager) {

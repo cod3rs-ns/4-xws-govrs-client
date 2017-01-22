@@ -366,7 +366,8 @@ public class Amendments extends Element {
 
     @Override
     public void removeChild(Element element) {
-
+        getChildren().remove(element);
+        getBody().getAmandman().remove((Amendment)element);
     }
 
     @Override
