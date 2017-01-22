@@ -11,6 +11,7 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyCleanerAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -93,19 +94,19 @@ import java.util.List;
 public class Explanation {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
     protected StringProperty razlog = new SimpleStringProperty("");
 
     @XmlElement(name = "objasnjene_predlozenog_rjesenja", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
     protected StringProperty objasnjenePredlozenogRjesenja = new SimpleStringProperty("");
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
     protected StringProperty cilj = new SimpleStringProperty("");
 
     @XmlElement(name = "uticaj_na_budzetska_sredstva", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    @XmlJavaTypeAdapter(StringPropertyAdapter.class)
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
     protected StringProperty uticajNaBudzetskaSredstva = new SimpleStringProperty("");
 
     /**
