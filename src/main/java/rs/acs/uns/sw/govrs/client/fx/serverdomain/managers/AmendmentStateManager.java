@@ -23,27 +23,27 @@ public class AmendmentStateManager {
     private SelectionInfo alac;
     private ObjectProperty<AmendmentType> resenjeProperty;
     private ObjectProperty<SelectionInfo> alacProperty;
-    private ObjectProperty<PopupEditorInit>  editorAttrsProperty;
+    private ObjectProperty<PopupEditorInit> editorAttrsProperty;
 
     public AmendmentStateManager(Amendment amendment) {
         this.amendment = amendment;
         resenjeProperty = amendment.getHead().rjesenjeProperty();
         resenjePropertyItem = new AmendmentTypePropertyItem(
                 resenjeProperty,
-                "Generalno",
+                "Predmet",
                 "Rešenje",
                 "Predlog rešenja",
                 true);
 
         alac = new SelectionInfo(
-                ((Amendments)amendment.getElementParent()).getHead().getPropis().getRef().getId(),
+                ((Amendments) amendment.getElementParent()).getHead().getPropis().getRef().getId(),
                 amendment.getHead().getPredmet().getRef().getId(),
                 ElementTypes.Article
         );
         alacProperty = new SimpleObjectProperty<>(alac);
-        predmetPickerPropertyItem= new ButtonPropertyItem(
+        predmetPickerPropertyItem = new ButtonPropertyItem(
                 alacProperty,
-                "Propis",
+                "Predmet",
                 "Predmet",
                 "Element na koji se odnosi",
                 true
@@ -53,8 +53,8 @@ public class AmendmentStateManager {
         editorAttrs = new PopupEditorInit("string", false, e, ElementTypes.Article);
         editorAttrsProperty = new SimpleObjectProperty<>(editorAttrs);
         odredbaEditorPropertyItem = new PopupButtonPropertyItem(
-                new SimpleObjectProperty<PopupEditorInit>(editorAttrs),
-                "Propis",
+                editorAttrsProperty,
+                "Predmet",
                 "Odredba",
                 "Nova ili izmenjena odredba",
                 true
@@ -64,13 +64,28 @@ public class AmendmentStateManager {
 
             editorAttrs = new PopupEditorInit("string", true, null, ElementTypes.Article);
             alac = new SelectionInfo(
-                    ((Amendments)amendment.getElementParent()).getHead().getPropis().getRef().getId(),
+                    ((Amendments) amendment.getElementParent()).getHead().getPropis().getRef().getId(),
                     null,
                     ElementTypes.Article
             );
 
             odredbaEditorPropertyItem.property.set(editorAttrs);
             predmetPickerPropertyItem.property.set(alac);
+
+            // hide 'Odredba' field if not needed
+            if (newValue == AmendmentType.Brisanje) {
+                amendment.getPropertyItems().remove(odredbaEditorPropertyItem);
+            } else {
+                amendment.getPropertyItems().remove(odredbaEditorPropertyItem);
+                odredbaEditorPropertyItem = new PopupButtonPropertyItem(
+                        editorAttrsProperty,
+                        "Predmet",
+                        "Odredba",
+                        "Nova ili izmenjena odredba",
+                        true
+                );
+                amendment.getPropertyItems().add(odredbaEditorPropertyItem);
+            }
         });
     }
 

@@ -298,11 +298,11 @@ public class Amendment extends Element {
         AmendmentStateManager stateManager = new AmendmentStateManager(this);
         getPropertyItems().add(idPropertyItem);
         getPropertyItems().add(namePropertyItem);
-        getPropertyItems().add(stateManager.getResenjePropertyItem());
         getPropertyItems().add(razlogPropertyItem);
         getPropertyItems().add(objasnjenjePropertyItem);
         getPropertyItems().add(ciljPropertyItem);
         getPropertyItems().add(uticajPropertyItem);
+        getPropertyItems().add(stateManager.getResenjePropertyItem());
         getPropertyItems().add(stateManager.getPredmetPickerPropertyItem());
         getPropertyItems().add(stateManager.getOdredbaEditorPropertyItem());
     }

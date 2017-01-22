@@ -41,7 +41,7 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
     public PopupPropertyElementPickerEditor(PropertySheet.Item item) {
         this.item = item;
         SelectionInfo cont = (SelectionInfo)item.getValue();
-        if (cont != null && !cont.elementId.equals("")) {
+        if (cont != null && cont.elementId != null) {
             btnEditor = new Button(cont.elementId);
             value.set((SelectionInfo) item.getValue());
         } else {

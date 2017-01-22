@@ -4,6 +4,7 @@ import com.gluonhq.connect.ConnectState;
 import com.gluonhq.connect.GluonObservableObject;
 import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -109,7 +110,15 @@ public class AmendmentsController {
                         amendmentProperties.getItems().clear();
                         amendmentProperties.getItems().addAll(newValue.getPropertyItems());
                         preview.update();
+                        newValue.getPropertyItems().addListener(new ListChangeListener<PropertySheet.Item>() {
+                            @Override
+                            public void onChanged(Change<? extends PropertySheet.Item> c) {
+                                amendmentProperties.getItems().clear();
+                                amendmentProperties.getItems().addAll(newValue.getPropertyItems());
+                            }
+                        });
                     }
+
                 });
 
     }
