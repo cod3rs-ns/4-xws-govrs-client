@@ -5,6 +5,9 @@ import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
+
+import java.util.List;
 
 
 public class StringWrapper extends Element{
@@ -105,4 +108,8 @@ public class StringWrapper extends Element{
         return new SimpleStringProperty("text");
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+
+    }
 }

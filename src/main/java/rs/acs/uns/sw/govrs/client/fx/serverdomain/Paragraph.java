@@ -16,6 +16,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter
 import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -27,9 +28,9 @@ import java.util.logging.Logger;
 
 /**
  * <p>Java class for stav element declaration.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;element name="stav">
  *   &lt;complexType>
@@ -44,12 +45,10 @@ import java.util.logging.Logger;
  *   &lt;/complexType>
  * &lt;/element>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "content"
+        "content"
 })
 @XmlRootElement(name = "stav", namespace = "http://www.parlament.gov.rs/schema/elementi")
 public class Paragraph extends Element {
@@ -70,26 +69,24 @@ public class Paragraph extends Element {
 
     /**
      * Gets the value of the content property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the content property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getContent().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link String }
      * {@link Clause }
-     * 
-     * 
      */
     public List<Object> getContent() {
         if (content == null) {
@@ -100,11 +97,9 @@ public class Paragraph extends Element {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
         return id.get();
@@ -112,11 +107,9 @@ public class Paragraph extends Element {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
         this.id.set(value);
@@ -129,10 +122,8 @@ public class Paragraph extends Element {
     /**
      * Gets the value of the name property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+     * @return possible object is
+     * {@link String }
      */
     public String getElementName() {
         return name.get();
@@ -141,10 +132,8 @@ public class Paragraph extends Element {
     /**
      * Sets the value of the name property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setElementName(String value) {
         this.name.set(value);
@@ -166,12 +155,12 @@ public class Paragraph extends Element {
     @Override
     public void initElement() {
         // add all clauses and all chunks of text content
-        for (Object o:getContent()) {
+        for (Object o : getContent()) {
             if (o instanceof Clause) {
-                Clause e = (Clause)o;
+                Clause e = (Clause) o;
                 getChildren().add(e);
             } else {
-                if(!StringCleaner.checkIsEmpty(o.toString())){
+                if (!StringCleaner.checkIsEmpty(o.toString())) {
                     StringWrapper se = new StringWrapper(o);
                     getChildren().add(se);
                 }
@@ -179,13 +168,12 @@ public class Paragraph extends Element {
         }
 
         // init observable list for all children
-        for (Element e: getChildren()) {
+        for (Element e : getChildren()) {
             e.setElementParent(this);
             e.initElement();
         }
         createPropertyAttrs();
     }
-
 
 
     @Override
@@ -213,7 +201,7 @@ public class Paragraph extends Element {
             getChildren().remove(element);
         } else if (element instanceof StringWrapper) {
             getChildren().remove(element);
-            getContent().remove(((StringWrapper)element).getWrappedObject());
+            getContent().remove(((StringWrapper) element).getWrappedObject());
         } else {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Invalid type of element to delete.");
         }
@@ -241,8 +229,8 @@ public class Paragraph extends Element {
     @Override
     public void preMarshaller() {
         getContent().clear();
-        for (Element e: getChildren()) {
-            if(e instanceof StringWrapper) {
+        for (Element e : getChildren()) {
+            if (e instanceof StringWrapper) {
                 // add TextOnly
                 getContent().add(e.getElementContent());
             } else {
@@ -252,8 +240,23 @@ public class Paragraph extends Element {
         }
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Paragraph, "Ime stava je obavezno."));
+        if (getChildren().size() == 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Paragraph, "Stav ne može biti prazan."));
+        else {
+            for (int i = 1; i < getChildren().size(); i++) {
+                if (getChildren().get(i) instanceof StringWrapper) {
+                    errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Paragraph, "Stav ne može imati nestruktuiran tekst nakon tačke."));
+                }
+            }
+        }
 
-
-
-
+        // validate children elements
+        for (Element child : getChildren()) {
+            child.validate(errorMessageList);
+        }
+    }
 }
