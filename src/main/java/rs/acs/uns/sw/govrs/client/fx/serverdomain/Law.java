@@ -2,12 +2,15 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
 import javafx.beans.property.*;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.DocumentStatusPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.IntegerPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.LocalDatePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DatePropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DocumentStatusAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -230,7 +233,7 @@ public class Law  extends Element{
                 "Naziv",
                 "Naziv elementa",
                 true);
-        StringPropertyItem statusPropertyItem = new StringPropertyItem(
+        DocumentStatusPropertyItem statusPropertyItem = new DocumentStatusPropertyItem(
                 getHead().getStatus().valueProperty(),
                 "Status",
                 "Status predloga",
@@ -1225,9 +1228,9 @@ public class Law  extends Element{
         public static class Status {
 
             @XmlValue
-            @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-            protected StringProperty value = new SimpleStringProperty("kreiran");
-            //TODO
+            @XmlJavaTypeAdapter(DocumentStatusAdapter.class)
+            protected ObjectProperty<DocumentStatus> value = new SimpleObjectProperty<>(DocumentStatus.Predlozen);
+
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -1240,7 +1243,18 @@ public class Law  extends Element{
              *     
              */
             public String getValue() {
-                return value.get();
+                if (value.get() == DocumentStatus.Predlozen) {
+                    return "predložen";
+                }
+
+                if (value.get() == DocumentStatus.Prihvacen) {
+                    return "prihvaćen";
+                }
+
+                if (value.get() == DocumentStatus.Odbijen) {
+                    return "odbijen";
+                }
+                return "";
             }
 
             /**
@@ -1252,10 +1266,18 @@ public class Law  extends Element{
              *     
              */
             public void setValue(String value) {
-                this.value.set(value);
+                if (value.equals("predložen")) {
+                    this.value.set(DocumentStatus.Predlozen);
+                }
+                if (value.equals("prihvaćen")) {
+                    this.value.set(DocumentStatus.Prihvacen);
+                }
+                if (value.equals("odbijen")) {
+                    this.value.set(DocumentStatus.Odbijen);
+                }
             }
 
-            public StringProperty valueProperty() {
+            public ObjectProperty<DocumentStatus> valueProperty() {
                 return value;
             }
             /**

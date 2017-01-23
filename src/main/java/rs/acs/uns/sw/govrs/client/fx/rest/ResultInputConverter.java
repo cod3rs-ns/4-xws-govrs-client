@@ -1,7 +1,8 @@
 package rs.acs.uns.sw.govrs.client.fx.rest;
 
+
 import com.gluonhq.connect.converter.InputStreamInputConverter;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -12,9 +13,15 @@ import java.util.logging.Logger;
 /**
  * Converts response body to SearchResult.
  */
-public class SearchResultInputConverter extends InputStreamInputConverter<SearchResult> {
+public class ResultInputConverter extends InputStreamInputConverter<Object> {
+    private Class<?> returnObjectType;
+
+    public ResultInputConverter(Class<?> classType) {
+        returnObjectType = classType;
+    }
+
     @Override
-    public SearchResult read() {
+    public Object read() {
         try (StringWriter stringWriter = new StringWriter()) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(getInputStream()));
                  BufferedWriter writer = new BufferedWriter(stringWriter)) {
@@ -29,13 +36,13 @@ public class SearchResultInputConverter extends InputStreamInputConverter<Search
                     writer.write(line);
                 }
             }
-            //Logger.getLogger(SearchResultInputConverter.class.getName()).log(Level.INFO, stringWriter.toString());
-            JAXBContext context = JAXBContext.newInstance(SearchResult.class);
+            //Logger.getLogger(LawInputConverter.class.getName()).log(Level.INFO, stringWriter.toString());
+            JAXBContext context = JAXBContext.newInstance(returnObjectType);
             Unmarshaller unMarshaller = context.createUnmarshaller();
-            return (SearchResult) unMarshaller.unmarshal(new StringReader(stringWriter.toString()));
+            return unMarshaller.unmarshal(new StringReader(stringWriter.toString()));
 
         } catch (Exception ex) {
-            Logger.getLogger(SearchResultInputConverter.class.getName()).log(Level.SEVERE, "Convert error", ex);
+            Logger.getLogger(LawInputConverter.class.getName()).log(Level.SEVERE, "Convert error", ex);
             return null;
         }
     }

@@ -8,7 +8,13 @@
 
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyCleanerAdapter;
+
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,33 +85,40 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "razlog",
-    "objasnjenePredlozenogRjesenja",
-    "cilj",
-    "uticajNaBudzetskaSredstva"
+        "razlog",
+        "objasnjenePredlozenogRjesenja",
+        "cilj",
+        "uticajNaBudzetskaSredstva"
 })
 @XmlRootElement(name = "obrazlozenje", namespace = "http://www.parlament.gov.rs/schema/amandman")
 public class Explanation {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    protected Razlog razlog;
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
+    protected StringProperty razlog = new SimpleStringProperty("");
+
     @XmlElement(name = "objasnjene_predlozenog_rjesenja", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    protected ObjasnjenePredlozenogRjesenja objasnjenePredlozenogRjesenja;
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
+    protected StringProperty objasnjenePredlozenogRjesenja = new SimpleStringProperty("");
+
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    protected Cilj cilj;
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
+    protected StringProperty cilj = new SimpleStringProperty("");
+
     @XmlElement(name = "uticaj_na_budzetska_sredstva", namespace = "http://www.parlament.gov.rs/schema/amandman", required = true)
-    protected UticajNaBudzetskaSredstva uticajNaBudzetskaSredstva;
+    @XmlJavaTypeAdapter(StringPropertyCleanerAdapter.class)
+    protected StringProperty uticajNaBudzetskaSredstva = new SimpleStringProperty("");
 
     /**
      * Gets the value of the razlog property.
      *
      * @return
      *     possible object is
-     *     {@link Razlog }
+     *     {@link String }
      *
      */
-    public Razlog getRazlog() {
-        return razlog;
+    public String getRazlog() {
+        return razlog.get();
     }
 
     /**
@@ -113,11 +126,15 @@ public class Explanation {
      *
      * @param value
      *     allowed object is
-     *     {@link Razlog }
+     *     {@link String }
      *
      */
-    public void setRazlog(Razlog value) {
-        this.razlog = value;
+    public void setRazlog(String value) {
+        this.razlog.set(value);
+    }
+
+    public StringProperty razlogProperty() {
+        return razlog;
     }
 
     /**
@@ -125,11 +142,11 @@ public class Explanation {
      *
      * @return
      *     possible object is
-     *     {@link ObjasnjenePredlozenogRjesenja }
+     *     {@link String }
      *
      */
-    public ObjasnjenePredlozenogRjesenja getObjasnjenePredlozenogRjesenja() {
-        return objasnjenePredlozenogRjesenja;
+    public String getObjasnjenePredlozenogRjesenja() {
+        return objasnjenePredlozenogRjesenja.get();
     }
 
     /**
@@ -137,11 +154,15 @@ public class Explanation {
      *
      * @param value
      *     allowed object is
-     *     {@link ObjasnjenePredlozenogRjesenja }
+     *     {@link String }
      *
      */
-    public void setObjasnjenePredlozenogRjesenja(ObjasnjenePredlozenogRjesenja value) {
-        this.objasnjenePredlozenogRjesenja = value;
+    public void setObjasnjenePredlozenogRjesenja(String value) {
+        this.objasnjenePredlozenogRjesenja.set(value);
+    }
+
+    public StringProperty objasnjenjePredlozenogRjesenjaProperty() {
+        return objasnjenePredlozenogRjesenja;
     }
 
     /**
@@ -149,11 +170,11 @@ public class Explanation {
      *
      * @return
      *     possible object is
-     *     {@link Cilj }
+     *     {@link String }
      *
      */
-    public Cilj getCilj() {
-        return cilj;
+    public String getCilj() {
+        return cilj.get();
     }
 
     /**
@@ -161,11 +182,15 @@ public class Explanation {
      *
      * @param value
      *     allowed object is
-     *     {@link Cilj }
+     *     {@link String }
      *
      */
-    public void setCilj(Cilj value) {
-        this.cilj = value;
+    public void setCilj(String value) {
+        this.cilj.set(value);
+    }
+
+    public StringProperty ciljProperty() {
+        return cilj;
     }
 
     /**
@@ -173,11 +198,11 @@ public class Explanation {
      *
      * @return
      *     possible object is
-     *     {@link UticajNaBudzetskaSredstva }
+     *     {@link String }
      *
      */
-    public UticajNaBudzetskaSredstva getUticajNaBudzetskaSredstva() {
-        return uticajNaBudzetskaSredstva;
+    public String getUticajNaBudzetskaSredstva() {
+        return uticajNaBudzetskaSredstva.get();
     }
 
     /**
@@ -185,259 +210,15 @@ public class Explanation {
      *
      * @param value
      *     allowed object is
-     *     {@link UticajNaBudzetskaSredstva }
+     *     {@link String }
      *
      */
-    public void setUticajNaBudzetskaSredstva(UticajNaBudzetskaSredstva value) {
-        this.uticajNaBudzetskaSredstva = value;
+    public void setUticajNaBudzetskaSredstva(String value) {
+        this.uticajNaBudzetskaSredstva.set(value);
     }
 
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;sequence>
-     *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}ref" maxOccurs="unbounded" minOccurs="0"/>
-     *       &lt;/sequence>
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "content"
-    })
-    public static class Cilj {
-
-        @XmlElementRef(name = "ref", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Ref.class, required = false)
-        @XmlMixed
-        protected List<Object> content;
-
-        /**
-         * Gets the value of the content property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the content property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getContent().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link String }
-         * {@link Ref }
-         * 
-         * 
-         */
-        public List<Object> getContent() {
-            if (content == null) {
-                content = new ArrayList<Object>();
-            }
-            return this.content;
-        }
-
-    }
-
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;sequence>
-     *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}ref" maxOccurs="unbounded" minOccurs="0"/>
-     *       &lt;/sequence>
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "content"
-    })
-    public static class ObjasnjenePredlozenogRjesenja {
-
-        @XmlElementRef(name = "ref", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Ref.class, required = false)
-        @XmlMixed
-        protected List<Object> content;
-
-        /**
-         * Gets the value of the content property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the content property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getContent().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link String }
-         * {@link Ref }
-         * 
-         * 
-         */
-        public List<Object> getContent() {
-            if (content == null) {
-                content = new ArrayList<Object>();
-            }
-            return this.content;
-        }
-
-    }
-
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;sequence>
-     *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}ref" maxOccurs="unbounded" minOccurs="0"/>
-     *       &lt;/sequence>
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "content"
-    })
-    public static class Razlog {
-
-        @XmlElementRef(name = "ref", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Ref.class, required = false)
-        @XmlMixed
-        protected List<Object> content;
-
-        /**
-         * Gets the value of the content property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the content property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getContent().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link String }
-         * {@link Ref }
-         * 
-         * 
-         */
-        public List<Object> getContent() {
-            if (content == null) {
-                content = new ArrayList<Object>();
-            }
-            return this.content;
-        }
-
-    }
-
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType>
-     *   &lt;complexContent>
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;sequence>
-     *         &lt;element ref="{http://www.parlament.gov.rs/schema/elementi}ref" maxOccurs="unbounded" minOccurs="0"/>
-     *       &lt;/sequence>
-     *     &lt;/restriction>
-     *   &lt;/complexContent>
-     * &lt;/complexType>
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "content"
-    })
-    public static class UticajNaBudzetskaSredstva {
-
-        @XmlElementRef(name = "ref", namespace = "http://www.parlament.gov.rs/schema/elementi", type = Ref.class, required = false)
-        @XmlMixed
-        protected List<Object> content;
-
-        /**
-         * Gets the value of the content property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the content property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getContent().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link String }
-         * {@link Ref }
-         * 
-         * 
-         */
-        public List<Object> getContent() {
-            if (content == null) {
-                content = new ArrayList<Object>();
-            }
-            return this.content;
-        }
-
+    public StringProperty uticajNaBudzetskaSredstvaProperty() {
+        return uticajNaBudzetskaSredstva;
     }
 
 }

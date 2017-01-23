@@ -1,0 +1,92 @@
+package rs.acs.uns.sw.govrs.client.fx.editor.help;
+
+import javafx.beans.property.*;
+import rs.acs.uns.sw.govrs.client.fx.domain.Element;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+
+public class PopupEditorOptions {
+    private StringProperty parentIdBase = new SimpleStringProperty();
+    private BooleanProperty createNew = new SimpleBooleanProperty(true);
+    private ObjectProperty<Element> element = new SimpleObjectProperty<>();
+    private BooleanProperty saved = new SimpleBooleanProperty(false);
+    private ObjectProperty<ElementTypes> typeOfElement = new SimpleObjectProperty<>(ElementTypes.None);
+
+
+    public PopupEditorOptions(String parentIdBase, boolean createNew, Element element, ElementTypes typeOfElement) {
+        this.parentIdBase = new SimpleStringProperty(parentIdBase);
+        this.createNew = new SimpleBooleanProperty(createNew);
+        this.element = new SimpleObjectProperty<>(element);
+        this.typeOfElement = new SimpleObjectProperty<>(typeOfElement);
+    }
+
+    public String getParentIdBase() {
+        return parentIdBase.get();
+    }
+
+    public StringProperty parentIdBaseProperty() {
+        return parentIdBase;
+    }
+
+    public void setParentIdBase(String parentIdBase) {
+        this.parentIdBase.set(parentIdBase);
+    }
+
+    public boolean isCreateNew() {
+        return createNew.get();
+    }
+
+    public BooleanProperty createNewProperty() {
+        return createNew;
+    }
+
+    public void setCreateNew(boolean createNew) {
+        this.createNew.set(createNew);
+    }
+
+    public Element getElement() {
+        return element.get();
+    }
+
+    public ObjectProperty<Element> elementProperty() {
+        return element;
+    }
+
+    public void setElement(Element element) {
+        this.element.set(element);
+    }
+
+    public boolean isSaved() {
+        return saved.get();
+    }
+
+    public BooleanProperty savedProperty() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved.set(saved);
+    }
+
+    public ElementTypes getTypeOfElement() {
+        return typeOfElement.get();
+    }
+
+    public ObjectProperty<ElementTypes> typeOfElementProperty() {
+        return typeOfElement;
+    }
+
+    public void setTypeOfElement(ElementTypes typeOfElement) {
+        this.typeOfElement.set(typeOfElement);
+    }
+
+    @Override
+    public String toString() {
+        return "PopupEditorOptions{" +
+                "parentIdBase=" + parentIdBase.get() +
+                ", createNew=" + createNew.get() +
+                ", element=" + element.get() +
+                ", saved=" + saved.get() +
+                ", typeOfElement=" + typeOfElement.get() +
+                '}';
+    }
+}

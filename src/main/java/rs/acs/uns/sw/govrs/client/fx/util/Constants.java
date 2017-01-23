@@ -10,7 +10,7 @@ public class Constants {
     public static final String CITIZEN = "gradjanin";
 
     // Button styles
-    public static final String HOME = "a-home";
+    public static final String SEARCH = "a-home";
     public static final String LAW = "a-law";
     public static final String AMENDMENT = "a-amendment";
     public static final String ALL = "a-all";
@@ -18,7 +18,8 @@ public class Constants {
 
     // FXML
     public static final String LAW_SEARCH_FXML = "/laws/LawsListing.fxml";
-    public static final String NEW_LAW_FXML = "/editor/XMLEditor.fxml";
+    public static final String LAW_EDITOR_FXML = "/editor/XMLEditor.fxml";
+    public static final String AMENDMENTS_EDITOR_FXML = "/amendments/Amendments.fxml";
 
 
     private Constants() {

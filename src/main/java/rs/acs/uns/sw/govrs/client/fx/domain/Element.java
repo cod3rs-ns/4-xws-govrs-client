@@ -75,6 +75,8 @@ public abstract class Element {
 
     public abstract void preMarshaller();
 
+    public abstract StringProperty idProperty();
+
     public ObservableList<PropertySheet.Item> getPropertyItems() {
         return propertyItems;
     }

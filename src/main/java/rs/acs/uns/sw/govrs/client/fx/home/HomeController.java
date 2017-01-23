@@ -8,12 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
@@ -29,72 +31,85 @@ import java.util.logging.Logger;
  * Home stage for every user.
  */
 public class HomeController extends AnchorPane implements Initializable {
+    /**
+     * App's status bar. Providing feedback to active user.
+     */
     @FXML
     public StatusBar statusBar;
-    // === window controls and drag info ===
+    // ===== window controls and drag info =====
     private double mouseDragOffsetX = 0;
     private double mouseDragOffsetY = 0;
     private Rectangle2D winBounds = null;
-    // =====================================
+    private double resizeDragOffsetX;
+    private double resizeDragOffsetY;
+    private double minWidth = 1200;
+    private double minHeight = 600;
+    // =========================================
     private boolean maximized = false;
+    // ======== window's action buttons ========
     @FXML
     private Button closeButton;
     @FXML
     private Button minButton;
+    // =========================================
     @FXML
     private Button maxButton;
-    @FXML
-    private BorderPane container;
+    // ============= user info ui ==============
     @FXML
     private Label userLabel;
     @FXML
     private Label userTypeLabel;
+    // =========================================
     @FXML
     private ImageView userImage;
-    @FXML
-    private VBox actionContainer;
+    // ======== resize and movement ui =========
     @FXML
     private AnchorPane dragPane;
-    @FXML
-    private AnchorPane rootAnchorPane;
+    // =========================================
     @FXML
     private Region resizeButton;
-
+    /**
+     * Component which contains main active UI element dependent of state.
+     */
+    @FXML
+    private BorderPane mainRootContainer;
+    /**
+     * Side actions container.
+     */
+    @FXML
+    private VBox actionContainer;
     private MainFXApp app;
-
     private StateManager stateManager;
-    private double resizeDragOffsetX, resizeDragOffsetY;
-    private double minWidth = 1200;
-    private double minHeight = 600;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // create and init State Manager
         stateManager = new StateManager(this);
-        stateManager.setRootContainer(container);
-        stateManager.setApp(app);
 
-        // Replaced standard window buttons and their actions
+        // replaced standard window buttons and their actions
         closeButton.setOnAction(event -> Platform.exit());
         minButton.setOnAction(event -> app.getStage().setIconified(true));
         maxButton.setOnAction(event -> toggleMax());
 
         // add window dragging
         dragPane.setOnMousePressed(event -> {
-            if (!maximized){
+            if (!maximized) {
                 mouseDragOffsetX = event.getSceneX();
                 mouseDragOffsetY = event.getSceneY();
             }
         });
         dragPane.setOnMouseDragged(event -> {
-            if(!maximized){
+            if (!maximized) {
                 app.getStage().setX(event.getScreenX() - mouseDragOffsetX);
                 app.getStage().setY(event.getScreenY() - mouseDragOffsetY);
             }
         });
         connectResizeButton();
-
     }
 
+    /**
+     * Toggle Maximized window mode.
+     */
     private void toggleMax() {
         final Screen screen = Screen.getScreensForRectangle(app.getStage().getX(), app.getStage().getY(), 1, 1).get(0);
         if (maximized) {
@@ -125,54 +140,83 @@ public class HomeController extends AnchorPane implements Initializable {
         userImage.setImage(new Image(MainFXApp.class.getResourceAsStream("/images/user-info.png")));
     }
 
-    private Button createButton(String type, Runnable action) {
+    /**
+     * Utility function for creating Button object.
+     *
+     * @param type   type of button
+     * @param action action which will be executed on mouse click
+     * @return created Button
+     */
+    private Button createButton(String type, Runnable action, String tooltipText) {
         Button button = new Button();
         button.setPrefHeight(50);
         button.setPrefWidth(50);
         button.getStyleClass().add(type);
+        Tooltip t = new Tooltip(tooltipText);
+        t.setFont(new Font("System", 12));
+        Tooltip.install(button, t);
         button.setOnAction(event ->
                 action.run()
         );
         return button;
     }
 
+    /**
+     * Test action
+     * TODO this is for test purpose only.
+     */
     private void action() {
         Logger.getLogger(HomeController.class.getName()).log(Level.INFO, "Button clicked!");
     }
 
-    private void homeAction() {
+    /**
+     * Action that switches to Search state.
+     */
+    private void searchAction() {
         stateManager.switchState(Constants.LAW_SEARCH_FXML);
     }
 
+    /**
+     * Action that switches to Editor state.
+     */
     private void lawAction() {
-        stateManager.switchState(Constants.NEW_LAW_FXML);
+        stateManager.switchState(Constants.LAW_EDITOR_FXML);
     }
 
+    /**
+     * Action that switches to Amendments Editor state.
+     */
+    private void amendmentAction() {
+        stateManager.switchState(Constants.AMENDMENTS_EDITOR_FXML);
+    }
+
+    /**
+     * Initializes actions for user - Alderman.
+     */
     private void setAldermanActions() {
-        actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
-        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction));
-        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
-        actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
+        actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::amendmentAction, "Amandman"));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
     }
 
+    /**
+     * Initializes actions for user - President.
+     */
     private void setPresidentActions() {
-        actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
-        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction));
-        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action));
-        actionContainer.getChildren().add(createButton(Constants.ALL, this::action));
-        actionContainer.getChildren().add(createButton(Constants.VOTE, this::action));
+        actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
+        actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::amendmentAction, "Amandman"));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
+        actionContainer.getChildren().add(createButton(Constants.VOTE, this::action, "Skupština"));
     }
 
-    @FXML
-    private void logout() {
-        app.logout();
-    }
-
-    public MainFXApp getApp() {
-        return app;
-    }
-
-    public void setApp(MainFXApp app) {
+    /**
+     * Method that <strong>MUST</strong> be called after initialize();
+     *
+     * @param app main application reference
+     */
+    public void setAppAndInitializeActions(MainFXApp app) {
         this.app = app;
         switch (app.getLoggedUser().getType()) {
             case Constants.PRESIDENT:
@@ -182,31 +226,20 @@ public class HomeController extends AnchorPane implements Initializable {
                 setAldermanActions();
                 break;
             default:
-                actionContainer.getChildren().add(createButton(Constants.HOME, this::homeAction));
+                actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
                 break;
         }
-
+        // user info
         this.userLabel.setText(app.getLoggedUser().getFirstName() + ' ' + app.getLoggedUser().getLastName());
         this.userTypeLabel.setText(app.getLoggedUser().getType());
+
+        // first state
         stateManager.switchState(Constants.LAW_SEARCH_FXML);
     }
 
-    public StatusBar getStatusBar() {
-        return statusBar;
-    }
-
-    public void setStatusBar(StatusBar statusBar) {
-        this.statusBar = statusBar;
-    }
-
-    public StateManager getStateManager() {
-        return stateManager;
-    }
-
-    public void setStateManager(StateManager stateManager) {
-        this.stateManager = stateManager;
-    }
-
+    /**
+     * Initializes listeners for resize functionality.
+     */
     private void connectResizeButton() {
         resizeButton.setId("window-resize-button");
         resizeButton.setPrefSize(11, 11);
@@ -231,5 +264,25 @@ public class HomeController extends AnchorPane implements Initializable {
             app.getStage().setHeight(Math.max(minHeight, maxY - app.getStage().getY()));
             e.consume();
         });
+    }
+
+    /**
+     * Perform User's logout functionality.
+     */
+    @FXML
+    private void logout() {
+        app.logout();
+    }
+
+    public BorderPane getMainRootContainer() {
+        return mainRootContainer;
+    }
+
+    public StatusBar getStatusBar() {
+        return statusBar;
+    }
+
+    public MainFXApp getApp() {
+        return app;
     }
 }

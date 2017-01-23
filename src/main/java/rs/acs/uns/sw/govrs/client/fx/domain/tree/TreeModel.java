@@ -16,24 +16,24 @@ public class TreeModel {
     private final TreeView<Element> treeView;
     private final Function<Element, ObservableList<Element>> children;
     private Function<Element, ObservableValue<String>> text;
-    private XMLEditorController editorController;
+    private TreeController treeController;
 
     public TreeModel(Element rootItem, Function<Element, ObservableList<Element>> children,
-                     Function<Element, ObservableValue<String>> text, XMLEditorController controller) {
+                     Function<Element, ObservableValue<String>> text, TreeController controller) {
         this.text = text;
         this.children = children;
-        this.editorController = controller;
+        this.treeController = controller;
 
         treeView = new TreeView<>(createTreeItem(rootItem));
         treeView.setEditable(true);
-        treeView.setCellFactory(p -> new CustomTextFieldTreeCell(text, editorController.preview));
+        treeView.setCellFactory(p -> new CustomTextFieldTreeCell(text, treeController.getPreview()));
         treeView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 TreeItem<Element> item = treeView.getSelectionModel().getSelectedItem();
                 System.out.println(item);
                 // TODO create Logic for displaying in text area
                 if (item != null) {
-                    editorController.setSelectedElement(item.getValue());
+                    treeController.setSelectedElement(item.getValue());
                 }
             }
         });

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import org.controlsfx.control.PropertySheet?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.amendments.AmendmentsController">
+   <children>
+      <SplitPane dividerPositions="0.2234982332155477, 0.6439929328621908" prefHeight="600.0" prefWidth="1134.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane maxWidth="244.0" minWidth="244.0" prefWidth="244.0">
+               <children>
+                  <TitledPane collapsible="false" maxWidth="244.0" minWidth="244.0" prefHeight="598.0" prefWidth="244.0" text="Struktura amandmana" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                     <content>
+                        <TableView fx:id="amendmentsTable" onContextMenuRequested="#createTableContextMenu" prefWidth="244.0">
+                          <columns>
+                            <TableColumn fx:id="amendmentNameColumn" maxWidth="244.0" minWidth="244.0" prefWidth="244.0" resizable="false" text="Naziv" />
+                          </columns>
+                        </TableView>
+                     </content>
+                  </TitledPane>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="8.0" top="2.0" />
+                     </padding>
+                     <children>
+                        <ImageView fx:id="addButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#addAmendment" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/plus.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets right="40.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fx:id="uploadButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#uploadAmendment" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/upload.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="newAmendmentsButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#createNewAmendments" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@../images/buttons/new_law.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="openButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#openAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/buttons/open.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="saveButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#saveAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/buttons/save.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="saveAsButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#saveAsAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/buttons/save_as.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane>
+               <children>
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <AnchorPane>
+                           <children>
+                              <TitledPane collapsible="false" minHeight="300.0" prefHeight="300.0" text="Atributi izabranog amandmana" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <AnchorPane>
+                                       <padding>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <PropertySheet fx:id="amendmentProperties" layoutX="50.0" layoutY="38.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane>
+                           <children>
+                              <TitledPane collapsible="false" minWidth="300.0" prefHeight="248.0" prefWidth="476.0" text="Generalno" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <AnchorPane>
+                                       <children>
+                                          <PropertySheet fx:id="generalProperties" layoutX="66.0" layoutY="115.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                       </padding>
+                                    </AnchorPane>
+                                 </content>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane BorderPane.alignment="TOP_LEFT">
+               <BorderPane.margin>
+                  <Insets left="2.0" right="4.0" />
+               </BorderPane.margin>
+               <children>
+                  <TitledPane fx:id="previewContainer" collapsible="false" minWidth="400.0" prefHeight="598.0" prefWidth="400.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                  </TitledPane>
+               </children>
+            </AnchorPane>
+
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

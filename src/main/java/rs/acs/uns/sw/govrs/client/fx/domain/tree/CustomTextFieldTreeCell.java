@@ -72,7 +72,9 @@ public class CustomTextFieldTreeCell extends TreeCell<Element> {
                 }
                 contextMenu = contextMenuHandler.createContextMenu(getItem());
                 setContextMenu(contextMenu);
-                preview.update();
+                if(preview != null) {
+                    preview.update();
+                }
             }
         }
     }
