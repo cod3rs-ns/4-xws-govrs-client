@@ -444,7 +444,9 @@ public class Amendments extends Element {
 
     @Override
     public void preMarshaller() {
-
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
 

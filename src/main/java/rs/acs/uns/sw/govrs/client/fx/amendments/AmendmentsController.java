@@ -196,6 +196,7 @@ public class AmendmentsController {
     @FXML
     private void saveAction() {
         try {
+            amendments.preMarshaller();
             if (activeFile != null) {
                 JAXBContext context = JAXBContext.newInstance(Amendments.class);
                 Marshaller marshaller = context.createMarshaller();
@@ -232,6 +233,7 @@ public class AmendmentsController {
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
+                amendments.preMarshaller();
                 JAXBContext context = JAXBContext.newInstance(Amendments.class);
                 Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -265,6 +267,7 @@ public class AmendmentsController {
     @FXML
     private void uploadAmendment() {
         try {
+            amendments.preMarshaller();
             GluonObservableObject<Object> amendmentsProperty =
                     RestClientProvider.getInstance().postAmendments(amendments);
             Stage stage = Loader.createLoader(amendmentsTable.getScene());

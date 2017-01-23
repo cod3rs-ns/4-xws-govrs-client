@@ -45,7 +45,7 @@ public class AmendmentStateManager {
         String predmetId = null;
         if (amendment.getHead().getPredmet() != null) {
             if (amendment.getHead().getPredmet().getRef() != null)
-            predmetId = amendment.getHead().getPredmet().getRef().getId();
+                predmetId = amendment.getHead().getPredmet().getRef().getId();
         }
         selectionInfo = new SelectionInfo(
                 lawParent,
@@ -111,7 +111,6 @@ public class AmendmentStateManager {
         });
 
 
-
         resenjeProperty.addListener((observable, oldValue, newValue) -> {
             selectionInfo = new SelectionInfo(
                     lawParent,
@@ -169,59 +168,6 @@ public class AmendmentStateManager {
                 );
                 amendment.getPropertyItems().add(editorAttrsPropertyItem);
 
-                /*
-                if(newValue == AmendmentType.Dopuna) {
-                    updateEditorAttrs(true);
-                } else if (newValue == AmendmentType.Izmena) {
-                    updateEditorAttrs(false);
-                }
-                 **/
-
-                /*
-                if (newValue == AmendmentType.Dopuna) {
-                    selectionInfo = new SelectionInfo(
-                            lawParent,
-                            null,
-                            ElementType.None
-                    );
-                    selectionInfoProperty.set(selectionInfo);
-                    selectionInfo.elementTypeProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        editorAttrs.setTypeOfElement(newValue1);
-                        amendment.getBody().setOdredba(new Amendment.Body.Odredba());
-
-                        editorAttrsPropertyItem.property.set(editorAttrs);
-                    });
-                    editorAttrsPropertyItem.property.set(editorAttrs);
-                } else if (newValue == AmendmentType.Izmena) {
-                    selectionInfo = new SelectionInfo(
-                            lawParent,
-                            null,
-                            ElementType.None
-                    );
-                    selectionInfoProperty.set(selectionInfo);
-                    selectionInfo.savedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        editorAttrs.setTypeOfElement(selectionInfo.getElementType());
-                        amendment.getBody().setOdredba(new Amendment.Body.Odredba());
-                        editorAttrs.setElement(selectionInfo.getElement());
-                        editorAttrs.setCreateNew(false);
-                        System.out.println("EVO MENE");
-                        System.out.println(selectionInfo.getElement());
-                        System.out.println(editorAttrs);
-                        editorAttrsPropertyItem.property.set(editorAttrs);
-                        setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
-
-                        Ref ref = new Ref();
-                        ref.setContent("");
-                        ref.setId(selectionInfo.getElementId());
-                        Amendment.Head.Predmet p = new Amendment.Head.Predmet();
-                        p.setRef(ref);
-                        System.out.println(p.getRef().getId());
-                        amendment.getHead().setPredmet(p);
-
-                    });
-                    editorAttrsPropertyItem.property.set(editorAttrs);
-                }
-                */
             }
 
         });
@@ -315,19 +261,19 @@ public class AmendmentStateManager {
 
     public void setNewOdredbaElement(Element newElement, ElementType type) {
         if (type == ElementType.Article) {
-            amendment.getBody().getOdredba().setClan((Article)newElement);
+            amendment.getBody().getOdredba().setClan((Article) newElement);
         }
         if (type == ElementType.Paragraph) {
-            amendment.getBody().getOdredba().setStav((Paragraph)newElement);
+            amendment.getBody().getOdredba().setStav((Paragraph) newElement);
         }
         if (type == ElementType.Clause) {
-            amendment.getBody().getOdredba().setTacka((Clause)newElement);
+            amendment.getBody().getOdredba().setTacka((Clause) newElement);
         }
         if (type == ElementType.Subclause) {
-            amendment.getBody().getOdredba().setPodtacka((Subclause)newElement);
+            amendment.getBody().getOdredba().setPodtacka((Subclause) newElement);
         }
         if (type == ElementType.Item) {
-            amendment.getBody().getOdredba().setAlineja(((ItemWrapper)newElement).getWrappedItem());
+            amendment.getBody().getOdredba().setAlineja(((ItemWrapper) newElement).getWrappedItem());
         }
     }
 
@@ -336,7 +282,7 @@ public class AmendmentStateManager {
         System.out.println(selectionInfo);
         editorAttrs = new PopupEditorOptions();
         editorAttrs.setCreateNew(createNew);
-        if(!createNew) editorAttrs.setElement(selectionInfo.getElement());
+        if (!createNew) editorAttrs.setElement(selectionInfo.getElement());
         editorAttrs.setParentElement(selectionInfo.getElement().getElementParent());
         editorAttrs.setTypeOfElement(selectionInfo.getElementType());
         editorAttrs.savedProperty().addListener((observable, oldValue, newValue) -> {
