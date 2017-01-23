@@ -2,9 +2,6 @@ package rs.acs.uns.sw.govrs.client.fx.editor;
 
 
 import com.gluonhq.connect.GluonObservableObject;
-import com.gluonhq.connect.converter.StringInputConverter;
-import com.gluonhq.connect.provider.DataProvider;
-import com.gluonhq.connect.provider.RestClient;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.binding.Bindings;
@@ -13,8 +10,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -33,7 +28,7 @@ import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
-import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
+import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
@@ -41,10 +36,8 @@ import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.ObjectCreator;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.awt.*;
 import java.io.File;
 import java.util.Optional;
 import java.util.function.Function;
@@ -54,11 +47,15 @@ import java.util.logging.Logger;
 /**
  * Used for creating Laws.
  */
-public class XMLEditorController implements TreeController{
-    /** Attribute for CSS change of buttons*/
+public class XMLEditorController implements TreeController {
+    /**
+     * Attribute for CSS change of buttons
+     */
     private static final String PRESSED = "pressed";
 
-    /** Styled Text Area attributes **/
+    /**
+     * Styled Text Area attributes
+     **/
     private final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
 
@@ -114,19 +111,29 @@ public class XMLEditorController implements TreeController{
     private PropertySheet propertySheet;
     // -------------------------------------------------
 
-    /** Injected StateManger - parent component **/
+    /**
+     * Injected StateManger - parent component
+     **/
     private StateManager stateManager;
 
-    /** Active Law element **/
+    /**
+     * Active Law element
+     **/
     private Law law;
 
-    /** Represents file on disk, if opened, currently initialized to some value for testing **/
-    private File activeFile = new File(System.getProperty("user.home") + File.separator+ "test_save_xml");
+    /**
+     * Represents file on disk, if opened, currently initialized to some value for testing
+     **/
+    private File activeFile = new File(System.getProperty("user.home") + File.separator + "test_save_xml");
 
-    /** Selected element on Tree **/
+    /**
+     * Selected element on Tree
+     **/
     private Element selectedElement;
 
-    /** Change Listener for Text Area **/
+    /**
+     * Change Listener for Text Area
+     **/
     private ChangeListener textAreaChangeListener;
 
     /**
@@ -164,22 +171,15 @@ public class XMLEditorController implements TreeController{
     }
 
     public void loadTestData() {
-        // create a RestClient to the specific URL
-        RestClient restClient = RestClient.create()
-                .method("GET")
-                .host("http://localhost:9000/api")
-                .header("Accept", "application/xml")
-                .path("/laws/law01");
+        GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw("law01");
 
-        // retrieve a list from the DataProvider
-        GluonObservableObject<Law> lawProperty;
-        LawInputConverter converter = new LawInputConverter();
-        lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+        // show progress to user
         ProgressBar pb = new ProgressBar();
         pb.setPrefWidth(150);
         stateManager.homeController.getStatusBar().getLeftItems().clear();
         stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
-        stateManager.homeController.getStatusBar().getLeftItems().add(pb);
+        stateManager.homeController.getStatusBar().getRightItems().add(pb);
+
         propertySheet = new PropertySheet();
         attributesContainer.setCenter(propertySheet);
 
@@ -197,25 +197,11 @@ public class XMLEditorController implements TreeController{
             );
 
             stateManager.homeController.getStatusBar().getLeftItems().clear();
+            stateManager.homeController.getStatusBar().getRightItems().clear();
             stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
 
             TreeView<Element> treeView = tree.getTreeView();
             treeContainer.setContent(treeView);
-
-            // create a RestClient to the specific URL
-            RestClient restClientHtml = RestClient.create()
-                    .method("GET")
-                    .host("http://localhost:9000/api")
-                    .path("/laws/html/law01");
-
-            // retrieve a list from the DataProvider
-            GluonObservableObject<String> htmlProperty;
-            StringInputConverter converterString = new StringInputConverter();
-            htmlProperty = DataProvider.retrieveObject(restClientHtml.createObjectDataReader(converterString));
-            htmlProperty.initializedProperty().addListener(((a, ov, nv) -> {
-                //preview.getNode().getEngine().loadContent(htmlProperty.get());
-                //System.out.println(htmlProperty.get());
-            }));
         }));
 
     }
