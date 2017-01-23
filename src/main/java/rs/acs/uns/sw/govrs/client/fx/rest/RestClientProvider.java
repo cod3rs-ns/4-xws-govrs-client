@@ -17,13 +17,11 @@ import java.util.logging.Logger;
 public class RestClientProvider {
 
     private static RestClientProvider instance = null;
-
+    public String username = "keky";
     private JAXBContext amendmentsContext;
     private Marshaller amendmentsMarshaller;
     private JAXBContext lawContext;
     private Marshaller lawMarshaller;
-
-    public String username = "keky";
 
     private RestClientProvider() {
         try {
@@ -37,7 +35,7 @@ public class RestClientProvider {
     }
 
     public static RestClientProvider getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new RestClientProvider();
         }
         return instance;
@@ -85,6 +83,28 @@ public class RestClientProvider {
                 .dataString(marshalledData);
 
         ResultInputConverter converter = new ResultInputConverter(Amendments.class);
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
+    public GluonObservableObject<Law> postLaw(Law law) {
+        StringWriter writer = new StringWriter();
+        try {
+            lawMarshaller.marshal(law, writer);
+        } catch (JAXBException e) {
+            System.out.println("");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal Amendments", e);
+        }
+        String marshalledData = writer.toString();
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("POST")
+                .host("http://localhost:9000/api")
+                .contentType("application/xml")
+                .path("/laws/")
+                .dataString(marshalledData);
+
+        // retrieve an object from the DataProvider
+        LawInputConverter converter = new LawInputConverter();
         return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
     }
 

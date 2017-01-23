@@ -34,6 +34,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Creator;
+import rs.acs.uns.sw.govrs.client.fx.util.Loader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -103,6 +104,8 @@ public class XMLEditorController implements TreeController {
     private ImageView saveAsButton;
     @FXML
     private ImageView newLawButton;
+    @FXML
+    private ImageView uploadButton;
     // -------------------------------------------------
 
     // ------------------ components -------------------
@@ -168,6 +171,8 @@ public class XMLEditorController implements TreeController {
         Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
         Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
         Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
+        Tooltip.install(newLawButton, new Tooltip("Kreirajte novi propis"));
+        Tooltip.install(uploadButton, new Tooltip("Postavite propis na skupštinski red"));
     }
 
     public void loadTestData() {
@@ -495,7 +500,7 @@ public class XMLEditorController implements TreeController {
     @FXML
     private void saveAsAction() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sačuvaj law kao...");
+        fileChooser.setTitle("Sačuvajate propis kao...");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("XML files", "*.xml")
         );
@@ -532,6 +537,19 @@ public class XMLEditorController implements TreeController {
             Law newl = Creator.createNewLaw();
             switchViewToNewLaw(newl);
         });
+    }
+
+    @FXML
+    private void uploadLaw() {
+        law.preMarshaller();
+        GluonObservableObject<Law> lawProperty =
+                RestClientProvider.getInstance().postLaw(law);
+        Stage stage = Loader.createLoader(treeContainer.getScene());
+        stage.show();
+
+        lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+            stage.close();
+        }));
     }
 
     /**
