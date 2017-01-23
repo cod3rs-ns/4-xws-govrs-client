@@ -34,7 +34,7 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
     public PopupPropertyElementEditorEditor(PropertySheet.Item item) {
         this.item = item;
         PopupEditorOptions cont = (PopupEditorOptions)item.getValue();
-        if (cont != null && !cont.isCreateNew() ) {
+        if (!cont.isCreateNew() ) {
             btnEditor = new Button(cont.getElement().getElementName());
             value.set((PopupEditorOptions) item.getValue());
         } else {
@@ -47,7 +47,7 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
 
         PopupButtonPropertyItem pbpi = (PopupButtonPropertyItem) item;
         pbpi.property.addListener(observable -> {
-            value.setValue(pbpi.property.get());
+            value.set(pbpi.property.get());
             if (!value.get().isCreateNew() ) {
                 btnEditor.setText(value.get().getElement().getElementName());
             } else {
@@ -73,7 +73,8 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
             stage.initStyle(StageStyle.UTILITY);
             stage.initOwner(btnEditor.getScene().getWindow());
             stage.showAndWait();
-            getValue().setElement(controller.getSelectedElement());
+
+            //getValue().setElement(controller.getRootElement());
             if (getValue().getElement() != null) {
                 getValue().setCreateNew(false);
             }

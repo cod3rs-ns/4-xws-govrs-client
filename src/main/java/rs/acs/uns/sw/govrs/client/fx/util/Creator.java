@@ -76,13 +76,14 @@ public class Creator {
     public static Amendment createOneAmendment() {
         ObjectFactory factory = new ObjectFactory();
         Amendment amendment = factory.createAmendment();
-        amendment.setId("aa_id");
-        amendment.setName("novi amandman");
+        amendment.setName("Novi amandman");
         amendment.setHead(factory.createAmendmentHead());
         amendment.setBody(factory.createAmendmentBody());
+        /*
         amendment.getHead().setPredmet(factory.createAmendmentHeadPredmet());
         amendment.getHead().getPredmet().setRef(factory.createRef());
         amendment.getHead().getPredmet().getRef().setId("article01");
+        */
         amendment.getBody().setObrazlozenje(factory.createExplanation());
         amendment.getHead().setRjesenje("");
         return amendment;

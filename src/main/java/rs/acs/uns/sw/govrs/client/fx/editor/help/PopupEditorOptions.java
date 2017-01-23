@@ -10,7 +10,11 @@ public class PopupEditorOptions {
     private ObjectProperty<Element> element = new SimpleObjectProperty<>();
     private BooleanProperty saved = new SimpleBooleanProperty(false);
     private ObjectProperty<ElementType> typeOfElement = new SimpleObjectProperty<>(ElementType.None);
+    private ObjectProperty<Element> parentElement = new SimpleObjectProperty<>();
 
+    public PopupEditorOptions() {
+
+    }
 
     public PopupEditorOptions(String parentIdBase, boolean createNew, Element element, ElementType typeOfElement) {
         this.parentIdBase = new SimpleStringProperty(parentIdBase);
@@ -79,6 +83,18 @@ public class PopupEditorOptions {
         this.typeOfElement.set(typeOfElement);
     }
 
+    public Element getParentElement() {
+        return parentElement.get();
+    }
+
+    public ObjectProperty<Element> parentElementProperty() {
+        return parentElement;
+    }
+
+    public void setParentElement(Element parentElement) {
+        this.parentElement.set(parentElement);
+    }
+
     @Override
     public String toString() {
         return "PopupEditorOptions{" +
@@ -87,6 +103,7 @@ public class PopupEditorOptions {
                 ", element=" + element.get() +
                 ", saved=" + saved.get() +
                 ", typeOfElement=" + typeOfElement.get() +
+                ", parentElement=" + parentElement.get() +
                 '}';
     }
 }

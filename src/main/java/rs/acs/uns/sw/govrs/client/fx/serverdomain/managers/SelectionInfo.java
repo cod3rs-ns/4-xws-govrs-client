@@ -1,4 +1,4 @@
-package rs.acs.uns.sw.govrs.client.fx.serverdomain.container;
+package rs.acs.uns.sw.govrs.client.fx.serverdomain.managers;
 
 
 import javafx.beans.property.*;

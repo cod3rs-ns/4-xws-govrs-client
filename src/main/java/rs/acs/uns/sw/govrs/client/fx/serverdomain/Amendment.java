@@ -303,8 +303,9 @@ public class Amendment extends Element {
         getPropertyItems().add(ciljPropertyItem);
         getPropertyItems().add(uticajPropertyItem);
         getPropertyItems().add(stateManager.getResenjePropertyItem());
-        getPropertyItems().add(stateManager.getPredmetPickerPropertyItem());
-        getPropertyItems().add(stateManager.getOdredbaEditorPropertyItem());
+        getPropertyItems().add(stateManager.getSelectionInfoPropertyItem());
+        getPropertyItems().add(stateManager.getEditorAttrsPropertyItem());
+        stateManager.checkIfStartWithoutOdredba();
     }
 
     @Override

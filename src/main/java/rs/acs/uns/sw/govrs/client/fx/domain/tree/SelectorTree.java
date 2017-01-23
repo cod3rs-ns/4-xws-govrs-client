@@ -40,6 +40,7 @@ public class SelectorTree {
                         controller.selectedLabel.setText(element.idProperty().get());
                         controller.setSelectedId(element.idProperty().get());
                         controller.setSelectedElement(element);
+                        Logger.getLogger(getClass().getName()).log(Level.INFO, element.toString());
                         if (element instanceof Article) {
                             controller.setSelectedType(ElementType.Article);
                         } else if (element instanceof Paragraph) {
