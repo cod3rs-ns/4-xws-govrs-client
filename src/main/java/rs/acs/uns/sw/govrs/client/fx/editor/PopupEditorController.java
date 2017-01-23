@@ -24,14 +24,14 @@ import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorOptions;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
-import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
-import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 
 import java.util.function.Function;
 
-public class PopupEditorController implements TreeController{
+public class PopupEditorController implements TreeController {
     /**
      * Attribute for CSS change of buttons
      */
@@ -83,16 +83,6 @@ public class PopupEditorController implements TreeController{
     // -------------------------------------------------
 
     /**
-     * Injected StateManger - parent component
-     **/
-    private StateManager stateManager;
-
-    /**
-     * Active Law element
-     **/
-    private Element rootElement;
-
-    /**
      * Selected element on Tree
      **/
     private Element selectedElement;
@@ -136,24 +126,29 @@ public class PopupEditorController implements TreeController{
         initObject = init;
         Element element = null;
         if (initObject.isCreateNew()) {
-            if (init.getTypeOfElement() == ElementTypes.Article) {
+            if (init.getTypeOfElement() == ElementType.Article) {
                 element = new Article();
-            } else if (init.getTypeOfElement() == ElementTypes.Paragraph) {
+                element.idProperty().set(IdentityGenerator.get().generate(initObject.getParentElement(), ElementType.Article));
+            } else if (init.getTypeOfElement() == ElementType.Paragraph) {
                 element = new Paragraph();
-            } else if (init.getTypeOfElement() == ElementTypes.Clause) {
+                element.idProperty().set(IdentityGenerator.get().generate(initObject.getParentElement(), ElementType.Paragraph));
+            } else if (init.getTypeOfElement() == ElementType.Clause) {
                 element = new Clause();
-            } else if (init.getTypeOfElement() == ElementTypes.Subclause) {
+                element.idProperty().set(IdentityGenerator.get().generate(init.getParentElement(), ElementType.Clause));
+            } else if (init.getTypeOfElement() == ElementType.Subclause) {
                 element = new Subclause();
-            } else if (init.getTypeOfElement() == ElementTypes.Item) {
+                element.idProperty().set(IdentityGenerator.get().generate(init.getParentElement(), ElementType.Subclause));
+            } else if (init.getTypeOfElement() == ElementType.Item) {
                 Item i = new Item();
+                i.setValue("");
+                i.idProperty().set(IdentityGenerator.get().generate(initObject.getParentElement(), ElementType.Item));
                 element = new ItemWrapper(i);
             } else {
                 System.out.println("Something went wrong in initElements");
             }
             init.setElement(element);
             init.setCreateNew(false);
-            System.out.println(init.getElement());
-            init.getElement().idProperty().set("A");
+            init.getElement().initElement();
             init.getElement().createPropertyAttrs();
         }
         tree = new TreeModel(
@@ -170,11 +165,13 @@ public class PopupEditorController implements TreeController{
     @FXML
     public void saveAction() {
         initObject.setSaved(true);
-        ((Stage)treeContainer.getScene().getWindow()).close();
+        ((Stage) treeContainer.getScene().getWindow()).close();
     }
+
     @FXML
     public void cancelAction() {
-
+        initObject.setSaved(false);
+        ((Stage) treeContainer.getScene().getWindow()).close();
     }
 
 
@@ -422,6 +419,10 @@ public class PopupEditorController implements TreeController{
             area.setDisable(false);
 
             area.clear();
+            // safe :)
+            if (selectedElement.getElementContent() == null) {
+                selectedElement.setElementContent("");
+            }
             area.replaceText(0, -1, selectedElement.getElementContent());
 
             textAreaChangeListener = createChangeAreaListener(selectedElement);
@@ -432,10 +433,6 @@ public class PopupEditorController implements TreeController{
         }
         this.propertySheet.getItems().clear();
         this.propertySheet.getItems().addAll(selectedElement.getPropertyItems());
-    }
-
-    public void setStateManager(StateManager stateManager) {
-        this.stateManager = stateManager;
     }
 
     /**

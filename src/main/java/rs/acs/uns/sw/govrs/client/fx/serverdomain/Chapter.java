@@ -18,6 +18,8 @@ import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.ChapterEnumPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.ChapterRoles;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -228,6 +230,7 @@ public class Chapter extends Element {
     public void createAndAddChild(Element element) {
         if (element instanceof Part) {
             Part p = (Part) element;
+            p.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Part));
             p.setElementParent(this);
             p.createPropertyAttrs();
             getGlava().add(p);

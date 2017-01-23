@@ -13,6 +13,8 @@ import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 import javax.xml.bind.annotation.*;
@@ -188,6 +190,7 @@ public class Clause extends Element{
     public void createAndAddChild(Element element) {
         if (element instanceof Subclause) {
             element.setElementParent(this);
+            element.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Subclause));
             element.createPropertyAttrs();
             getContent().add(element);
             getChildren().add(element);

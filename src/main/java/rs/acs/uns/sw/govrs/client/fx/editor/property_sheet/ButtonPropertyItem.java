@@ -4,7 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.PropertyEditor;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.SelectionInfo;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.managers.SelectionInfo;
 
 import java.util.Optional;
 

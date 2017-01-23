@@ -9,18 +9,17 @@ import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentTypeProperty
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.ButtonPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.PopupButtonPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.SelectionInfo;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentType;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
-import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AmendmentStateManager {
     private Amendment amendment;
-    private ButtonPropertyItem predmetPickerPropertyItem;
-    private PopupButtonPropertyItem odredbaEditorPropertyItem;
+    private ButtonPropertyItem selectionInfoPropertyItem;
+    private PopupButtonPropertyItem editorAttrsPropertyItem;
     private AmendmentTypePropertyItem resenjePropertyItem;
     private PopupEditorOptions editorAttrs;
     private SelectionInfo selectionInfo;
@@ -33,6 +32,7 @@ public class AmendmentStateManager {
         this.amendment = amendment;
         lawParent = ((Amendments) amendment.getElementParent()).getHead().getPropis().getRef().getId();
 
+        // ========== initial resenje property
         resenjeProperty = amendment.getHead().rjesenjeProperty();
         resenjePropertyItem = new AmendmentTypePropertyItem(
                 resenjeProperty,
@@ -41,9 +41,11 @@ public class AmendmentStateManager {
                 "Predlog rešenja",
                 true);
 
+        // ========== initial selection info property
         String predmetId = null;
-        if (amendment.getHead().getPredmet().getRef() != null) {
-            predmetId = amendment.getHead().getPredmet().getRef().getId();
+        if (amendment.getHead().getPredmet() != null) {
+            if (amendment.getHead().getPredmet().getRef() != null)
+                predmetId = amendment.getHead().getPredmet().getRef().getId();
         }
         selectionInfo = new SelectionInfo(
                 lawParent,
@@ -51,7 +53,7 @@ public class AmendmentStateManager {
                 getElementTypes(amendment)
         );
         selectionInfoProperty = new SimpleObjectProperty<>(selectionInfo);
-        predmetPickerPropertyItem = new ButtonPropertyItem(
+        selectionInfoPropertyItem = new ButtonPropertyItem(
                 selectionInfoProperty,
                 "Predmet",
                 "Predmet",
@@ -60,42 +62,12 @@ public class AmendmentStateManager {
         );
         System.out.println(selectionInfo);
 
-        // ==================================== default selected case =================================================
-        selectionInfo.elementTypeProperty().addListener((observable, oldValue, newValue) -> {
-            if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Brisanje) {
-                amendment.getBody().setOdredba(null);
-            }
-            if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Dopuna) {
-                amendment.getBody().setOdredba(new Amendment.Body.Odredba());
-                editorAttrs = new PopupEditorOptions("string", true, null, selectionInfo.getElementType());
-                editorAttrsProperty.set(editorAttrs);
-                odredbaEditorPropertyItem.property.set(editorAttrs);
-                setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
-                editorAttrs.savedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                    if (newValue1) {
-                        setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
-                        System.out.println("Saved");
-                    }
-                });
-            }
-            if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Izmena) {
-                editorAttrs.savedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                    if (newValue1) {
-                        amendment.getBody().setOdredba(new Amendment.Body.Odredba());
-                        setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
-                        editorAttrsProperty.set(editorAttrs);
-                        odredbaEditorPropertyItem.property.set(editorAttrs);
-                        System.out.println("Saved Edit");
-                    }
-                });
-            }
-        });
-
+        // ========== initial editor property
         Element e = getElement(amendment, selectionInfo.getElementType());
         if (e != null) e.initElement();
         editorAttrs = new PopupEditorOptions("string", e == null, e, selectionInfo.getElementType());
         editorAttrsProperty = new SimpleObjectProperty<>(editorAttrs);
-        odredbaEditorPropertyItem = new PopupButtonPropertyItem(
+        editorAttrsPropertyItem = new PopupButtonPropertyItem(
                 editorAttrsProperty,
                 "Predmet",
                 "Odredba",
@@ -104,18 +76,63 @@ public class AmendmentStateManager {
         );
         System.out.println(editorAttrs);
 
+        // ==================================== default selected case =================================================
+        selectionInfo.elementIdProperty().addListener((observable, oldValue, newValue) -> {
+            if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Brisanje) {
+                amendment.getBody().setOdredba(null);
+                updateEditorAttrs(false);
+            }
+
+            if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Dopuna) {
+                amendment.getBody().setOdredba(new Amendment.Body.Odredba());
+                updateEditorAttrs(true);
+            }
+
+            if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Izmena) {
+                updateEditorAttrs(false);
+            }
+
+            // update predmet
+            if (newValue != null) {
+                Ref ref = new Ref();
+                ref.setContent("");
+                ref.setId(newValue);
+                Amendment.Head.Predmet p = new Amendment.Head.Predmet();
+                p.setRef(ref);
+                amendment.getHead().setPredmet(p);
+            }
+        });
+
+        editorAttrs.savedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
+                System.out.println("Saved!");
+            }
+        });
+
 
         resenjeProperty.addListener((observable, oldValue, newValue) -> {
             selectionInfo = new SelectionInfo(
                     lawParent,
                     null,
-                    ElementTypes.None
+                    ElementType.None
             );
-            editorAttrs = new PopupEditorOptions("string", true, null, ElementTypes.None);
-            selectionInfoProperty.set(selectionInfo);
-            editorAttrsProperty.set(editorAttrs);
+            selectionInfo.elementIdProperty().addListener((observable1, oldValue1, nv) -> {
+                if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Brisanje) {
+                    amendment.getBody().setOdredba(null);
+                    updateEditorAttrs(false);
+                }
 
-            selectionInfoProperty.get().elementIdProperty().addListener((o, ov, nv) -> {
+                if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Dopuna) {
+                    amendment.getBody().setOdredba(new Amendment.Body.Odredba());
+                    updateEditorAttrs(true);
+                }
+
+                if (amendment.getHead().rjesenjeProperty().get() == AmendmentType.Izmena) {
+                    updateEditorAttrs(false);
+                }
+
+                // update predmet
                 if (nv != null) {
                     Ref ref = new Ref();
                     ref.setContent("");
@@ -125,100 +142,48 @@ public class AmendmentStateManager {
                     amendment.getHead().setPredmet(p);
                 }
             });
+            editorAttrs = new PopupEditorOptions("string", true, null, ElementType.None);
+            selectionInfoProperty.set(selectionInfo);
+            editorAttrsProperty.set(editorAttrs);
+            editorAttrsPropertyItem.property.set(editorAttrs);
+            selectionInfoPropertyItem.property.set(selectionInfo);
 
-            odredbaEditorPropertyItem.property.set(editorAttrs);
-            predmetPickerPropertyItem.property.set(selectionInfo);
-
+            // reset model
             amendment.getBody().setOdredba(new Amendment.Body.Odredba());
             amendment.getHead().setPredmet(new Amendment.Head.Predmet());
 
             // hide 'Odredba' field if not needed
             if (newValue == AmendmentType.Brisanje) {
-                amendment.getPropertyItems().remove(odredbaEditorPropertyItem);
+                amendment.getPropertyItems().remove(editorAttrsPropertyItem);
                 amendment.getBody().setOdredba(null);
             } else {
                 amendment.getBody().setOdredba(new Amendment.Body.Odredba());
-                amendment.getPropertyItems().remove(odredbaEditorPropertyItem);
-                odredbaEditorPropertyItem = new PopupButtonPropertyItem(
+                amendment.getPropertyItems().remove(editorAttrsPropertyItem);
+                editorAttrsPropertyItem = new PopupButtonPropertyItem(
                         editorAttrsProperty,
                         "Predmet",
                         "Odredba",
                         "Nova ili izmenjena odredba",
                         true
                 );
-                amendment.getPropertyItems().add(odredbaEditorPropertyItem);
-                if (newValue == AmendmentType.Dopuna) {
-                    selectionInfo = new SelectionInfo(
-                            lawParent,
-                            null,
-                            ElementTypes.None
-                    );
-                    selectionInfoProperty.set(selectionInfo);
-                    selectionInfo.elementTypeProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        editorAttrs.setTypeOfElement(newValue1);
-                        amendment.getBody().setOdredba(new Amendment.Body.Odredba());
+                amendment.getPropertyItems().add(editorAttrsPropertyItem);
 
-                        odredbaEditorPropertyItem.property.set(editorAttrs);
-                    });
-                    odredbaEditorPropertyItem.property.set(editorAttrs);
-                } else if (newValue == AmendmentType.Izmena) {
-                    selectionInfo = new SelectionInfo(
-                            lawParent,
-                            null,
-                            ElementTypes.None
-                    );
-                    selectionInfoProperty.set(selectionInfo);
-                    selectionInfo.savedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        editorAttrs.setTypeOfElement(selectionInfo.getElementType());
-                        amendment.getBody().setOdredba(new Amendment.Body.Odredba());
-                        editorAttrs.setElement(selectionInfo.getElement());
-                        editorAttrs.setCreateNew(false);
-                        System.out.println("EVO MENE");
-                        System.out.println(selectionInfo.getElement());
-                        System.out.println(editorAttrs);
-                        odredbaEditorPropertyItem.property.set(editorAttrs);
-                        setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
-
-                        Ref ref = new Ref();
-                        ref.setContent("");
-                        ref.setId(selectionInfo.getElementId());
-                        Amendment.Head.Predmet p = new Amendment.Head.Predmet();
-                        p.setRef(ref);
-                        System.out.println(p.getRef().getId());
-                        amendment.getHead().setPredmet(p);
-
-                    });
-                    odredbaEditorPropertyItem.property.set(editorAttrs);
-                }
             }
 
         });
 
-        selectionInfoProperty.get().elementIdProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("AAAAAAAAAA");
-            if (newValue != null) {
-                System.out.println(newValue);
-                Ref ref = new Ref();
-                ref.setContent("");
-                ref.setId(newValue);
-                Amendment.Head.Predmet p = new Amendment.Head.Predmet();
-                p.setRef(ref);
-                System.out.println(p.getRef().getId());
-                amendment.getHead().setPredmet(p);
-            }
-        });
     }
 
     public Amendment getAmendment() {
         return amendment;
     }
 
-    public ButtonPropertyItem getPredmetPickerPropertyItem() {
-        return predmetPickerPropertyItem;
+    public ButtonPropertyItem getSelectionInfoPropertyItem() {
+        return selectionInfoPropertyItem;
     }
 
-    public PopupButtonPropertyItem getOdredbaEditorPropertyItem() {
-        return odredbaEditorPropertyItem;
+    public PopupButtonPropertyItem getEditorAttrsPropertyItem() {
+        return editorAttrsPropertyItem;
     }
 
     public AmendmentTypePropertyItem getResenjePropertyItem() {
@@ -233,58 +198,58 @@ public class AmendmentStateManager {
         return selectionInfo;
     }
 
-    private ElementTypes getElementTypes(Amendment amendment) {
+    private ElementType getElementTypes(Amendment amendment) {
         Amendment.Body.Odredba odredba = amendment.getBody().getOdredba();
         if (odredba != null) {
             if (odredba.getAlineja() != null) {
-                return ElementTypes.Item;
+                return ElementType.Item;
             } else if (odredba.getClan() != null) {
-                return ElementTypes.Article;
+                return ElementType.Article;
             } else if (odredba.getPodtacka() != null) {
-                return ElementTypes.Subclause;
+                return ElementType.Subclause;
             } else if (odredba.getStav() != null) {
-                return ElementTypes.Paragraph;
+                return ElementType.Paragraph;
             } else if (odredba.getTacka() != null) {
-                return ElementTypes.Clause;
+                return ElementType.Clause;
             } else {
-                return ElementTypes.None;
+                return ElementType.None;
             }
         } else {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Odredba ne postoji!");
-            return ElementTypes.None;
+            return ElementType.None;
         }
     }
 
-    private Element getElement(Amendment amendment, ElementTypes type) {
-        if (type == ElementTypes.Article) {
+    private Element getElement(Amendment amendment, ElementType type) {
+        if (type == ElementType.Article) {
             if (amendment.getBody().getOdredba().getClan() != null) {
                 return amendment.getBody().getOdredba().getClan();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Paragraph) {
+        if (type == ElementType.Paragraph) {
             if (amendment.getBody().getOdredba().getStav() != null) {
                 return amendment.getBody().getOdredba().getStav();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Clause) {
+        if (type == ElementType.Clause) {
             if (amendment.getBody().getOdredba().getTacka() != null) {
                 return amendment.getBody().getOdredba().getTacka();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Subclause) {
+        if (type == ElementType.Subclause) {
             if (amendment.getBody().getOdredba().getPodtacka() != null) {
                 return amendment.getBody().getOdredba().getPodtacka();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Item) {
+        if (type == ElementType.Item) {
             if (amendment.getBody().getOdredba().getAlineja() != null) {
                 return new ItemWrapper(amendment.getBody().getOdredba().getAlineja());
             } else {
@@ -294,21 +259,48 @@ public class AmendmentStateManager {
         return null;
     }
 
-    public void setNewOdredbaElement(Element newElement, ElementTypes type) {
-        if (type == ElementTypes.Article) {
-            amendment.getBody().getOdredba().setClan((Article)newElement);
+    public void setNewOdredbaElement(Element newElement, ElementType type) {
+        if (type == ElementType.Article) {
+            amendment.getBody().getOdredba().setClan((Article) newElement);
         }
-        if (type == ElementTypes.Paragraph) {
-            amendment.getBody().getOdredba().setStav((Paragraph)newElement);
+        if (type == ElementType.Paragraph) {
+            amendment.getBody().getOdredba().setStav((Paragraph) newElement);
         }
-        if (type == ElementTypes.Clause) {
-            amendment.getBody().getOdredba().setTacka((Clause)newElement);
+        if (type == ElementType.Clause) {
+            amendment.getBody().getOdredba().setTacka((Clause) newElement);
         }
-        if (type == ElementTypes.Subclause) {
-            amendment.getBody().getOdredba().setPodtacka((Subclause)newElement);
+        if (type == ElementType.Subclause) {
+            amendment.getBody().getOdredba().setPodtacka((Subclause) newElement);
         }
-        if (type == ElementTypes.Item) {
-            amendment.getBody().getOdredba().setAlineja(((ItemWrapper)newElement).getWrappedItem());
+        if (type == ElementType.Item) {
+            amendment.getBody().getOdredba().setAlineja(((ItemWrapper) newElement).getWrappedItem());
+        }
+    }
+
+    private void updateEditorAttrs(boolean createNew) {
+        System.out.println("___UPDATE___");
+        System.out.println(selectionInfo);
+        editorAttrs = new PopupEditorOptions();
+        editorAttrs.setCreateNew(createNew);
+        if (!createNew) editorAttrs.setElement(selectionInfo.getElement());
+        editorAttrs.setParentElement(selectionInfo.getElement().getElementParent());
+        editorAttrs.setTypeOfElement(selectionInfo.getElementType());
+        editorAttrs.savedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
+                System.out.println("Saved!");
+            }
+        });
+        editorAttrsProperty.set(editorAttrs);
+        editorAttrsPropertyItem.setValue(editorAttrs);
+    }
+
+    public void checkIfStartWithoutOdredba() {
+        if (resenjeProperty.get() == AmendmentType.Brisanje) {
+            System.out.println(amendment.getPropertyItems().size());
+            amendment.getPropertyItems().remove(editorAttrsPropertyItem);
+            System.out.println(amendment.getPropertyItems().size());
+            amendment.getBody().setOdredba(null);
         }
     }
 }

@@ -50,7 +50,6 @@ public class PopupButtonPropertyItem implements PropertySheet.Item {
 
     @Override
     public void setValue(Object value) {
-        System.out.println("property");
         property.set((PopupEditorOptions) value);
     }
 

@@ -1,8 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.editor.property_sheet;
 
 import com.gluonhq.connect.GluonObservableObject;
-import com.gluonhq.connect.provider.DataProvider;
-import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -23,11 +21,13 @@ import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.amendments.ElementPicker;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.SelectorTree;
-import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
+import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.SelectionInfo;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.managers.SelectionInfo;
 
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PopupPropertyElementPickerEditor implements PropertyEditor<SelectionInfo> {
 
@@ -40,12 +40,12 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
 
     public PopupPropertyElementPickerEditor(PropertySheet.Item item) {
         this.item = item;
-        SelectionInfo cont = (SelectionInfo)item.getValue();
-        if (cont != null && cont.getElementId() != null) {
+        SelectionInfo cont = (SelectionInfo) item.getValue();
+        if (cont.getElementId() != null) {
             btnEditor = new Button(cont.getElementId());
             value.set((SelectionInfo) item.getValue());
         } else {
-            btnEditor = new Button("<nije_izabran>");
+            btnEditor = new Button("<nije izabran>");
         }
         btnEditor.setAlignment(Pos.CENTER_LEFT);
         btnEditor.setOnAction((ActionEvent event) -> {
@@ -54,7 +54,7 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
 
         ButtonPropertyItem bpi = (ButtonPropertyItem) item;
         bpi.property.addListener(observable -> {
-            value.setValue(bpi.property.get());
+            value.set(bpi.property.get());
             if (value.get().getElementId() != null) {
                 btnEditor.setText(value.get().getElementId());
             } else {
@@ -64,24 +64,13 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
     }
 
     private void displayPopupEditor() {
-
         FXMLLoader loader = new FXMLLoader();
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(MainFXApp.class.getResource("/amendments/ElementPicker.fxml"));
         try (InputStream in = MainFXApp.class.getResourceAsStream("/amendments/ElementPicker.fxml")) {
             pickerPane = loader.load(in);
             picker = loader.getController();
-            // create a RestClient to the specific URL
-            RestClient restClient = RestClient.create()
-                    .method("GET")
-                    .host("http://localhost:9000/api")
-                    .header("Accept", "application/xml")
-                    .path("/laws/" + value.get().getLawId());
-
-            // retrieve a list from the DataProvider
-            GluonObservableObject<Law> lawProperty;
-            LawInputConverter converter = new LawInputConverter();
-            lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+            GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw(value.get().getLawId());
             lawProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
                 Law law = lawProperty.get();
                 law.initElement();
@@ -106,26 +95,23 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
             stage.initOwner(btnEditor.getScene().getWindow());
             picker.chooseButton.setOnAction(event -> {
                 stage.close();
-                if(picker.getSelectedId() != null) {
+                if (picker.getSelectedId() != null) {
                     btnEditor.setText(picker.getSelectedId());
-                    value.get().setElementId(picker.getSelectedId());
                     value.get().setElementType(picker.getSelectedType());
                     value.get().setElement(picker.getSelectedElement());
-                    value.get().setSaved(true);
-                    System.out.println("...... sl .......");
+                    value.get().setElementId(picker.getSelectedId());
+                    System.out.println("B");
                     System.out.println(value.get());
-
+                    // TODO trigger Save - then switch back - possible bug
+                    value.get().setSaved(true);
+                    value.get().setSaved(false);
                 }
             });
             stage.showAndWait();
 
-
-
         } catch (Exception e) {
-
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to instantiate ElementPicker.fxml");
         }
-
-
     }
 
 
