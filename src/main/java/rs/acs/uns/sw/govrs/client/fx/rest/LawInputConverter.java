@@ -29,7 +29,7 @@ public class LawInputConverter extends InputStreamInputConverter<Law> {
                     writer.write(line);
                 }
             }
-            Logger.getLogger(LawInputConverter.class.getName()).log(Level.INFO, stringWriter.toString());
+            //Logger.getLogger(LawInputConverter.class.getName()).log(Level.INFO, stringWriter.toString());
             JAXBContext context = JAXBContext.newInstance(Law.class);
             Unmarshaller unMarshaller = context.createUnmarshaller();
             return (Law) unMarshaller.unmarshal(new StringReader(stringWriter.toString()));

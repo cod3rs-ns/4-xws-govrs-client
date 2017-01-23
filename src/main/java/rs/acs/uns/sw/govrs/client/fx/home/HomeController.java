@@ -184,12 +184,19 @@ public class HomeController extends AnchorPane implements Initializable {
     }
 
     /**
+     * Action that switches to Amendments Editor state.
+     */
+    private void amendmentAction() {
+        stateManager.switchState(Constants.AMENDMENTS_EDITOR_FXML);
+    }
+
+    /**
      * Initializes actions for user - Alderman.
      */
     private void setAldermanActions() {
         actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
         actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
-        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action, "Amandman"));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::amendmentAction, "Amandman"));
         actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
     }
 
@@ -199,7 +206,7 @@ public class HomeController extends AnchorPane implements Initializable {
     private void setPresidentActions() {
         actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
         actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
-        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::action, "Amandman"));
+        actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::amendmentAction, "Amandman"));
         actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
         actionContainer.getChildren().add(createButton(Constants.VOTE, this::action, "Skupština"));
     }

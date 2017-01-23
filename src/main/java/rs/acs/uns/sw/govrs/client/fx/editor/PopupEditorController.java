@@ -1,10 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.editor;
 
 
-import com.gluonhq.connect.GluonObservableObject;
-import com.gluonhq.connect.converter.StringInputConverter;
-import com.gluonhq.connect.provider.DataProvider;
-import com.gluonhq.connect.provider.RestClient;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import javafx.beans.binding.Bindings;
@@ -13,13 +9,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -29,44 +20,32 @@ import org.reactfx.SuspendableNo;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeController;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.TreeModel;
+import rs.acs.uns.sw.govrs.client.fx.editor.help.PopupEditorOptions;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.ParStyle;
 import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
-import rs.acs.uns.sw.govrs.client.fx.rest.LawInputConverter;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
-import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
-import rs.acs.uns.sw.govrs.client.fx.util.ObjectCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.awt.*;
-import java.io.File;
-import java.util.Optional;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- * Used for creating Laws.
- */
-public class XMLEditorController implements TreeController{
-    /** Attribute for CSS change of buttons*/
+public class PopupEditorController implements TreeController{
+    /**
+     * Attribute for CSS change of buttons
+     */
     private static final String PRESSED = "pressed";
 
-    /** Styled Text Area attributes **/
+    /**
+     * Styled Text Area attributes
+     **/
     private final StyledTextArea<ParStyle, TextStyle> area;
     private final SuspendableNo updatingToolbar = new SuspendableNo();
 
     // ---------------- ui-containers ------------------
     @FXML
     private TitledPane treeContainer;
-    @FXML
-    private TitledPane previewContainer;
     @FXML
     private BorderPane areaContainer;
     @FXML
@@ -93,47 +72,41 @@ public class XMLEditorController implements TreeController{
     @FXML
     private Button strikeAction;
     @FXML
-    private Button linkAction;
-    @FXML
     private ComboBox<Integer> fontSizePicker;
 
-    // ------------ file control buttons ---------------
     @FXML
-    private ImageView openButton;
-    @FXML
-    private ImageView saveButton;
-    @FXML
-    private ImageView saveAsButton;
-    @FXML
-    private ImageView newLawButton;
-    // -------------------------------------------------
-
-    // ------------------ components -------------------
-    private HtmlPreview preview;
-    private TreeModel tree;
     private PropertySheet propertySheet;
+
+    private PopupEditorOptions initObject;
+
+    private TreeModel tree;
     // -------------------------------------------------
 
-    /** Injected StateManger - parent component **/
+    /**
+     * Injected StateManger - parent component
+     **/
     private StateManager stateManager;
 
-    /** Active Law element **/
-    private Law law;
+    /**
+     * Active Law element
+     **/
+    private Element rootElement;
 
-    /** Represents file on disk, if opened, currently initialized to some value for testing **/
-    private File activeFile = new File(System.getProperty("user.home") + File.separator+ "test_save_xml");
-
-    /** Selected element on Tree **/
+    /**
+     * Selected element on Tree
+     **/
     private Element selectedElement;
 
-    /** Change Listener for Text Area **/
+    /**
+     * Change Listener for Text Area
+     **/
     private ChangeListener textAreaChangeListener;
 
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public XMLEditorController() {
+    public PopupEditorController() {
         // setup text area
         area = new StyledTextArea<>(
                 ParStyle.EMPTY, (paragraph, style) -> paragraph.setStyle(style.toCss()),
@@ -157,68 +130,53 @@ public class XMLEditorController implements TreeController{
         VirtualizedScrollPane<StyledTextArea<ParStyle, TextStyle>> vsPane = new VirtualizedScrollPane<>(area);
         areaContainer.setCenter(vsPane);
 
-        // create tooltips for file control buttons
-        Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
-        Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
-        Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
     }
 
-    public void loadTestData() {
-        // create a RestClient to the specific URL
-        RestClient restClient = RestClient.create()
-                .method("GET")
-                .host("http://localhost:9000/api")
-                .header("Accept", "application/xml")
-                .path("/laws/law01");
+    public void initElements(PopupEditorOptions init) {
+        initObject = init;
+        Element element = null;
+        if (initObject.isCreateNew()) {
+            if (init.getTypeOfElement() == ElementTypes.Article) {
+                element = new Article();
+            } else if (init.getTypeOfElement() == ElementTypes.Paragraph) {
+                element = new Paragraph();
+            } else if (init.getTypeOfElement() == ElementTypes.Clause) {
+                element = new Clause();
+            } else if (init.getTypeOfElement() == ElementTypes.Subclause) {
+                element = new Subclause();
+            } else if (init.getTypeOfElement() == ElementTypes.Item) {
+                Item i = new Item();
+                element = new ItemWrapper(i);
+            } else {
+                System.out.println("Something went wrong in initElements");
+            }
+            init.setElement(element);
+            init.setCreateNew(false);
+            System.out.println(init.getElement());
+            init.getElement().idProperty().set("A");
+            init.getElement().createPropertyAttrs();
+        }
+        tree = new TreeModel(
+                init.getElement(),
+                Element::getChildren,
+                Element::elementNameProperty,
+                this
+        );
 
-        // retrieve a list from the DataProvider
-        GluonObservableObject<Law> lawProperty;
-        LawInputConverter converter = new LawInputConverter();
-        lawProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
-        ProgressBar pb = new ProgressBar();
-        pb.setPrefWidth(150);
-        stateManager.homeController.getStatusBar().getLeftItems().clear();
-        stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
-        stateManager.homeController.getStatusBar().getLeftItems().add(pb);
-        propertySheet = new PropertySheet();
-        attributesContainer.setCenter(propertySheet);
+        TreeView<Element> treeView = tree.getTreeView();
+        treeContainer.setContent(treeView);
+    }
 
-        lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-            law = lawProperty.get();
-            law.initElement();
-            preview = new HtmlPreview(law, "propis", Law.class);
-            previewContainer.setContent(preview.getNode());
-            area.replaceText(0, 0, "");
-            tree = new TreeModel(
-                    law,
-                    Element::getChildren,
-                    Element::elementNameProperty,
-                    this
-            );
-
-            stateManager.homeController.getStatusBar().getLeftItems().clear();
-            stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
-
-            TreeView<Element> treeView = tree.getTreeView();
-            treeContainer.setContent(treeView);
-
-            // create a RestClient to the specific URL
-            RestClient restClientHtml = RestClient.create()
-                    .method("GET")
-                    .host("http://localhost:9000/api")
-                    .path("/laws/html/law01");
-
-            // retrieve a list from the DataProvider
-            GluonObservableObject<String> htmlProperty;
-            StringInputConverter converterString = new StringInputConverter();
-            htmlProperty = DataProvider.retrieveObject(restClientHtml.createObjectDataReader(converterString));
-            htmlProperty.initializedProperty().addListener(((a, ov, nv) -> {
-                //preview.getNode().getEngine().loadContent(htmlProperty.get());
-                //System.out.println(htmlProperty.get());
-            }));
-        }));
+    @FXML
+    public void saveAction() {
+        initObject.setSaved(true);
+        ((Stage)treeContainer.getScene().getWindow()).close();
+    }
+    @FXML
+    public void cancelAction() {
 
     }
+
 
     /**
      * Creates all actions of <strong>TextArea</strong> and initializes all remaining properties.
@@ -316,9 +274,6 @@ public class XMLEditorController implements TreeController{
                     } else {
                         fontSizePicker.getSelectionModel().clearSelection();
                     }
-
-                    // Update preview on finished style changing
-                    preview.update();
                 });
             }
         });
@@ -437,145 +392,17 @@ public class XMLEditorController implements TreeController{
             action.run();
             area.requestFocus();
         });
-        linkAction.setGraphic(GlyphsDude.createIcon(MaterialDesignIcon.LINK));
         fontSizePicker.setOnAction(event -> updateFontSize(fontSizePicker.getValue()));
     }
 
-    /**
-     * Opens XML file from disk.
-     */
-    @FXML
-    private void openAction() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Otvori XML propis");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("XML files", "*.xml")
-        );
-        Stage stage = (Stage) areaContainer.getScene().getWindow();
-        File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {
-            try {
-                JAXBContext context = JAXBContext.newInstance(Law.class);
-                Unmarshaller unMarshaller = context.createUnmarshaller();
-                Law openNew = (Law) unMarshaller.unmarshal(file);
-                switchViewToNewLaw(openNew);
-                CustomDialogCreator.createInformationAlert(
-                        "GovRS",
-                        "Otvaranje XML datoteke",
-                        "Fajl je uspešno otvoren."
-                ).showAndWait();
-            } catch (Exception e) {
-                CustomDialogCreator.createErrorAlert(
-                        "GovRS",
-                        "GREŠKA!",
-                        "Fajl nije moguće otvoriti."
-                ).showAndWait();
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to load file.", e);
-            }
-        }
-    }
-
-    /**
-     * Saves active file to disk.
-     */
-    @FXML
-    private void saveAction() {
-        try {
-            if (activeFile != null) {
-                JAXBContext context = JAXBContext.newInstance(Law.class);
-                Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(law, activeFile);
-            }
-            CustomDialogCreator.createInformationAlert(
-                    "GovRS",
-                    "Čuvanje XML datoteke",
-                    "Fajl je uspešno sačuvan."
-            ).showAndWait();
-        } catch (Exception e) {
-            CustomDialogCreator.createErrorAlert(
-                    "GovRS",
-                    "Čucanje XML datoteke",
-                    "Fajl nije uspešno sačuvan."
-            ).showAndWait();
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
-        }
-    }
-
-    /**
-     * Selects and saves active Law to file.
-     */
-    @FXML
-    private void saveAsAction() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sačuvaj law kao...");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("XML files", "*.xml")
-        );
-
-        Stage stage = (Stage) areaContainer.getScene().getWindow();
-        File file = fileChooser.showSaveDialog(stage);
-        if (file != null) {
-            try {
-                JAXBContext context = JAXBContext.newInstance(Law.class);
-                Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(law, file);
-                CustomDialogCreator.createInformationAlert(
-                        "GovRS",
-                        "Čuvanje XML datoteke",
-                        "Fajl je uspešno sačuvan."
-                ).showAndWait();
-            } catch (Exception e) {
-                CustomDialogCreator.createErrorAlert(
-                        "GovRS",
-                        "Čuvanje XML datoteke",
-                        "Fajl nije uspešno sačuvan."
-                ).showAndWait();
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
-            }
-        }
-    }
-
-    @FXML
-    private void createNewLaw() {
-        TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Propis");
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(name -> {
-            Law newl = ObjectCreator.createNewLaw();
-            switchViewToNewLaw(newl);
-        });
-    }
-
-    /**
-     * Updates context when new Law is opened.
-     *
-     * @param newLaw newly opened Law
-     */
-    private void switchViewToNewLaw(Law newLaw) {
-        selectedElement = null;
-        law = newLaw;
-        law.initElement();
-        preview.setRootElement(law);
-        preview.update();
-        tree = new TreeModel(
-                law,
-                Element::getChildren,
-                Element::elementNameProperty,
-                this
-        );
-
-        TreeView<Element> treeView = tree.getTreeView();
-        treeContainer.setContent(treeView);
-    }
 
     public Element getSelectedElement() {
         return selectedElement;
     }
 
-    public void setStateManager(StateManager stateManager) {
-        this.stateManager = stateManager;
+    @Override
+    public HtmlPreview getPreview() {
+        return null;
     }
 
     /**
@@ -607,6 +434,10 @@ public class XMLEditorController implements TreeController{
         this.propertySheet.getItems().addAll(selectedElement.getPropertyItems());
     }
 
+    public void setStateManager(StateManager stateManager) {
+        this.stateManager = stateManager;
+    }
+
     /**
      * Creates new Listener for newly selected Element
      *
@@ -616,12 +447,7 @@ public class XMLEditorController implements TreeController{
     private ChangeListener createChangeAreaListener(Element selElement) {
         return (ChangeListener<String>) (observable, oldValue, newValue) -> {
             selElement.setElementContent(newValue);
-            preview.update();
         };
-    }
-
-    public HtmlPreview getPreview() {
-        return preview;
     }
 
 }

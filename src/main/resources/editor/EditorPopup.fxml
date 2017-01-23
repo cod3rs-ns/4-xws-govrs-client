@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import org.controlsfx.control.PropertySheet?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.editor.PopupEditorController">
+   <children>
+      <SplitPane dividerPositions="0.5" prefHeight="610.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane maxWidth="250.0" minWidth="200.0" prefWidth="200.0">
+               <children>
+                  <TitledPane fx:id="treeContainer" collapsible="false" maxWidth="250.0" minWidth="200.0" prefHeight="598.0" prefWidth="250.0" text="Struktura" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <TreeView />
+                     </content>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                  </TitledPane>
+                  <HBox alignment="CENTER_RIGHT" layoutX="-20.0" layoutY="272.0" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="8.0" top="2.0" />
+                     </padding>
+                     <children>
+                        <ImageView fx:id="cancelButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#cancelAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/cancel.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                        <ImageView fx:id="saveButton" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#saveAction" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/buttons/save.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane maxWidth="550.0" minWidth="470.0" prefWidth="470.0">
+               <children>
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="608.0" prefWidth="542.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <AnchorPane>
+                           <children>
+                              <TitledPane collapsible="false" maxWidth="470.0" minWidth="470.0" prefHeight="210.0" prefWidth="470.0" text="Trenutni element" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="470.0" prefHeight="180.0" prefWidth="470.0">
+                                       <children>
+                                          <AnchorPane maxWidth="440.0" minWidth="440.0" prefWidth="440.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <ToolBar layoutX="-10.0" maxWidth="450.0" minWidth="450.0" prefHeight="35.0" prefWidth="450.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <items>
+                                                      <Button fx:id="undoAction" mnemonicParsing="false" />
+                                                      <Button fx:id="redoAction" mnemonicParsing="false" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <Button fx:id="cutAction" mnemonicParsing="false" />
+                                                      <Button fx:id="copyAction" mnemonicParsing="false" />
+                                                      <Button fx:id="pasteAction" mnemonicParsing="false" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <Button fx:id="boldAction" mnemonicParsing="false" />
+                                                      <Button fx:id="italicAction" mnemonicParsing="false" />
+                                                      <Button fx:id="underlineAction" mnemonicParsing="false" />
+                                                      <Button fx:id="strikeAction" mnemonicParsing="false" />
+                                                      <Separator orientation="VERTICAL" />
+                                                      <ComboBox fx:id="fontSizePicker" prefWidth="60.0">
+                                                         <tooltip>
+                                                            <Tooltip text="Veličina fonta" />
+                                                         </tooltip>
+                                                      </ComboBox>
+                                                      <Separator orientation="VERTICAL" />
+                                                   </items>
+                                                </ToolBar>
+                                             </children>
+                                          </AnchorPane>
+                                          <BorderPane fx:id="areaContainer" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                                             <padding>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </padding>
+                                          </BorderPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane>
+                           <children>
+                              <TitledPane collapsible="false" prefHeight="390.0" prefWidth="470.0" text="Atributi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <AnchorPane>
+                                       <children>
+                                          <PropertySheet fx:id="propertySheet" layoutX="206.0" layoutY="53.0" prefHeight="274.0" prefWidth="538.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.399999999999977" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <padding>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </padding>
+                                          </PropertySheet>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
