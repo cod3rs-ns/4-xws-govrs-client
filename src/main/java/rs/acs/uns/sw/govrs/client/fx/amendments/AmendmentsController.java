@@ -1,9 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.amendments;
 
-import com.gluonhq.connect.ConnectState;
 import com.gluonhq.connect.GluonObservableObject;
-import com.gluonhq.connect.provider.DataProvider;
-import com.gluonhq.connect.provider.RestClient;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,20 +13,17 @@ import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.ContextMenuHandler;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
-import rs.acs.uns.sw.govrs.client.fx.rest.ResultInputConverter;
+import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendment;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Loader;
-import rs.acs.uns.sw.govrs.client.fx.util.ObjectCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.io.StringWriter;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,7 +100,7 @@ public class AmendmentsController {
 
         amendmentsTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    if (newValue != null){
+                    if (newValue != null) {
                         amendmentProperties.getItems().clear();
                         amendmentProperties.getItems().addAll(newValue.getPropertyItems());
                         preview.update();
@@ -124,24 +118,16 @@ public class AmendmentsController {
     }
 
     public void loadTestData() {
-        // create a RestClient to the specific URL
-        RestClient restClient = RestClient.create()
-                .method("GET")
-                .host("http://localhost:9000/api")
-                .header("Accept", "application/xml")
-                .path("/amendments/amendments02");
-
-        // retrieve a list from the DataProvider
-        GluonObservableObject<Object> amendmentsProperty;
-        ResultInputConverter converter = new ResultInputConverter(Amendments.class);
-        amendmentsProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+        // send request
+        GluonObservableObject<Object> amendmentsProperty =
+                RestClientProvider.getInstance().getAmendments("amendments02");
 
         ProgressBar pb = new ProgressBar();
         pb.setPrefWidth(150);
 
         stateManager.homeController.getStatusBar().getLeftItems().clear();
         stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
-        stateManager.homeController.getStatusBar().getLeftItems().add(pb);
+        stateManager.homeController.getStatusBar().getRightItems().add(pb);
 
 
         amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
@@ -162,6 +148,7 @@ public class AmendmentsController {
             amendmentsTable.refresh();
 
             stateManager.homeController.getStatusBar().getLeftItems().clear();
+            stateManager.homeController.getStatusBar().getRightItems().clear();
             stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
 
         }));
@@ -209,6 +196,7 @@ public class AmendmentsController {
     @FXML
     private void saveAction() {
         try {
+            amendments.preMarshaller();
             if (activeFile != null) {
                 JAXBContext context = JAXBContext.newInstance(Amendments.class);
                 Marshaller marshaller = context.createMarshaller();
@@ -245,6 +233,7 @@ public class AmendmentsController {
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
+                amendments.preMarshaller();
                 JAXBContext context = JAXBContext.newInstance(Amendments.class);
                 Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -270,7 +259,7 @@ public class AmendmentsController {
         TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Neki novi amandmani");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            Amendments newl = ObjectCreator.createNewAmendments();
+            Amendments newl = Creator.createNewAmendments();
             switchViewToNewAmendment(newl);
         });
     }
@@ -278,31 +267,17 @@ public class AmendmentsController {
     @FXML
     private void uploadAmendment() {
         try {
-            JAXBContext context = JAXBContext.newInstance(Amendments.class);
-            Marshaller marshaller = context.createMarshaller();
-            StringWriter writer = new StringWriter();
-            marshaller.marshal(amendments, writer);
-            String a = writer.toString();
-            // create a RestClient to the specific URL
-            RestClient restClient = RestClient.create()
-                    .method("POST")
-                    .host("http://localhost:9000/api")
-                    .contentType("application/xml")
-                    .path("/amendments/")
-                    .dataString(a);
-            // retrieve a list from the DataProvider
-            GluonObservableObject<Object> amendmentsProperty;
-            ResultInputConverter converter = new ResultInputConverter(Amendments.class);
-            amendmentsProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+            amendments.preMarshaller();
+            GluonObservableObject<Object> amendmentsProperty =
+                    RestClientProvider.getInstance().postAmendments(amendments);
             Stage stage = Loader.createLoader(amendmentsTable.getScene());
             stage.show();
 
             amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
                 stage.close();
             }));
-        }
-         catch (Exception e) {
-             System.out.println("aaaaaa");
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
         }
 
     }
@@ -325,14 +300,14 @@ public class AmendmentsController {
 
     @FXML
     private void addAmendment() {
-        amendments.createAndAddChild(ObjectCreator.createOneAmendment());
+        amendments.createAndAddChild(Creator.createOneAmendment());
     }
 
     @FXML
     private void createTableContextMenu() {
         Element element = amendmentsTable.getSelectionModel().selectedItemProperty().get();
         if (element != null) {
-            Amendment a = (Amendment)element;
+            Amendment a = (Amendment) element;
             ContextMenuHandler cmh = new ContextMenuHandler();
             ContextMenu contextMenu = cmh.createContextMenu(a);
             amendmentsTable.setContextMenu(contextMenu);

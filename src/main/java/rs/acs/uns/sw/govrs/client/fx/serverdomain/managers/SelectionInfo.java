@@ -1,18 +1,18 @@
-package rs.acs.uns.sw.govrs.client.fx.serverdomain.container;
+package rs.acs.uns.sw.govrs.client.fx.serverdomain.managers;
 
 
 import javafx.beans.property.*;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 
 public class SelectionInfo {
     private StringProperty lawId = new SimpleStringProperty();
     private StringProperty elementId = new SimpleStringProperty();
-    private ObjectProperty<ElementTypes> elementType = new SimpleObjectProperty<>();
+    private ObjectProperty<ElementType> elementType = new SimpleObjectProperty<>();
     private ObjectProperty<Element> element = new SimpleObjectProperty<>();
     private BooleanProperty saved = new SimpleBooleanProperty(false);
 
-    public SelectionInfo(String lawId, String elementId, ElementTypes elementType) {
+    public SelectionInfo(String lawId, String elementId, ElementType elementType) {
         this.lawId = new SimpleStringProperty(lawId);
         this.elementId = new SimpleStringProperty(elementId);
         this.elementType = new SimpleObjectProperty<>(elementType);
@@ -42,15 +42,15 @@ public class SelectionInfo {
         this.elementId.set(elementId);
     }
 
-    public ElementTypes getElementType() {
+    public ElementType getElementType() {
         return elementType.get();
     }
 
-    public ObjectProperty<ElementTypes> elementTypeProperty() {
+    public ObjectProperty<ElementType> elementTypeProperty() {
         return elementType;
     }
 
-    public void setElementType(ElementTypes elementType) {
+    public void setElementType(ElementType elementType) {
         this.elementType.set(elementType);
     }
 

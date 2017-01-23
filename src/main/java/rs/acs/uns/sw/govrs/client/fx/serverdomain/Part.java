@@ -18,6 +18,8 @@ import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.PartEnumPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.PartRoles;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -229,6 +231,7 @@ public class Part extends Element{
     public void createAndAddChild(Element element) {
         if (element instanceof Section) {
             Section s = (Section) element;
+            s.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Section));
             s.setElementParent(this);
             s.createPropertyAttrs();
             getOdjeljak().add(s);

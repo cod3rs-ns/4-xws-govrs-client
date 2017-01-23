@@ -12,7 +12,7 @@ public class ItemWrapper extends Element {
 
     public ItemWrapper(Item item) {
         wrappedItem = item;
-        this.elementContentProperty().setValue(wrappedItem.getValue());
+        this.elementContentProperty().set(wrappedItem.getValue());
     }
 
     @Override
@@ -28,6 +28,16 @@ public class ItemWrapper extends Element {
     @Override
     public StringProperty elementNameProperty() {
         return wrappedItem.elementNameProperty();
+    }
+
+    @Override
+    public void setElementContent(String elementContent) {
+        wrappedItem.setValue(elementContent);
+    }
+
+    @Override
+    public String getElementContent() {
+       return wrappedItem.getValue();
     }
 
     public String getId() {
@@ -52,7 +62,7 @@ public class ItemWrapper extends Element {
 
     @Override
     public void initElement() {
-
+        createPropertyAttrs();
     }
 
     @Override

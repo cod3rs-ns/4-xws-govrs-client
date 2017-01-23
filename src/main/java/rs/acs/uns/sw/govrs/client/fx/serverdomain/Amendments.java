@@ -23,6 +23,8 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DocumentStatusAdapter
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -360,6 +362,7 @@ public class Amendments extends Element {
     public void createAndAddChild(Element element) {
         element.setElementParent(this);
         element.createPropertyAttrs();
+        element.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Amendment));
         getChildren().add(element);
         getBody().getAmandman().add((Amendment)element);
     }
@@ -441,7 +444,9 @@ public class Amendments extends Element {
 
     @Override
     public void preMarshaller() {
-
+        for (Element child: getChildren()) {
+            child.preMarshaller();
+        }
     }
 
 

@@ -303,13 +303,27 @@ public class Amendment extends Element {
         getPropertyItems().add(ciljPropertyItem);
         getPropertyItems().add(uticajPropertyItem);
         getPropertyItems().add(stateManager.getResenjePropertyItem());
-        getPropertyItems().add(stateManager.getPredmetPickerPropertyItem());
-        getPropertyItems().add(stateManager.getOdredbaEditorPropertyItem());
+        getPropertyItems().add(stateManager.getSelectionInfoPropertyItem());
+        getPropertyItems().add(stateManager.getEditorAttrsPropertyItem());
+        stateManager.checkIfStartWithoutOdredba();
     }
 
     @Override
     public void preMarshaller() {
-
+        if (getBody().getOdredba() != null) {
+            if (getBody().getOdredba().getClan() != null) {
+                getBody().getOdredba().getClan().preMarshaller();
+            }
+            if (getBody().getOdredba().getPodtacka() != null) {
+                getBody().getOdredba().getPodtacka().preMarshaller();
+            }
+            if (getBody().getOdredba().getStav() != null) {
+                getBody().getOdredba().getStav().preMarshaller();
+            }
+            if (getBody().getOdredba().getTacka() != null) {
+                getBody().getOdredba().getTacka().preMarshaller();
+            }
+        }
     }
 
     /**
