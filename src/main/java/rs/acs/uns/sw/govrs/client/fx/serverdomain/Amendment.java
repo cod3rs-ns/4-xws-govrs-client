@@ -18,6 +18,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentTypeAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentType;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.managers.AmendmentStateManager;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
@@ -27,9 +28,9 @@ import java.util.List;
 
 /**
  * <p>Java class for amandman element declaration.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;element name="amandman">
  *   &lt;complexType>
@@ -99,13 +100,11 @@ import java.util.List;
  *   &lt;/complexType>
  * &lt;/element>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "head",
-    "body"
+        "head",
+        "body"
 })
 @XmlRootElement(name = "amandman", namespace = "http://www.parlament.gov.rs/schema/amandman")
 public class Amendment extends Element {
@@ -127,10 +126,8 @@ public class Amendment extends Element {
     /**
      * Gets the value of the head property.
      *
-     * @return
-     *     possible object is
-     *     {@link Head }
-     *
+     * @return possible object is
+     * {@link Head }
      */
     public Head getHead() {
         return head;
@@ -139,10 +136,8 @@ public class Amendment extends Element {
     /**
      * Sets the value of the head property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link Head }
-     *
+     * @param value allowed object is
+     *              {@link Head }
      */
     public void setHead(Head value) {
         this.head = value;
@@ -151,10 +146,8 @@ public class Amendment extends Element {
     /**
      * Gets the value of the body property.
      *
-     * @return
-     *     possible object is
-     *     {@link Body }
-     *
+     * @return possible object is
+     * {@link Body }
      */
     public Body getBody() {
         return body;
@@ -163,21 +156,18 @@ public class Amendment extends Element {
     /**
      * Sets the value of the body property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link Body }
-     *
+     * @param value allowed object is
+     *              {@link Body }
      */
     public void setBody(Body value) {
         this.body = value;
     }
+
     /**
      * Gets the value of the id property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
         return id.get();
@@ -186,10 +176,8 @@ public class Amendment extends Element {
     /**
      * Sets the value of the id property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
         this.id.set(value);
@@ -202,10 +190,8 @@ public class Amendment extends Element {
     /**
      * Gets the value of the name property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name.get();
@@ -214,10 +200,8 @@ public class Amendment extends Element {
     /**
      * Sets the value of the name property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name.set(value);
@@ -330,9 +314,9 @@ public class Amendment extends Element {
 
     /**
      * <p>Java class for anonymous complex type.
-     *
+     * <p>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     *
+     * <p>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -359,13 +343,11 @@ public class Amendment extends Element {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     *
-     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "odredba",
-        "obrazlozenje"
+            "odredba",
+            "obrazlozenje"
     })
     public static class Body {
 
@@ -377,10 +359,8 @@ public class Amendment extends Element {
         /**
          * Gets the value of the odredba property.
          *
-         * @return
-         *     possible object is
-         *     {@link Odredba }
-         *
+         * @return possible object is
+         * {@link Odredba }
          */
         public Odredba getOdredba() {
             return odredba;
@@ -389,10 +369,8 @@ public class Amendment extends Element {
         /**
          * Sets the value of the odredba property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Odredba }
-         *
+         * @param value allowed object is
+         *              {@link Odredba }
          */
         public void setOdredba(Odredba value) {
             this.odredba = value;
@@ -401,10 +379,8 @@ public class Amendment extends Element {
         /**
          * Gets the value of the obrazlozenje property.
          *
-         * @return
-         *     possible object is
-         *     {@link Explanation }
-         *
+         * @return possible object is
+         * {@link Explanation }
          */
         public Explanation getObrazlozenje() {
             return obrazlozenje;
@@ -413,10 +389,8 @@ public class Amendment extends Element {
         /**
          * Sets the value of the obrazlozenje property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Explanation }
-         *
+         * @param value allowed object is
+         *              {@link Explanation }
          */
         public void setObrazlozenje(Explanation value) {
             this.obrazlozenje = value;
@@ -425,9 +399,9 @@ public class Amendment extends Element {
 
         /**
          * <p>Java class for anonymous complex type.
-         *
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         *
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -443,16 +417,14 @@ public class Amendment extends Element {
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         *
-         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "clan",
-            "stav",
-            "tacka",
-            "podtacka",
-            "alineja"
+                "clan",
+                "stav",
+                "tacka",
+                "podtacka",
+                "alineja"
         })
         public static class Odredba {
 
@@ -470,10 +442,8 @@ public class Amendment extends Element {
             /**
              * Gets the value of the clan property.
              *
-             * @return
-             *     possible object is
-             *     {@link Article }
-             *
+             * @return possible object is
+             * {@link Article }
              */
             public Article getClan() {
                 return clan;
@@ -482,10 +452,8 @@ public class Amendment extends Element {
             /**
              * Sets the value of the clan property.
              *
-             * @param value
-             *     allowed object is
-             *     {@link Article }
-             *
+             * @param value allowed object is
+             *              {@link Article }
              */
             public void setClan(Article value) {
                 this.clan = value;
@@ -494,10 +462,8 @@ public class Amendment extends Element {
             /**
              * Gets the value of the stav property.
              *
-             * @return
-             *     possible object is
-             *     {@link Paragraph }
-             *
+             * @return possible object is
+             * {@link Paragraph }
              */
             public Paragraph getStav() {
                 return stav;
@@ -506,10 +472,8 @@ public class Amendment extends Element {
             /**
              * Sets the value of the stav property.
              *
-             * @param value
-             *     allowed object is
-             *     {@link Paragraph }
-             *
+             * @param value allowed object is
+             *              {@link Paragraph }
              */
             public void setStav(Paragraph value) {
                 this.stav = value;
@@ -518,10 +482,8 @@ public class Amendment extends Element {
             /**
              * Gets the value of the tacka property.
              *
-             * @return
-             *     possible object is
-             *     {@link Clause }
-             *
+             * @return possible object is
+             * {@link Clause }
              */
             public Clause getTacka() {
                 return tacka;
@@ -530,10 +492,8 @@ public class Amendment extends Element {
             /**
              * Sets the value of the tacka property.
              *
-             * @param value
-             *     allowed object is
-             *     {@link Clause }
-             *
+             * @param value allowed object is
+             *              {@link Clause }
              */
             public void setTacka(Clause value) {
                 this.tacka = value;
@@ -542,10 +502,8 @@ public class Amendment extends Element {
             /**
              * Gets the value of the podtacka property.
              *
-             * @return
-             *     possible object is
-             *     {@link Subclause }
-             *
+             * @return possible object is
+             * {@link Subclause }
              */
             public Subclause getPodtacka() {
                 return podtacka;
@@ -554,10 +512,8 @@ public class Amendment extends Element {
             /**
              * Sets the value of the podtacka property.
              *
-             * @param value
-             *     allowed object is
-             *     {@link Subclause }
-             *
+             * @param value allowed object is
+             *              {@link Subclause }
              */
             public void setPodtacka(Subclause value) {
                 this.podtacka = value;
@@ -566,10 +522,8 @@ public class Amendment extends Element {
             /**
              * Gets the value of the alineja property.
              *
-             * @return
-             *     possible object is
-             *     {@link Item }
-             *
+             * @return possible object is
+             * {@link Item }
              */
             public Item getAlineja() {
                 return alineja;
@@ -578,10 +532,8 @@ public class Amendment extends Element {
             /**
              * Sets the value of the alineja property.
              *
-             * @param value
-             *     allowed object is
-             *     {@link Item }
-             *
+             * @param value allowed object is
+             *              {@link Item }
              */
             public void setAlineja(Item value) {
                 this.alineja = value;
@@ -594,9 +546,9 @@ public class Amendment extends Element {
 
     /**
      * <p>Java class for anonymous complex type.
-     *
+     * <p>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     *
+     * <p>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -627,13 +579,11 @@ public class Amendment extends Element {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     *
-     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "rjesenje",
-        "predmet"
+            "rjesenje",
+            "predmet"
     })
     public static class Head {
 
@@ -647,10 +597,8 @@ public class Amendment extends Element {
         /**
          * Gets the value of the rjesenje property.
          *
-         * @return
-         *     possible object is
-         *     {@link String }
-         *
+         * @return possible object is
+         * {@link String }
          */
         public String getRjesenje() {
             if (rjesenje.get() == AmendmentType.Dopuna) {
@@ -670,10 +618,8 @@ public class Amendment extends Element {
         /**
          * Sets the value of the rjesenje property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setRjesenje(String value) {
             if (value.equals("dopuna")) {
@@ -694,10 +640,8 @@ public class Amendment extends Element {
         /**
          * Gets the value of the predmet property.
          *
-         * @return
-         *     possible object is
-         *     {@link Predmet }
-         *
+         * @return possible object is
+         * {@link Predmet }
          */
         public Predmet getPredmet() {
             return predmet;
@@ -706,10 +650,8 @@ public class Amendment extends Element {
         /**
          * Sets the value of the predmet property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Predmet }
-         *
+         * @param value allowed object is
+         *              {@link Predmet }
          */
         public void setPredmet(Predmet value) {
             this.predmet = value;
@@ -718,9 +660,9 @@ public class Amendment extends Element {
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -732,12 +674,10 @@ public class Amendment extends Element {
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "ref"
+                "ref"
         })
         public static class Predmet {
 
@@ -746,11 +686,9 @@ public class Amendment extends Element {
 
             /**
              * Gets the value of the ref property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link Ref }
-             *     
+             *
+             * @return possible object is
+             * {@link Ref }
              */
             public Ref getRef() {
                 return ref;
@@ -758,11 +696,9 @@ public class Amendment extends Element {
 
             /**
              * Sets the value of the ref property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link Ref }
-             *     
+             *
+             * @param value allowed object is
+             *              {@link Ref }
              */
             public void setRef(Ref value) {
                 this.ref = value;
@@ -773,6 +709,26 @@ public class Amendment extends Element {
 
     @Override
     public void validate(List<ErrorMessage> errorMessageList) {
-        // TODO : implement
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Amendment, "Amandman na odredbu zakona mora imati ime."));
+        if (getHead().getPredmet() == null || getHead().getPredmet().getRef() == null)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Amendment, "Amandman mora imati odredbu na koju se odnosi."));
+        else {
+            if (getHead().getRjesenje() != null && getBody().getOdredba() == null) {
+                if (getHead().getRjesenje().equals("izmjena") || getHead().getRjesenje().equals("dopuna")) {
+                    errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Amendment, "Amandman koji mijenja/dodaje neku odredbu mora imati zamjensku/dopunsku odredbu."));
+                }
+            }
+            if (getBody().getOdredba() != null){
+                if (getBody().getOdredba().getClan() != null)
+                    getBody().getOdredba().getClan().validate(errorMessageList);
+                if (getBody().getOdredba().getPodtacka() != null)
+                    getBody().getOdredba().getPodtacka().validate(errorMessageList);
+                if (getBody().getOdredba().getStav() != null)
+                    getBody().getOdredba().getStav().validate(errorMessageList);
+                if (getBody().getOdredba().getTacka() != null)
+                    getBody().getOdredba().getTacka().validate(errorMessageList);
+            }
+        }
     }
 }

@@ -509,6 +509,7 @@ public class XMLEditorController implements TreeController {
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
+                // TODO: Change to error notifications on client page
                 List<ErrorMessage> errors = new ArrayList<>();
                 law.validate(errors);
                 System.out.println(errors);

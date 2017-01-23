@@ -1619,6 +1619,14 @@ public class Amendments extends Element {
 
     @Override
     public void validate(List<ErrorMessage> errorMessageList) {
-        // TODO: implement
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Amendments, "Pri podnošenju amandmana, amandman mora imati naziv."));
+        if (getChildren().size() == 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Amendments, "Amandman ne može biti prazan"));
+
+        // validate children elements
+        for (Element child : getChildren()) {
+            child.validate(errorMessageList);
+        }
     }
 }
