@@ -259,7 +259,8 @@ public class AmendmentsController {
         TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Neki novi amandmani");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            Amendments newl = Creator.createNewAmendments();
+            // TODO change to real Law ID
+            Amendments newl = Creator.createNewAmendments("law01");
             switchViewToNewAmendment(newl);
         });
     }
