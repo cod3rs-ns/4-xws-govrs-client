@@ -25,6 +25,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -1616,4 +1617,8 @@ public class Amendments extends Element {
 
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        // TODO: implement
+    }
 }

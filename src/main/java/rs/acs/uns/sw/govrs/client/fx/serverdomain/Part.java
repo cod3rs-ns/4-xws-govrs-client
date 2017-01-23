@@ -20,6 +20,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.PartRoles;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -281,4 +282,16 @@ public class Part extends Element{
         }
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Part, "Ime glave je obavezno."));
+        if (getChildren().size() == 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Part, "Glava ne može biti prazna."));
+
+        // validate children elements
+        for(Element child: getChildren()){
+            child.validate(errorMessageList);
+        }
+    }
 }

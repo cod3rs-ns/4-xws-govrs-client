@@ -20,6 +20,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.ChapterRoles;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -279,4 +280,16 @@ public class Chapter extends Element {
         }
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Chapter, "Ime dijela je obavezno."));
+        if (getChildren().size() == 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Chapter, "Dio ne može biti prazan."));
+
+        // validate children elements
+        for(Element child: getChildren()){
+            child.validate(errorMessageList);
+        }
+    }
 }

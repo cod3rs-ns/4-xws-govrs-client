@@ -18,9 +18,11 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.AmendmentTypeAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentType;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.managers.AmendmentStateManager;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.List;
 
 
 /**
@@ -767,7 +769,10 @@ public class Amendment extends Element {
             }
 
         }
-
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        // TODO : implement
+    }
 }
