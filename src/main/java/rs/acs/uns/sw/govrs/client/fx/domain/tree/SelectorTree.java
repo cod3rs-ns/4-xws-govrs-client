@@ -1,7 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.domain.tree;
 
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -11,13 +10,11 @@ import rs.acs.uns.sw.govrs.client.fx.amendments.ElementPicker;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
-import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static java.util.stream.Collectors.toList;
 
 public class SelectorTree {
     private final TreeView<Element> treeView;
@@ -44,15 +41,15 @@ public class SelectorTree {
                         controller.setSelectedId(element.idProperty().get());
                         controller.setSelectedElement(element);
                         if (element instanceof Article) {
-                            controller.setSelectedType(ElementTypes.Article);
+                            controller.setSelectedType(ElementType.Article);
                         } else if (element instanceof Paragraph) {
-                            controller.setSelectedType(ElementTypes.Paragraph);
+                            controller.setSelectedType(ElementType.Paragraph);
                         } else if (element instanceof Clause) {
-                            controller.setSelectedType(ElementTypes.Clause);
+                            controller.setSelectedType(ElementType.Clause);
                         } else if (element instanceof Subclause) {
-                            controller.setSelectedType(ElementTypes.Subclause);
+                            controller.setSelectedType(ElementType.Subclause);
                         } else if (element instanceof ItemWrapper) {
-                            controller.setSelectedType(ElementTypes.Item);
+                            controller.setSelectedType(ElementType.Item);
                         } else {
                             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Invalid selection type!");
                         }

@@ -27,7 +27,7 @@ import rs.acs.uns.sw.govrs.client.fx.editor.style.TextStyle;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
-import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 
 import java.util.function.Function;
 
@@ -136,15 +136,16 @@ public class PopupEditorController implements TreeController{
         initObject = init;
         Element element = null;
         if (initObject.isCreateNew()) {
-            if (init.getTypeOfElement() == ElementTypes.Article) {
+            if (init.getTypeOfElement() == ElementType.Article) {
                 element = new Article();
-            } else if (init.getTypeOfElement() == ElementTypes.Paragraph) {
+
+            } else if (init.getTypeOfElement() == ElementType.Paragraph) {
                 element = new Paragraph();
-            } else if (init.getTypeOfElement() == ElementTypes.Clause) {
+            } else if (init.getTypeOfElement() == ElementType.Clause) {
                 element = new Clause();
-            } else if (init.getTypeOfElement() == ElementTypes.Subclause) {
+            } else if (init.getTypeOfElement() == ElementType.Subclause) {
                 element = new Subclause();
-            } else if (init.getTypeOfElement() == ElementTypes.Item) {
+            } else if (init.getTypeOfElement() == ElementType.Item) {
                 Item i = new Item();
                 element = new ItemWrapper(i);
             } else {

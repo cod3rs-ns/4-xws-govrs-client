@@ -13,6 +13,8 @@ import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -214,6 +216,7 @@ public class Section extends Element{
         // add new article
         if (element instanceof Article) {
             Article a = (Article)element;
+            a.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Article));
             a.setElementParent(this);
             a.createPropertyAttrs();
             getClan().add(a);
@@ -223,6 +226,7 @@ public class Section extends Element{
         // add new subsection
         if (element instanceof Subsection) {
             Subsection s = (Subsection)element;
+            s.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Subsection));
             s.setElementParent(this);
             s.createPropertyAttrs();
             getPododjeljak().add(s);

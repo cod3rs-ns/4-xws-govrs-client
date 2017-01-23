@@ -14,6 +14,8 @@ import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 import javax.xml.bind.annotation.*;
@@ -191,6 +193,7 @@ public class Subclause extends Element {
     public void createAndAddChild(Element element) {
         if (element instanceof ItemWrapper) {
             element.setElementParent(this);
+            element.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Item));
             element.createPropertyAttrs();
             getContent().add(((ItemWrapper) element).getWrappedItem());
             getChildren().add(element);

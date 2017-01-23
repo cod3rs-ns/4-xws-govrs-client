@@ -2,17 +2,17 @@ package rs.acs.uns.sw.govrs.client.fx.editor.help;
 
 import javafx.beans.property.*;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
-import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 
 public class PopupEditorOptions {
     private StringProperty parentIdBase = new SimpleStringProperty();
     private BooleanProperty createNew = new SimpleBooleanProperty(true);
     private ObjectProperty<Element> element = new SimpleObjectProperty<>();
     private BooleanProperty saved = new SimpleBooleanProperty(false);
-    private ObjectProperty<ElementTypes> typeOfElement = new SimpleObjectProperty<>(ElementTypes.None);
+    private ObjectProperty<ElementType> typeOfElement = new SimpleObjectProperty<>(ElementType.None);
 
 
-    public PopupEditorOptions(String parentIdBase, boolean createNew, Element element, ElementTypes typeOfElement) {
+    public PopupEditorOptions(String parentIdBase, boolean createNew, Element element, ElementType typeOfElement) {
         this.parentIdBase = new SimpleStringProperty(parentIdBase);
         this.createNew = new SimpleBooleanProperty(createNew);
         this.element = new SimpleObjectProperty<>(element);
@@ -67,15 +67,15 @@ public class PopupEditorOptions {
         this.saved.set(saved);
     }
 
-    public ElementTypes getTypeOfElement() {
+    public ElementType getTypeOfElement() {
         return typeOfElement.get();
     }
 
-    public ObjectProperty<ElementTypes> typeOfElementProperty() {
+    public ObjectProperty<ElementType> typeOfElementProperty() {
         return typeOfElement;
     }
 
-    public void setTypeOfElement(ElementTypes typeOfElement) {
+    public void setTypeOfElement(ElementType typeOfElement) {
         this.typeOfElement.set(typeOfElement);
     }
 

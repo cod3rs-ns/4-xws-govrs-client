@@ -1,6 +1,5 @@
 package rs.acs.uns.sw.govrs.client.fx.util;
 
-import javafx.beans.property.ObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -10,8 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
 
-public class ObjectCreator {
-
+public class Creator {
     // TODO change when IDGenerator is implemented
     public static Law createNewLaw() {
         ObjectFactory factory = new ObjectFactory();
@@ -24,7 +22,7 @@ public class ObjectCreator {
             e.printStackTrace();
         }
         Law law = factory.createLaw();
-        law.setId("law00");
+        law.setId(IdentityGenerator.get().generate(null, ElementType.Law));
         law.setHead(factory.createLawHead());
         law.setBody(factory.createLawBody());
 
@@ -57,7 +55,7 @@ public class ObjectCreator {
         Amendments amendments = factory.createAmendments();
         amendments.setHead(factory.createAmendmentsHead());
         amendments.setBody(factory.createAmendmentsBody());
-        amendments.setId("novi_id");
+        amendments.setId(IdentityGenerator.get().generate(null, ElementType.Amendments));
         amendments.setName("Neki novi amandmani");
         amendments.getHead().setDatumIzglasavanja(factory.createAmendmentsHeadDatumIzglasavanja());
         amendments.getHead().getDatumIzglasavanja().setValue(dateTest);
@@ -70,6 +68,7 @@ public class ObjectCreator {
         amendments.getHead().setPodnosilac(factory.createAmendmentsHeadPodnosilac());
         amendments.getHead().setPropis(factory.createAmendmentsHeadPropis());
         amendments.getHead().getPropis().setRef(factory.createRef());
+        // TODO
         amendments.getHead().getPropis().getRef().setId("law01");
         return amendments;
     }

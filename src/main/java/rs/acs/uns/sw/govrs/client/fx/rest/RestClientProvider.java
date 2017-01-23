@@ -23,6 +23,8 @@ public class RestClientProvider {
     private JAXBContext lawContext;
     private Marshaller lawMarshaller;
 
+    public String username = "keky";
+
     private RestClientProvider() {
         try {
             amendmentsContext = JAXBContext.newInstance(Amendments.class);

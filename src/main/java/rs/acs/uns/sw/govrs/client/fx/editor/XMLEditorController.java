@@ -33,7 +33,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
-import rs.acs.uns.sw.govrs.client.fx.util.ObjectCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -529,7 +529,7 @@ public class XMLEditorController implements TreeController {
         TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Propis");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            Law newl = ObjectCreator.createNewLaw();
+            Law newl = Creator.createNewLaw();
             switchViewToNewLaw(newl);
         });
     }

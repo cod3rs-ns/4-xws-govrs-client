@@ -11,6 +11,7 @@ import javafx.stage.StageStyle;
 import rs.acs.uns.sw.govrs.client.fx.domain.User;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
+import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 
 import java.io.IOException;
 import java.io.InputStream;

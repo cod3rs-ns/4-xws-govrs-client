@@ -12,7 +12,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.container.SelectionInfo;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.AmendmentType;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
-import rs.acs.uns.sw.govrs.client.fx.util.ElementTypes;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -109,9 +109,9 @@ public class AmendmentStateManager {
             selectionInfo = new SelectionInfo(
                     lawParent,
                     null,
-                    ElementTypes.None
+                    ElementType.None
             );
-            editorAttrs = new PopupEditorOptions("string", true, null, ElementTypes.None);
+            editorAttrs = new PopupEditorOptions("string", true, null, ElementType.None);
             selectionInfoProperty.set(selectionInfo);
             editorAttrsProperty.set(editorAttrs);
 
@@ -151,7 +151,7 @@ public class AmendmentStateManager {
                     selectionInfo = new SelectionInfo(
                             lawParent,
                             null,
-                            ElementTypes.None
+                            ElementType.None
                     );
                     selectionInfoProperty.set(selectionInfo);
                     selectionInfo.elementTypeProperty().addListener((observable1, oldValue1, newValue1) -> {
@@ -165,7 +165,7 @@ public class AmendmentStateManager {
                     selectionInfo = new SelectionInfo(
                             lawParent,
                             null,
-                            ElementTypes.None
+                            ElementType.None
                     );
                     selectionInfoProperty.set(selectionInfo);
                     selectionInfo.savedProperty().addListener((observable1, oldValue1, newValue1) -> {
@@ -233,58 +233,58 @@ public class AmendmentStateManager {
         return selectionInfo;
     }
 
-    private ElementTypes getElementTypes(Amendment amendment) {
+    private ElementType getElementTypes(Amendment amendment) {
         Amendment.Body.Odredba odredba = amendment.getBody().getOdredba();
         if (odredba != null) {
             if (odredba.getAlineja() != null) {
-                return ElementTypes.Item;
+                return ElementType.Item;
             } else if (odredba.getClan() != null) {
-                return ElementTypes.Article;
+                return ElementType.Article;
             } else if (odredba.getPodtacka() != null) {
-                return ElementTypes.Subclause;
+                return ElementType.Subclause;
             } else if (odredba.getStav() != null) {
-                return ElementTypes.Paragraph;
+                return ElementType.Paragraph;
             } else if (odredba.getTacka() != null) {
-                return ElementTypes.Clause;
+                return ElementType.Clause;
             } else {
-                return ElementTypes.None;
+                return ElementType.None;
             }
         } else {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Odredba ne postoji!");
-            return ElementTypes.None;
+            return ElementType.None;
         }
     }
 
-    private Element getElement(Amendment amendment, ElementTypes type) {
-        if (type == ElementTypes.Article) {
+    private Element getElement(Amendment amendment, ElementType type) {
+        if (type == ElementType.Article) {
             if (amendment.getBody().getOdredba().getClan() != null) {
                 return amendment.getBody().getOdredba().getClan();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Paragraph) {
+        if (type == ElementType.Paragraph) {
             if (amendment.getBody().getOdredba().getStav() != null) {
                 return amendment.getBody().getOdredba().getStav();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Clause) {
+        if (type == ElementType.Clause) {
             if (amendment.getBody().getOdredba().getTacka() != null) {
                 return amendment.getBody().getOdredba().getTacka();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Subclause) {
+        if (type == ElementType.Subclause) {
             if (amendment.getBody().getOdredba().getPodtacka() != null) {
                 return amendment.getBody().getOdredba().getPodtacka();
             } else {
                 return null;
             }
         }
-        if (type == ElementTypes.Item) {
+        if (type == ElementType.Item) {
             if (amendment.getBody().getOdredba().getAlineja() != null) {
                 return new ItemWrapper(amendment.getBody().getOdredba().getAlineja());
             } else {
@@ -294,20 +294,20 @@ public class AmendmentStateManager {
         return null;
     }
 
-    public void setNewOdredbaElement(Element newElement, ElementTypes type) {
-        if (type == ElementTypes.Article) {
+    public void setNewOdredbaElement(Element newElement, ElementType type) {
+        if (type == ElementType.Article) {
             amendment.getBody().getOdredba().setClan((Article)newElement);
         }
-        if (type == ElementTypes.Paragraph) {
+        if (type == ElementType.Paragraph) {
             amendment.getBody().getOdredba().setStav((Paragraph)newElement);
         }
-        if (type == ElementTypes.Clause) {
+        if (type == ElementType.Clause) {
             amendment.getBody().getOdredba().setTacka((Clause)newElement);
         }
-        if (type == ElementTypes.Subclause) {
+        if (type == ElementType.Subclause) {
             amendment.getBody().getOdredba().setPodtacka((Subclause)newElement);
         }
-        if (type == ElementTypes.Item) {
+        if (type == ElementType.Item) {
             amendment.getBody().getOdredba().setAlineja(((ItemWrapper)newElement).getWrappedItem());
         }
     }

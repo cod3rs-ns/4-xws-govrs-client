@@ -18,7 +18,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendment;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Loader;
-import rs.acs.uns.sw.govrs.client.fx.util.ObjectCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -257,7 +257,7 @@ public class AmendmentsController {
         TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Neki novi amandmani");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            Amendments newl = ObjectCreator.createNewAmendments();
+            Amendments newl = Creator.createNewAmendments();
             switchViewToNewAmendment(newl);
         });
     }
@@ -297,7 +297,7 @@ public class AmendmentsController {
 
     @FXML
     private void addAmendment() {
-        amendments.createAndAddChild(ObjectCreator.createOneAmendment());
+        amendments.createAndAddChild(Creator.createOneAmendment());
     }
 
     @FXML
