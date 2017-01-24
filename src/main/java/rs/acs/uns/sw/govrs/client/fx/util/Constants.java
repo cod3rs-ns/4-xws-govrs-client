@@ -6,7 +6,7 @@ package rs.acs.uns.sw.govrs.client.fx.util;
 public class Constants {
     // User types
     public static final String PRESIDENT = "predsednik";
-    public static final String ALDERMAN = "odbornik";
+    public static final String ALDERMAN = "narodni_poslanik";
     public static final String CITIZEN = "gradjanin";
 
     // Button styles

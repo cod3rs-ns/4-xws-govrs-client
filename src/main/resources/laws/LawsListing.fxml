@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
@@ -9,49 +11,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.PropertySheet?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.laws.LawSearchController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <AnchorPane BorderPane.alignment="CENTER">
-               <children>
-                  <TitledPane collapsible="false" maxWidth="800.0" prefHeight="200.0" prefWidth="640.0" text="Rezultati pretrage" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <content>
-                        <ScrollPane hbarPolicy="NEVER">
-                           <content>
-                              <VBox fx:id="lawsContainer" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="620.0" prefWidth="620.0" style="-fx-spacing: 5;">
-                                 <opaqueInsets>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </opaqueInsets>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                     </content>
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding>
-                  </TitledPane>
-               </children>
-            </AnchorPane>
-         </left>
-         <center>
-            <AnchorPane minWidth="400.0" prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
-               <children>
-                  <TitledPane collapsible="false" prefHeight="626.0" prefWidth="200.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding>
-                  </TitledPane>
-               </children>
-            </AnchorPane>
-         </center>
          <bottom>
-            <Pagination maxPageIndicatorCount="5" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Pagination fx:id="pagination" maxPageIndicatorCount="5" prefHeight="50.0" prefWidth="1017.0" BorderPane.alignment="CENTER">
                <padding>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </padding>
@@ -60,22 +27,80 @@
                </BorderPane.margin>
             </Pagination>
          </bottom>
-         <top>
-            <HBox alignment="CENTER" prefHeight="100.0">
+         <left>
+            <AnchorPane maxWidth="790.0" minWidth="790.0" prefWidth="790.0" BorderPane.alignment="CENTER">
                <children>
-                  <CustomTextField alignment="CENTER">
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding>
-                  </CustomTextField>
-                  <Button fx:id="searchButton" alignment="CENTER" mnemonicParsing="false" text="Search">
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding>
-                  </Button>
+                  <AnchorPane maxWidth="250.0" minWidth="250.0" prefHeight="550.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <CustomTextField fx:id="searchField" alignment="CENTER" prefHeight="25.0" promptText="Termin pretrage...">
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </CustomTextField>
+                              <Button fx:id="searchButton" alignment="CENTER" mnemonicParsing="false" onAction="#performSearch" prefHeight="25.0" text="Pretraži">
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <Label layoutX="14.0" layoutY="50.0" text="Napredna pretraga" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="50.0" />
+                        <PropertySheet fx:id="propertySheet" mode="CATEGORY" searchBoxVisible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="70.0" />
+                        <Hyperlink layoutX="188.0" layoutY="43.0" onAction="#clearData" text="poništi" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="46.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane maxWidth="530.0" minWidth="530.0" prefWidth="530.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TitledPane collapsible="false" maxWidth="540.0" minWidth="540.0" prefHeight="550.0" prefWidth="560.0" text="Rezultati pretrage" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                           </padding>
+                           <content>
+                              <AnchorPane>
+                                 <children>
+                                    <ScrollPane fx:id="scrolledContainer" hbarPolicy="NEVER" layoutX="2.0" layoutY="2.0" prefHeight="520.0" prefWidth="554.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <content>
+                                          <VBox fx:id="lawsContainer" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="520.0" style="-fx-spacing: 5;">
+                                             <opaqueInsets>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </padding>
+                                          </VBox>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
                </children>
-            </HBox>
-         </top>
+            </AnchorPane>
+         </left>
+         <center>
+            <AnchorPane BorderPane.alignment="CENTER">
+               <children>
+                  <TitledPane collapsible="false" prefHeight="550.0" prefWidth="231.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                     <content>
+                        <BorderPane fx:id="previewHtml" />
+                     </content>
+                  </TitledPane>
+               </children>
+            </AnchorPane>
+         </center>
       </BorderPane>
    </children>
    <padding>

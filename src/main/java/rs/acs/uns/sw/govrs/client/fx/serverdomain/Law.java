@@ -13,6 +13,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -26,11 +27,11 @@ import java.util.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "head",
-    "body"
+        "head",
+        "body"
 })
 @XmlRootElement(name = "propis", namespace = "http://www.parlament.gov.rs/schema/propis")
-public class Law  extends Element{
+public class Law extends Element {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/propis", required = true)
     protected Law.Head head;
@@ -53,10 +54,8 @@ public class Law  extends Element{
     /**
      * Gets the value of the head property.
      *
-     * @return
-     *     possible object is
-     *     {@link Law.Head }
-     *
+     * @return possible object is
+     * {@link Law.Head }
      */
     public Law.Head getHead() {
         return head;
@@ -65,10 +64,8 @@ public class Law  extends Element{
     /**
      * Sets the value of the head property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link Law.Head }
-     *
+     * @param value allowed object is
+     *              {@link Law.Head }
      */
     public void setHead(Law.Head value) {
         this.head = value;
@@ -77,10 +74,8 @@ public class Law  extends Element{
     /**
      * Gets the value of the body property.
      *
-     * @return
-     *     possible object is
-     *     {@link Law.Body }
-     *
+     * @return possible object is
+     * {@link Law.Body }
      */
     public Law.Body getBody() {
         return body;
@@ -89,10 +84,8 @@ public class Law  extends Element{
     /**
      * Sets the value of the body property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link Law.Body }
-     *
+     * @param value allowed object is
+     *              {@link Law.Body }
      */
     public void setBody(Law.Body value) {
         this.body = value;
@@ -101,10 +94,8 @@ public class Law  extends Element{
     /**
      * Gets the value of the id property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
         return id.get();
@@ -113,16 +104,16 @@ public class Law  extends Element{
     /**
      * Sets the value of the id property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
         this.id.set(value);
     }
 
-    public StringProperty idProperty() {return id;}
+    public StringProperty idProperty() {
+        return id;
+    }
 
 
     public String getName() {
@@ -136,10 +127,8 @@ public class Law  extends Element{
     /**
      * Gets the value of the name property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+     * @return possible object is
+     * {@link String }
      */
     public String getElementName() {
         return name.get();
@@ -148,10 +137,8 @@ public class Law  extends Element{
     /**
      * Sets the value of the name property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+     * @param value allowed object is
+     *              {@link String }
      */
 
     public void setElementName(String value) {
@@ -166,17 +153,17 @@ public class Law  extends Element{
     @Override
     public void initElement() {
         // add all chapters
-        for (Element e: getBody().getDio()){
+        for (Element e : getBody().getDio()) {
             getChildren().add(e);
         }
 
         // add all parts
-        for (Element e: getBody().getGlava()){
+        for (Element e : getBody().getGlava()) {
             getChildren().add(e);
         }
 
         // init observable list for all children
-        for (Element e: getChildren()) {
+        for (Element e : getChildren()) {
             e.setElementParent(this);
             e.initElement();
         }
@@ -189,7 +176,7 @@ public class Law  extends Element{
     public void createAndAddChild(Element element) {
         // create Part
         if (element instanceof Part) {
-            Part p = (Part)element;
+            Part p = (Part) element;
             p.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Part));
             p.setElementParent(this);
             p.createPropertyAttrs();
@@ -198,7 +185,7 @@ public class Law  extends Element{
         }
         // create Chapter
         if (element instanceof Chapter) {
-            Chapter c = (Chapter)element;
+            Chapter c = (Chapter) element;
             c.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Chapter));
             c.setElementParent(this);
             c.createPropertyAttrs();
@@ -211,13 +198,13 @@ public class Law  extends Element{
     public void removeChild(Element element) {
         // create Part
         if (element instanceof Part) {
-            Part p = (Part)element;
+            Part p = (Part) element;
             getBody().getGlava().remove(p);
             getChildren().remove(p);
         }
         // create Chapter
         if (element instanceof Chapter) {
-            Chapter c = (Chapter)element;
+            Chapter c = (Chapter) element;
             getBody().getDio().remove(c);
             getChildren().remove(c);
         }
@@ -243,7 +230,7 @@ public class Law  extends Element{
                 "Status predloga",
                 "Trenutni status Akta na Skupštinskom repertoaru",
                 true);
-        LocalDatePropertyItem  propositionDatePropertyItem = new LocalDatePropertyItem(
+        LocalDatePropertyItem propositionDatePropertyItem = new LocalDatePropertyItem(
                 getHead().getDatumPredloga().valueProperty(),
                 "Status",
                 "Datum predloga",
@@ -293,7 +280,7 @@ public class Law  extends Element{
 
     @Override
     public void preMarshaller() {
-        for (Element child: getChildren()) {
+        for (Element child : getChildren()) {
             child.preMarshaller();
         }
     }
@@ -301,17 +288,15 @@ public class Law  extends Element{
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.
-     *
+     * <p>
      * <p>
      * the map is keyed by the name of the attribute and
      * the value is the string value of the attribute.
-     *
+     * <p>
      * the map returned by this method is live, and you can add new attribute
      * by updating the map directly. Because of this design, there's no setter.
      *
-     *
-     * @return
-     *     always non-null
+     * @return always non-null
      */
     public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
@@ -320,9 +305,9 @@ public class Law  extends Element{
 
     /**
      * <p>Java class for anonymous complex type.
-     *
+     * <p>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     *
+     * <p>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -335,13 +320,11 @@ public class Law  extends Element{
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     *
-     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "glava",
-        "dio"
+            "glava",
+            "dio"
     })
     public static class Body {
 
@@ -352,25 +335,23 @@ public class Law  extends Element{
 
         /**
          * Gets the value of the glava property.
-         *
+         * <p>
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the glava property.
-         *
+         * <p>
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getGlava().add(newItem);
          * </pre>
-         *
-         *
+         * <p>
+         * <p>
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Part }
-         *
-         *
          */
         public List<Part> getGlava() {
             if (glava == null) {
@@ -381,25 +362,23 @@ public class Law  extends Element{
 
         /**
          * Gets the value of the dio property.
-         *
+         * <p>
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the dio property.
-         *
+         * <p>
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getDio().add(newItem);
          * </pre>
-         *
-         *
+         * <p>
+         * <p>
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Chapter }
-         *
-         *
          */
         public List<Chapter> getDio() {
             if (dio == null) {
@@ -413,9 +392,9 @@ public class Law  extends Element{
 
     /**
      * <p>Java class for anonymous complex type.
-     *
+     * <p>
      * <p>The following schema fragment specifies the expected content contained within this class.
-     *
+     * <p>
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -494,19 +473,17 @@ public class Law  extends Element{
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     *
-     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "datumPredloga",
-        "datumIzglasavanja",
-        "status",
-        "mjesto",
-        "glasovaZa",
-        "glasovaProtiv",
-        "glasovaSuzdrzani",
-        "podnosilac"
+            "datumPredloga",
+            "datumIzglasavanja",
+            "status",
+            "mjesto",
+            "glasovaZa",
+            "glasovaProtiv",
+            "glasovaSuzdrzani",
+            "podnosilac"
     })
     public static class Head {
 
@@ -535,10 +512,8 @@ public class Law  extends Element{
         /**
          * Gets the value of the datumPredloga property.
          *
-         * @return
-         *     possible object is
-         *     {@link Law.Head.DatumPredloga }
-         *
+         * @return possible object is
+         * {@link Law.Head.DatumPredloga }
          */
         public Law.Head.DatumPredloga getDatumPredloga() {
             return datumPredloga;
@@ -547,10 +522,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the datumPredloga property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Law.Head.DatumPredloga }
-         *
+         * @param value allowed object is
+         *              {@link Law.Head.DatumPredloga }
          */
         public void setDatumPredloga(Law.Head.DatumPredloga value) {
             this.datumPredloga = value;
@@ -559,10 +532,8 @@ public class Law  extends Element{
         /**
          * Gets the value of the datumIzglasavanja property.
          *
-         * @return
-         *     possible object is
-         *     {@link Law.Head.DatumIzglasavanja }
-         *
+         * @return possible object is
+         * {@link Law.Head.DatumIzglasavanja }
          */
         public Law.Head.DatumIzglasavanja getDatumIzglasavanja() {
             return datumIzglasavanja;
@@ -571,10 +542,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the datumIzglasavanja property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Law.Head.DatumIzglasavanja }
-         *
+         * @param value allowed object is
+         *              {@link Law.Head.DatumIzglasavanja }
          */
         public void setDatumIzglasavanja(Law.Head.DatumIzglasavanja value) {
             this.datumIzglasavanja = value;
@@ -583,10 +552,8 @@ public class Law  extends Element{
         /**
          * Gets the value of the status property.
          *
-         * @return
-         *     possible object is
-         *     {@link Law.Head.Status }
-         *
+         * @return possible object is
+         * {@link Law.Head.Status }
          */
         public Law.Head.Status getStatus() {
             return status;
@@ -595,10 +562,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the status property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Law.Head.Status }
-         *
+         * @param value allowed object is
+         *              {@link Law.Head.Status }
          */
         public void setStatus(Law.Head.Status value) {
             this.status = value;
@@ -607,10 +572,8 @@ public class Law  extends Element{
         /**
          * Gets the value of the mjesto property.
          *
-         * @return
-         *     possible object is
-         *     {@link String }
-         *
+         * @return possible object is
+         * {@link String }
          */
         public String getMjesto() {
             return mjesto.get();
@@ -619,10 +582,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the mjesto property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setMjesto(String value) {
             this.mjesto.set(value);
@@ -631,13 +592,12 @@ public class Law  extends Element{
         public StringProperty mjestoProperty() {
             return mjesto;
         }
+
         /**
          * Gets the value of the glasovaZa property.
          *
-         * @return
-         *     possible object is
-         *     {@link Law.Head.GlasovaZa }
-         *
+         * @return possible object is
+         * {@link Law.Head.GlasovaZa }
          */
         public Law.Head.GlasovaZa getGlasovaZa() {
             return glasovaZa;
@@ -646,10 +606,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the glasovaZa property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Law.Head.GlasovaZa }
-         *
+         * @param value allowed object is
+         *              {@link Law.Head.GlasovaZa }
          */
         public void setGlasovaZa(Law.Head.GlasovaZa value) {
             this.glasovaZa = value;
@@ -658,10 +616,8 @@ public class Law  extends Element{
         /**
          * Gets the value of the glasovaProtiv property.
          *
-         * @return
-         *     possible object is
-         *     {@link Law.Head.GlasovaProtiv }
-         *
+         * @return possible object is
+         * {@link Law.Head.GlasovaProtiv }
          */
         public Law.Head.GlasovaProtiv getGlasovaProtiv() {
             return glasovaProtiv;
@@ -670,10 +626,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the glasovaProtiv property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Law.Head.GlasovaProtiv }
-         *
+         * @param value allowed object is
+         *              {@link Law.Head.GlasovaProtiv }
          */
         public void setGlasovaProtiv(Law.Head.GlasovaProtiv value) {
             this.glasovaProtiv = value;
@@ -682,10 +636,8 @@ public class Law  extends Element{
         /**
          * Gets the value of the glasovaSuzdrzani property.
          *
-         * @return
-         *     possible object is
-         *     {@link Law.Head.GlasovaSuzdrzani }
-         *
+         * @return possible object is
+         * {@link Law.Head.GlasovaSuzdrzani }
          */
         public Law.Head.GlasovaSuzdrzani getGlasovaSuzdrzani() {
             return glasovaSuzdrzani;
@@ -694,10 +646,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the glasovaSuzdrzani property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Law.Head.GlasovaSuzdrzani }
-         *
+         * @param value allowed object is
+         *              {@link Law.Head.GlasovaSuzdrzani }
          */
         public void setGlasovaSuzdrzani(Law.Head.GlasovaSuzdrzani value) {
             this.glasovaSuzdrzani = value;
@@ -706,10 +656,8 @@ public class Law  extends Element{
         /**
          * Gets the value of the podnosilac property.
          *
-         * @return
-         *     possible object is
-         *     {@link Law.Head.Podnosilac }
-         *
+         * @return possible object is
+         * {@link Law.Head.Podnosilac }
          */
         public Law.Head.Podnosilac getPodnosilac() {
             return podnosilac;
@@ -718,10 +666,8 @@ public class Law  extends Element{
         /**
          * Sets the value of the podnosilac property.
          *
-         * @param value
-         *     allowed object is
-         *     {@link Law.Head.Podnosilac }
-         *
+         * @param value allowed object is
+         *              {@link Law.Head.Podnosilac }
          */
         public void setPodnosilac(Law.Head.Podnosilac value) {
             this.podnosilac = value;
@@ -729,17 +675,15 @@ public class Law  extends Element{
 
         /**
          * Gets a map that contains attributes that aren't bound to any typed property on this class.
-         * 
          * <p>
-         * the map is keyed by the name of the attribute and 
+         * <p>
+         * the map is keyed by the name of the attribute and
          * the value is the string value of the attribute.
-         * 
+         * <p>
          * the map returned by this method is live, and you can add new attribute
          * by updating the map directly. Because of this design, there's no setter.
-         * 
-         * 
-         * @return
-         *     always non-null
+         *
+         * @return always non-null
          */
         public Map<QName, String> getOtherAttributes() {
             return otherAttributes;
@@ -748,9 +692,9 @@ public class Law  extends Element{
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;simpleContent>
@@ -760,12 +704,10 @@ public class Law  extends Element{
          *   &lt;/simpleContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "value"
+                "value"
         })
         public static class DatumIzglasavanja {
 
@@ -776,13 +718,12 @@ public class Law  extends Element{
 
             @XmlAnyAttribute
             private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+
             /**
              * Gets the value of the value property.
              *
-             * @return
-             *     possible object is
-             *     {@link XMLGregorianCalendar }
-             *
+             * @return possible object is
+             * {@link XMLGregorianCalendar }
              */
             public XMLGregorianCalendar getValue() {
                 LocalDate localDate = value.get();
@@ -798,10 +739,8 @@ public class Law  extends Element{
             /**
              * Sets the value of the value property.
              *
-             * @param value
-             *     allowed object is
-             *     {@link XMLGregorianCalendar }
-             *
+             * @param value allowed object is
+             *              {@link XMLGregorianCalendar }
              */
             public void setValue(XMLGregorianCalendar value) {
                 LocalDate localDate = value.toGregorianCalendar().toZonedDateTime().toLocalDate();
@@ -811,19 +750,18 @@ public class Law  extends Element{
             public ObjectProperty<LocalDate> valueProperty() {
                 return value;
             }
+
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
-             * 
              * <p>
-             * the map is keyed by the name of the attribute and 
+             * <p>
+             * the map is keyed by the name of the attribute and
              * the value is the string value of the attribute.
-             * 
+             * <p>
              * the map returned by this method is live, and you can add new attribute
              * by updating the map directly. Because of this design, there's no setter.
-             * 
-             * 
-             * @return
-             *     always non-null
+             *
+             * @return always non-null
              */
             public Map<QName, String> getOtherAttributes() {
                 return otherAttributes;
@@ -834,9 +772,9 @@ public class Law  extends Element{
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;simpleContent>
@@ -846,12 +784,10 @@ public class Law  extends Element{
          *   &lt;/simpleContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "value"
+                "value"
         })
         public static class DatumPredloga {
 
@@ -865,11 +801,9 @@ public class Law  extends Element{
 
             /**
              * Gets the value of the value property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link XMLGregorianCalendar }
-             *     
+             *
+             * @return possible object is
+             * {@link XMLGregorianCalendar }
              */
             public XMLGregorianCalendar getValue() {
                 LocalDate localDate = value.get();
@@ -884,11 +818,9 @@ public class Law  extends Element{
 
             /**
              * Sets the value of the value property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link XMLGregorianCalendar }
-             *     
+             *
+             * @param value allowed object is
+             *              {@link XMLGregorianCalendar }
              */
             public void setValue(XMLGregorianCalendar value) {
                 LocalDate localDate = value.toGregorianCalendar().toZonedDateTime().toLocalDate();
@@ -901,17 +833,15 @@ public class Law  extends Element{
 
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
-             * 
              * <p>
-             * the map is keyed by the name of the attribute and 
+             * <p>
+             * the map is keyed by the name of the attribute and
              * the value is the string value of the attribute.
-             * 
+             * <p>
              * the map returned by this method is live, and you can add new attribute
              * by updating the map directly. Because of this design, there's no setter.
-             * 
-             * 
-             * @return
-             *     always non-null
+             *
+             * @return always non-null
              */
             public Map<QName, String> getOtherAttributes() {
                 return otherAttributes;
@@ -922,9 +852,9 @@ public class Law  extends Element{
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;simpleContent>
@@ -934,12 +864,10 @@ public class Law  extends Element{
          *   &lt;/simpleContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "value"
+                "value"
         })
         public static class GlasovaProtiv {
 
@@ -952,7 +880,6 @@ public class Law  extends Element{
 
             /**
              * Gets the value of the value property.
-             * 
              */
             public int getValue() {
                 return value.get();
@@ -960,7 +887,6 @@ public class Law  extends Element{
 
             /**
              * Sets the value of the value property.
-             * 
              */
             public void setValue(int value) {
                 this.value.set(value);
@@ -972,17 +898,15 @@ public class Law  extends Element{
 
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
-             * 
              * <p>
-             * the map is keyed by the name of the attribute and 
+             * <p>
+             * the map is keyed by the name of the attribute and
              * the value is the string value of the attribute.
-             * 
+             * <p>
              * the map returned by this method is live, and you can add new attribute
              * by updating the map directly. Because of this design, there's no setter.
-             * 
-             * 
-             * @return
-             *     always non-null
+             *
+             * @return always non-null
              */
             public Map<QName, String> getOtherAttributes() {
                 return otherAttributes;
@@ -993,9 +917,9 @@ public class Law  extends Element{
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;simpleContent>
@@ -1005,12 +929,10 @@ public class Law  extends Element{
          *   &lt;/simpleContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "value"
+                "value"
         })
         public static class GlasovaSuzdrzani {
 
@@ -1023,7 +945,6 @@ public class Law  extends Element{
 
             /**
              * Gets the value of the value property.
-             * 
              */
             public int getValue() {
                 return value.get();
@@ -1031,7 +952,6 @@ public class Law  extends Element{
 
             /**
              * Sets the value of the value property.
-             * 
              */
             public void setValue(int value) {
                 this.value.set(value);
@@ -1043,17 +963,15 @@ public class Law  extends Element{
 
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
-             * 
              * <p>
-             * the map is keyed by the name of the attribute and 
+             * <p>
+             * the map is keyed by the name of the attribute and
              * the value is the string value of the attribute.
-             * 
+             * <p>
              * the map returned by this method is live, and you can add new attribute
              * by updating the map directly. Because of this design, there's no setter.
-             * 
-             * 
-             * @return
-             *     always non-null
+             *
+             * @return always non-null
              */
             public Map<QName, String> getOtherAttributes() {
                 return otherAttributes;
@@ -1064,9 +982,9 @@ public class Law  extends Element{
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;simpleContent>
@@ -1076,12 +994,10 @@ public class Law  extends Element{
          *   &lt;/simpleContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "value"
+                "value"
         })
         public static class GlasovaZa {
 
@@ -1093,7 +1009,6 @@ public class Law  extends Element{
 
             /**
              * Gets the value of the value property.
-             * 
              */
             public int getValue() {
                 return value.get();
@@ -1101,7 +1016,6 @@ public class Law  extends Element{
 
             /**
              * Sets the value of the value property.
-             * 
              */
             public void setValue(int value) {
                 this.value.set(value);
@@ -1113,17 +1027,15 @@ public class Law  extends Element{
 
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
-             * 
              * <p>
-             * the map is keyed by the name of the attribute and 
+             * <p>
+             * the map is keyed by the name of the attribute and
              * the value is the string value of the attribute.
-             * 
+             * <p>
              * the map returned by this method is live, and you can add new attribute
              * by updating the map directly. Because of this design, there's no setter.
-             * 
-             * 
-             * @return
-             *     always non-null
+             *
+             * @return always non-null
              */
             public Map<QName, String> getOtherAttributes() {
                 return otherAttributes;
@@ -1134,9 +1046,9 @@ public class Law  extends Element{
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -1149,12 +1061,10 @@ public class Law  extends Element{
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "ref"
+                "ref"
         })
         public static class Podnosilac {
 
@@ -1165,11 +1075,9 @@ public class Law  extends Element{
 
             /**
              * Gets the value of the ref property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link Ref }
-             *     
+             *
+             * @return possible object is
+             * {@link Ref }
              */
             public Ref getRef() {
                 return ref;
@@ -1177,11 +1085,9 @@ public class Law  extends Element{
 
             /**
              * Sets the value of the ref property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link Ref }
-             *     
+             *
+             * @param value allowed object is
+             *              {@link Ref }
              */
             public void setRef(Ref value) {
                 this.ref = value;
@@ -1189,17 +1095,15 @@ public class Law  extends Element{
 
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
-             * 
              * <p>
-             * the map is keyed by the name of the attribute and 
+             * <p>
+             * the map is keyed by the name of the attribute and
              * the value is the string value of the attribute.
-             * 
+             * <p>
              * the map returned by this method is live, and you can add new attribute
              * by updating the map directly. Because of this design, there's no setter.
-             * 
-             * 
-             * @return
-             *     always non-null
+             *
+             * @return always non-null
              */
             public Map<QName, String> getOtherAttributes() {
                 return otherAttributes;
@@ -1210,9 +1114,9 @@ public class Law  extends Element{
 
         /**
          * <p>Java class for anonymous complex type.
-         * 
+         * <p>
          * <p>The following schema fragment specifies the expected content contained within this class.
-         * 
+         * <p>
          * <pre>
          * &lt;complexType>
          *   &lt;simpleContent>
@@ -1222,12 +1126,10 @@ public class Law  extends Element{
          *   &lt;/simpleContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "value"
+                "value"
         })
         public static class Status {
 
@@ -1240,11 +1142,9 @@ public class Law  extends Element{
 
             /**
              * Gets the value of the value property.
-             * 
-             * @return
-             *     possible object is
-             *     {@link String }
-             *     
+             *
+             * @return possible object is
+             * {@link String }
              */
             public String getValue() {
                 if (value.get() == DocumentStatus.Predlozen) {
@@ -1263,11 +1163,9 @@ public class Law  extends Element{
 
             /**
              * Sets the value of the value property.
-             * 
-             * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
+             *
+             * @param value allowed object is
+             *              {@link String }
              */
             public void setValue(String value) {
                 if (value.equals("predložen")) {
@@ -1284,26 +1182,43 @@ public class Law  extends Element{
             public ObjectProperty<DocumentStatus> valueProperty() {
                 return value;
             }
+
             /**
              * Gets a map that contains attributes that aren't bound to any typed property on this class.
-             * 
              * <p>
-             * the map is keyed by the name of the attribute and 
+             * <p>
+             * the map is keyed by the name of the attribute and
              * the value is the string value of the attribute.
-             * 
+             * <p>
              * the map returned by this method is live, and you can add new attribute
              * by updating the map directly. Because of this design, there's no setter.
-             * 
-             * 
-             * @return
-             *     always non-null
+             *
+             * @return always non-null
              */
             public Map<QName, String> getOtherAttributes() {
                 return otherAttributes;
             }
 
         }
-
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Ime zakona je obavezno."));
+        if (getChildren().size() == 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može biti prazan."));
+        if (body.getDio().size() > 2)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može da ima više od dva dijela."));
+        if (body.getGlava().size() > 2)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može da ima više od dvije glave."));
+        if (body.getGlava().size() > 0 && body.getDio().size() > 0) {
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može istovremeno da sadrži i \nglave  i dijelove kao korijenski element."));
+        }
+
+        // validate children elements
+        for (Element child : getChildren()) {
+            child.validate(errorMessageList);
+        }
+    }
 }

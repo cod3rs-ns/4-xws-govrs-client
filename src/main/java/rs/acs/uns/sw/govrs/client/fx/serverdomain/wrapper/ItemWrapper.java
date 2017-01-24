@@ -4,6 +4,11 @@ import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Item;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
+import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
+
+import java.util.List;
 
 
 public class ItemWrapper extends Element {
@@ -99,4 +104,9 @@ public class ItemWrapper extends Element {
 
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        if (getElementContent() == null || "".equals(getElementContent()))
+            errorMessageList.add(new ErrorMessage(getId(), getElementName(), ElementType.Item, "Sadržaj alineje je obavezan."));
+    }
 }

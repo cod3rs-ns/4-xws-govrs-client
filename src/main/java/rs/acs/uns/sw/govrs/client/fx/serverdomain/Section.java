@@ -15,6 +15,7 @@ import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.StringPropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -24,9 +25,9 @@ import java.util.List;
 
 /**
  * <p>Java class for odjeljak element declaration.
- * 
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;element name="odjeljak">
  *   &lt;complexType>
@@ -42,16 +43,14 @@ import java.util.List;
  *   &lt;/complexType>
  * &lt;/element>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "clan",
-    "pododjeljak"
+        "clan",
+        "pododjeljak"
 })
 @XmlRootElement(name = "odjeljak", namespace = "http://www.parlament.gov.rs/schema/elementi")
-public class Section extends Element{
+public class Section extends Element {
 
     @XmlElement(namespace = "http://www.parlament.gov.rs/schema/elementi")
     protected List<Article> clan;
@@ -69,25 +68,23 @@ public class Section extends Element{
 
     /**
      * Gets the value of the clan property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the clan property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getClan().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Article }
-     * 
-     * 
      */
     public List<Article> getClan() {
         if (clan == null) {
@@ -98,25 +95,23 @@ public class Section extends Element{
 
     /**
      * Gets the value of the pododjeljak property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the pododjeljak property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getPododjeljak().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Subsection }
-     * 
-     * 
      */
     public List<Subsection> getPododjeljak() {
         if (pododjeljak == null) {
@@ -127,11 +122,9 @@ public class Section extends Element{
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
         return id.get();
@@ -139,11 +132,9 @@ public class Section extends Element{
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
         this.id.set(value);
@@ -156,10 +147,8 @@ public class Section extends Element{
     /**
      * Gets the value of the name property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+     * @return possible object is
+     * {@link String }
      */
     public String getElementName() {
         return name.get();
@@ -168,10 +157,8 @@ public class Section extends Element{
     /**
      * Sets the value of the name property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setElementName(String value) {
         this.name.set(value);
@@ -193,17 +180,17 @@ public class Section extends Element{
     @Override
     public void initElement() {
         // add all articles
-        for (Element e:getClan()) {
+        for (Element e : getClan()) {
             getChildren().add(e);
         }
 
         // add all subsections
-        for (Element e:getPododjeljak()){
+        for (Element e : getPododjeljak()) {
             getChildren().add(e);
         }
 
         // init observable list for all children
-        for (Element e: getChildren()) {
+        for (Element e : getChildren()) {
             e.setElementParent(this);
             e.initElement();
         }
@@ -215,7 +202,7 @@ public class Section extends Element{
     public void createAndAddChild(Element element) {
         // add new article
         if (element instanceof Article) {
-            Article a = (Article)element;
+            Article a = (Article) element;
             a.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Article));
             a.setElementParent(this);
             a.createPropertyAttrs();
@@ -225,7 +212,7 @@ public class Section extends Element{
 
         // add new subsection
         if (element instanceof Subsection) {
-            Subsection s = (Subsection)element;
+            Subsection s = (Subsection) element;
             s.idProperty().set(IdentityGenerator.get().generate(this, ElementType.Subsection));
             s.setElementParent(this);
             s.createPropertyAttrs();
@@ -238,7 +225,7 @@ public class Section extends Element{
     public void removeChild(Element element) {
         // remove article
         if (element instanceof Article) {
-            Article a = (Article)element;
+            Article a = (Article) element;
             getClan().remove(a);
             getChildren().remove(a);
         }
@@ -272,8 +259,23 @@ public class Section extends Element{
 
     @Override
     public void preMarshaller() {
-        for (Element child: getChildren()) {
+        for (Element child : getChildren()) {
             child.preMarshaller();
+        }
+    }
+
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Section, "Odjeljak je obavezan."));
+        if (getChildren().size() == 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Section, "Odjeljak ne može biti prazan."));
+        if (getPododjeljak().size() > 0 && getClan().size() > 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Section, "Odjeljak ne može imati na istom nivou i članove i pododjeljke."));
+
+        // validate children elements
+        for (Element child : getChildren()) {
+            child.validate(errorMessageList);
         }
     }
 }

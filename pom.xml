@@ -6,7 +6,7 @@
 
     <groupId>gov-rs</groupId>
     <artifactId>xws-gov-rs-client</artifactId>
-    <version>0.8.5.dev</version>
+    <version>0.9.dev</version>
 
 
     <properties>
@@ -73,6 +73,28 @@
             <artifactId>controlsfx</artifactId>
             <version>8.40.12</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>

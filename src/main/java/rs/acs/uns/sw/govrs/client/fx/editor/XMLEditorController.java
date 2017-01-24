@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
@@ -32,17 +33,22 @@ import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
-import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Creator;
+import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
+import rs.acs.uns.sw.govrs.client.fx.util.Loader;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  * Used for creating Laws.
@@ -103,6 +109,8 @@ public class XMLEditorController implements TreeController {
     private ImageView saveAsButton;
     @FXML
     private ImageView newLawButton;
+    @FXML
+    private ImageView uploadButton;
     // -------------------------------------------------
 
     // ------------------ components -------------------
@@ -124,7 +132,7 @@ public class XMLEditorController implements TreeController {
     /**
      * Represents file on disk, if opened, currently initialized to some value for testing
      **/
-    private File activeFile = new File(System.getProperty("user.home") + File.separator + "test_save_xml");
+    private File activeFile = new File(System.getProperty("user.home") + File.separator + "test_save.xml");
 
     /**
      * Selected element on Tree
@@ -168,6 +176,8 @@ public class XMLEditorController implements TreeController {
         Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
         Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
         Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
+        Tooltip.install(newLawButton, new Tooltip("Kreirajte novi propis"));
+        Tooltip.install(uploadButton, new Tooltip("Postavite propis na skupštinski red"));
     }
 
     public void loadTestData() {
@@ -468,17 +478,29 @@ public class XMLEditorController implements TreeController {
     @FXML
     private void saveAction() {
         try {
-            if (activeFile != null) {
-                JAXBContext context = JAXBContext.newInstance(Law.class);
-                Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(law, activeFile);
+            List<ErrorMessage> errors = new ArrayList<>();
+            law.validate(errors);
+            if (errors.size() > 0) {
+                for (ErrorMessage em: errors) {
+                    Notifications.create().owner(areaContainer.getScene().getWindow())
+                            .title("Greška <" + em.getElementType().toString() + ">")
+                            .text(em.getMessage())
+                            .showError();
+                }
+            } else {
+                if (activeFile != null) {
+                    JAXBContext context = JAXBContext.newInstance(Law.class);
+                    Marshaller marshaller = context.createMarshaller();
+                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    marshaller.marshal(law, activeFile);
+
+                    CustomDialogCreator.createInformationAlert(
+                            "GovRS",
+                            "Čuvanje XML datoteke",
+                            "Fajl je uspešno sačuvan."
+                    ).showAndWait();
+                }
             }
-            CustomDialogCreator.createInformationAlert(
-                    "GovRS",
-                    "Čuvanje XML datoteke",
-                    "Fajl je uspešno sačuvan."
-            ).showAndWait();
         } catch (Exception e) {
             CustomDialogCreator.createErrorAlert(
                     "GovRS",
@@ -495,7 +517,7 @@ public class XMLEditorController implements TreeController {
     @FXML
     private void saveAsAction() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sačuvaj law kao...");
+        fileChooser.setTitle("Sačuvajate propis kao...");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("XML files", "*.xml")
         );
@@ -504,15 +526,26 @@ public class XMLEditorController implements TreeController {
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
-                JAXBContext context = JAXBContext.newInstance(Law.class);
-                Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(law, file);
-                CustomDialogCreator.createInformationAlert(
-                        "GovRS",
-                        "Čuvanje XML datoteke",
-                        "Fajl je uspešno sačuvan."
-                ).showAndWait();
+                List<ErrorMessage> errors = new ArrayList<>();
+                law.validate(errors);
+                if (errors.size() > 0) {
+                    for (ErrorMessage em: errors) {
+                        Notifications.create().owner(areaContainer.getScene().getWindow())
+                                .title("Greška <" + em.getElementType().toString() + ">")
+                                .text(em.getMessage())
+                                .showError();
+                    }
+                } else {
+                    JAXBContext context = JAXBContext.newInstance(Law.class);
+                    Marshaller marshaller = context.createMarshaller();
+                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    marshaller.marshal(law, file);
+                    CustomDialogCreator.createInformationAlert(
+                            "GovRS",
+                            "Čuvanje XML datoteke",
+                            "Fajl je uspešno sačuvan."
+                    ).showAndWait();
+                }
             } catch (Exception e) {
                 CustomDialogCreator.createErrorAlert(
                         "GovRS",
@@ -531,7 +564,32 @@ public class XMLEditorController implements TreeController {
         result.ifPresent(name -> {
             Law newl = Creator.createNewLaw();
             switchViewToNewLaw(newl);
+            Notifications.create().owner(treeContainer.getScene().getWindow()).title("Propis").text("Propis je uspešno kreiran!").showInformation();
         });
+    }
+
+    @FXML
+    private void uploadLaw() {
+        List<ErrorMessage> errors = new ArrayList<>();
+        law.validate(errors);
+        if (errors.size() > 0) {
+            for (ErrorMessage em: errors) {
+                Notifications.create().owner(areaContainer.getScene().getWindow())
+                        .title("Greška <" + em.getElementType().toString() + ">")
+                        .text(em.getMessage())
+                        .showError();
+            }
+        } else {
+            law.preMarshaller();
+            GluonObservableObject<Law> lawProperty =
+                    RestClientProvider.getInstance().postLaw(law);
+            Stage stage = Loader.createLoader(treeContainer.getScene());
+            stage.show();
+
+            lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                stage.close();
+            }));
+        }
     }
 
     /**
