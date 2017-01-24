@@ -64,7 +64,7 @@
                               <Label fx:id="nameLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label fx:id="authorNameLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label fx:id="dateLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Hyperlink text="pregledaj" GridPane.rowIndex="4" />
+                              <Hyperlink onAction="#preview" text="pregledaj" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
                         <AnchorPane GridPane.columnIndex="1">

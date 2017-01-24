@@ -46,13 +46,13 @@
                   </HBox>
                </children>
             </AnchorPane>
-            <AnchorPane>
+            <AnchorPane maxWidth="580.0" minWidth="580.0" prefWidth="580.0">
                <children>
-                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.5" maxWidth="575.0" minWidth="575.0" orientation="VERTICAL" prefHeight="598.0" prefWidth="580.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <AnchorPane maxHeight="150.0" minHeight="150.0" prefHeight="150.0">
                            <children>
-                              <TitledPane collapsible="false" minHeight="200.0" prefHeight="200.0" text="Podaci o izabranom propisu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TitledPane collapsible="false" minHeight="200.0" prefHeight="150.0" prefWidth="578.0" text="Podaci o izabranom propisu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
                                     <AnchorPane>
                                        <padding>
@@ -104,16 +104,16 @@
                               </TitledPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane>
+                        <AnchorPane maxWidth="580.0" minWidth="580.0" prefWidth="580.0">
                            <children>
-                              <TitledPane collapsible="false" minWidth="300.0" prefHeight="248.0" prefWidth="476.0" text="Amandmani" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TitledPane collapsible="false" minWidth="300.0" prefHeight="440.0" prefWidth="570.0" text="Amandmani" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <padding>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </padding>
                                  <content>
                                     <AnchorPane>
                                        <children>
-                                          <ScrollPane fx:id="scrolledContainer" hbarPolicy="NEVER" layoutX="2.0" layoutY="2.0" prefHeight="520.0" prefWidth="554.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <ScrollPane fx:id="scrolledContainer" hbarPolicy="NEVER" layoutX="2.0" layoutY="2.0" prefHeight="520.0" prefWidth="554.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <content>
                                                 <VBox fx:id="amendmentsContainer" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="520.0" style="-fx-spacing: 5;">
                                                    <opaqueInsets>

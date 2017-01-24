@@ -232,6 +232,16 @@ public class RestClientProvider {
         return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
     }
 
+    public GluonObservableObject<SearchResult> getAmendmentsByLaw(String lawId) {
+        RestClient restClient = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000")
+                .path("/api/amendments/laws/" + lawId);
+
+        SearchResultInputConverter converter = new SearchResultInputConverter();
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
     public AppUser getUser() {
         return user.get();
     }
