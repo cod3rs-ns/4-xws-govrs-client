@@ -1,5 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.util;
 
+import javafx.beans.property.ObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
@@ -7,6 +8,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
+import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
@@ -77,6 +79,7 @@ public class Creator {
         Amendments amendments = factory.createAmendments();
         amendments.setHead(factory.createAmendmentsHead());
         amendments.setBody(factory.createAmendmentsBody());
+        amendments.getBody().setPravniOsnov(createPravniOsnov());
         amendments.setId(IdentityGenerator.get().generate(null, ElementType.Amendments));
         amendments.setName("Neki novi amandmani");
         amendments.getHead().setDatumIzglasavanja(factory.createAmendmentsHeadDatumIzglasavanja());
@@ -148,5 +151,23 @@ public class Creator {
         ObjectFactory factory = new ObjectFactory();
         Amendment.Body.Odredba odredba = factory.createAmendmentBodyOdredba();
         return odredba;
+    }
+
+    public static Amendments.Body.PravniOsnov createPravniOsnov() {
+        ObjectFactory factory = new ObjectFactory();
+        Amendments.Body.PravniOsnov pravniOsnov = factory.createAmendmentsBodyPravniOsnov();
+        Article a = new Article();
+        a.setId("pravni_osnov");
+        a.setName("Pravni osnov");
+        a.initElement();
+        Paragraph p = new Paragraph();
+        p.setId("pravni_osnov/pp_id");
+        p.setName("Stav 1");
+        StringWrapper sw = new StringWrapper("Prema Stavu 1. Člana 7, Zakona o podnošenju amandmana na predlog zakona, donosi se amandman u sledećoj pisanoj formi.");
+        a.createAndAddChild(p);
+        p.createAndAddChild(sw);
+        a.preMarshaller();
+        pravniOsnov.setClan(a);
+        return pravniOsnov;
     }
 }

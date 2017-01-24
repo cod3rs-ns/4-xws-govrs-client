@@ -716,7 +716,7 @@ public class Amendment extends Element {
         else {
             if (getHead().getRjesenje() != null && getBody().getOdredba() == null) {
                 if (getHead().getRjesenje().equals("izmjena") || getHead().getRjesenje().equals("dopuna")) {
-                    errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Amendment, "Amandman koji mijenja/dodaje neku odredbu mora imati zamjensku/dopunsku odredbu."));
+                    errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Amendment, "Amandman koji mijenja/dodaje neku odredbu \nmora imati zamjensku/dopunsku odredbu."));
                 }
             }
             if (getBody().getOdredba() != null){

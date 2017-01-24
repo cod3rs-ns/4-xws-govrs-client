@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.ContextMenuHandler;
@@ -16,9 +17,9 @@ import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendment;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
+import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Loader;
-import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.JAXBContext;
@@ -199,18 +200,30 @@ public class AmendmentsController {
     @FXML
     private void saveAction() {
         try {
-            amendments.preMarshaller();
-            if (activeFile != null) {
-                JAXBContext context = JAXBContext.newInstance(Amendments.class);
-                Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(amendments, activeFile);
+            List<ErrorMessage> errors = new ArrayList<>();
+            amendments.validate(errors);
+            if (errors.size() > 0) {
+                for (ErrorMessage em : errors) {
+                    Notifications.create().owner(previewContainer.getScene().getWindow())
+                            .title("Greška <" + em.getElementType().toString() + ">")
+                            .text(em.getMessage())
+                            .showError();
+                }
+            } else {
+                amendments.preMarshaller();
+                if (activeFile != null) {
+                    JAXBContext context = JAXBContext.newInstance(Amendments.class);
+                    Marshaller marshaller = context.createMarshaller();
+                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    marshaller.marshal(amendments, activeFile);
+
+                    CustomDialogCreator.createInformationAlert(
+                            "GovRS",
+                            "Čuvanje XML datoteke",
+                            "Fajl je uspešno sačuvan."
+                    ).showAndWait();
+                }
             }
-            CustomDialogCreator.createInformationAlert(
-                    "GovRS",
-                    "Čuvanje XML datoteke",
-                    "Fajl je uspešno sačuvan."
-            ).showAndWait();
         } catch (Exception e) {
             CustomDialogCreator.createErrorAlert(
                     "GovRS",
@@ -226,37 +239,44 @@ public class AmendmentsController {
      */
     @FXML
     private void saveAsAction() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sačuvaj amandman kao...");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("XML files", "*.xml")
-        );
+        List<ErrorMessage> errors = new ArrayList<>();
+        amendments.validate(errors);
+        if (errors.size() > 0) {
+            for (ErrorMessage em : errors) {
+                Notifications.create().owner(previewContainer.getScene().getWindow())
+                        .title("Greška <" + em.getElementType().toString() + ">")
+                        .text(em.getMessage())
+                        .showError();
+            }
+        } else {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Sačuvaj amandman kao...");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("XML files", "*.xml")
+            );
 
-        Stage stage = (Stage) amendmentsTable.getScene().getWindow();
-        File file = fileChooser.showSaveDialog(stage);
-        if (file != null) {
-            try {
-                List<ErrorMessage> messages = new ArrayList<>();
-                amendments.validate(messages);
-                System.out.println(messages);
-
-                amendments.preMarshaller();
-                JAXBContext context = JAXBContext.newInstance(Amendments.class);
-                Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(amendments, file);
-                CustomDialogCreator.createInformationAlert(
-                        "GovRS",
-                        "Čuvanje XML datoteke",
-                        "Fajl je uspešno sačuvan."
-                ).showAndWait();
-            } catch (Exception e) {
-                CustomDialogCreator.createErrorAlert(
-                        "GovRS",
-                        "Čuvanje XML datoteke",
-                        "Fajl nije uspešno sačuvan."
-                ).showAndWait();
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
+            Stage stage = (Stage) amendmentsTable.getScene().getWindow();
+            File file = fileChooser.showSaveDialog(stage);
+            if (file != null) {
+                try {
+                    amendments.preMarshaller();
+                    JAXBContext context = JAXBContext.newInstance(Amendments.class);
+                    Marshaller marshaller = context.createMarshaller();
+                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    marshaller.marshal(amendments, file);
+                    CustomDialogCreator.createInformationAlert(
+                            "GovRS",
+                            "Čuvanje XML datoteke",
+                            "Fajl je uspešno sačuvan."
+                    ).showAndWait();
+                } catch (Exception e) {
+                    CustomDialogCreator.createErrorAlert(
+                            "GovRS",
+                            "Čuvanje XML datoteke",
+                            "Fajl nije uspešno sačuvan."
+                    ).showAndWait();
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
+                }
             }
         }
     }
@@ -267,6 +287,7 @@ public class AmendmentsController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             // TODO change to real Law ID
+            // TODO add notification
             Amendments newl = Creator.createNewAmendments("law01");
             switchViewToNewAmendment(newl);
         });
@@ -275,15 +296,26 @@ public class AmendmentsController {
     @FXML
     private void uploadAmendment() {
         try {
-            amendments.preMarshaller();
-            GluonObservableObject<Object> amendmentsProperty =
-                    RestClientProvider.getInstance().postAmendments(amendments);
-            Stage stage = Loader.createLoader(amendmentsTable.getScene());
-            stage.show();
+            List<ErrorMessage> errors = new ArrayList<>();
+            amendments.validate(errors);
+            if (errors.size() > 0) {
+                for (ErrorMessage em : errors) {
+                    Notifications.create().owner(previewContainer.getScene().getWindow())
+                            .title("Greška <" + em.getElementType().toString() + ">")
+                            .text(em.getMessage())
+                            .showError();
+                }
+            } else {
+                amendments.preMarshaller();
+                GluonObservableObject<Object> amendmentsProperty =
+                        RestClientProvider.getInstance().postAmendments(amendments);
+                Stage stage = Loader.createLoader(amendmentsTable.getScene());
+                stage.show();
 
-            amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-                stage.close();
-            }));
+                amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                    stage.close();
+                }));
+            }
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
         }
