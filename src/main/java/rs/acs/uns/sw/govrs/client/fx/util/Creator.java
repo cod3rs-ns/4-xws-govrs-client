@@ -39,6 +39,9 @@ public class Creator {
         law.getHead().setGlasovaZa(factory.createLawHeadGlasovaZa());
         law.getHead().setStatus(factory.createLawHeadStatus());
         law.getHead().setPodnosilac(factory.createLawHeadPodnosilac());
+        Ref podnosilacRef = new Ref();
+        podnosilacRef.setContent("");
+        podnosilacRef.setId(RestClientProvider.getInstance().getUser().getKorisnickoIme());
         law.getHead().getPodnosilac().getOtherAttributes().put(new QName("rel"), "pred:predlozenOd");
         law.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().getUser().getKorisnickoIme());
         law.getHead().getPodnosilac().getOtherAttributes().put(new QName("typeOf"), "pred:Odbornik");
@@ -94,6 +97,10 @@ public class Creator {
         // TODO change to real law ID
         amendments.getHead().setPropis(createPropis(lawId));
 
+        Ref podnosilacRef = new Ref();
+        podnosilacRef.setContent("");
+        podnosilacRef.setId(RestClientProvider.getInstance().getUser().getKorisnickoIme());
+        amendments.getHead().getPodnosilac().setRef(podnosilacRef);
         amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("rel"), "pred:predlozenOd");
         amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().getUser().getKorisnickoIme());
         amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("typeOf"), "pred:Odbornik");
@@ -124,11 +131,6 @@ public class Creator {
         amendment.setName("Novi amandman");
         amendment.setHead(factory.createAmendmentHead());
         amendment.setBody(factory.createAmendmentBody());
-        /*
-        amendment.getHead().setPredmet(factory.createAmendmentHeadPredmet());
-        amendment.getHead().getPredmet().setRef(factory.createRef());
-        amendment.getHead().getPredmet().getRef().setId("article01");
-        */
         amendment.getBody().setObrazlozenje(factory.createExplanation());
         amendment.getHead().setRjesenje("");
         return amendment;
