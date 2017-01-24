@@ -162,13 +162,6 @@ public class HomeController extends AnchorPane implements Initializable {
         return button;
     }
 
-    /**
-     * Test action
-     * TODO this is for test purpose only.
-     */
-    private void action() {
-        Logger.getLogger(HomeController.class.getName()).log(Level.INFO, "Button clicked!");
-    }
 
     /**
      * Action that switches to Search state.
@@ -192,13 +185,22 @@ public class HomeController extends AnchorPane implements Initializable {
     }
 
     /**
+     * Action that switches to Parliament state.
+     */
+    private void assemblyAction() { stateManager.switchState(Constants.ASSEMBLY_XML_EDITOR_FXML);}
+
+    /**
+     * Action that switches to Profile overview state.
+     */
+    private void myProfileAction() {stateManager.switchState(Constants.MY_PROFILE);}
+    /**
      * Initializes actions for user - Alderman.
      */
     private void setAldermanActions() {
         actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
         actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
         actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::amendmentAction, "Amandman"));
-        actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::myProfileAction, "Moji predlozi"));
     }
 
     /**
@@ -208,8 +210,8 @@ public class HomeController extends AnchorPane implements Initializable {
         actionContainer.getChildren().add(createButton(Constants.SEARCH, this::searchAction, "Početna"));
         actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
         actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::amendmentAction, "Amandman"));
-        actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
-        actionContainer.getChildren().add(createButton(Constants.VOTE, this::action, "Skupština"));
+        actionContainer.getChildren().add(createButton(Constants.ALL, this::myProfileAction, "Moji predlozi"));
+        actionContainer.getChildren().add(createButton(Constants.VOTE, this::assemblyAction, "Skupština"));
     }
 
     /**
