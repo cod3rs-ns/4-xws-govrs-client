@@ -82,9 +82,37 @@ public class LawSearchController extends AnchorPane implements Initializable {
         createItems();
         propertySheet.getItems().addAll(items);
 
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageCount(1);
+
     }
     private Stage loadingStage;
     ChangeListener<Boolean> listener;
+
+    @FXML
+    private void clearData() {
+        startVotesFor = new SimpleIntegerProperty();
+        endVotesFor = new SimpleIntegerProperty();
+        startVotesAgainst = new SimpleIntegerProperty();
+        endVotesAgainst = new SimpleIntegerProperty();
+        startVotesNeutral = new SimpleIntegerProperty();
+        endVotesNeutral = new SimpleIntegerProperty();
+        startDateOfProposal = new SimpleObjectProperty<>();
+        endDateOfProposal = new SimpleObjectProperty<>();
+        startDateOfVoting = new SimpleObjectProperty<>();
+        endDateOfVoting = new SimpleObjectProperty<>();
+        status = new SimpleObjectProperty<>();
+        items.clear();
+        propertySheet.getItems().clear();
+        createItems();
+        propertySheet.getItems().addAll(items);
+        queryStringProperty = new SimpleStringProperty("?");
+        retrievedObjects.clear();
+        scrolledContainer.setContent(null);
+        searchField.setText("");
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageCount(0);
+    }
     @FXML
     private void performSearch() {
         try{
