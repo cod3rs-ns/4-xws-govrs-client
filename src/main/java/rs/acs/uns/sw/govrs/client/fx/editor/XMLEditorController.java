@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
@@ -40,6 +41,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -536,6 +538,7 @@ public class XMLEditorController implements TreeController {
         result.ifPresent(name -> {
             Law newl = Creator.createNewLaw();
             switchViewToNewLaw(newl);
+            Notifications.create().owner(treeContainer.getScene().getWindow()).title("Propis").text("Propis je uspešno kreiran!").showInformation();
         });
     }
 
