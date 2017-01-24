@@ -159,8 +159,6 @@ public class LawSearchController extends AnchorPane implements Initializable {
             queryStringProperty.set(queryStringProperty.get() + "&endDateOfVoting=" + convertLocalDate(endDateOfVoting.get()));
         }
 
-        System.out.println(queryStringProperty.get());
-
         // create a RestClient to the specific URL
         RestClient restClient = RestClient.create()
                 .method("GET")
@@ -194,7 +192,6 @@ public class LawSearchController extends AnchorPane implements Initializable {
 
                         totalPages = retrievedObjects.size() / itemsPerPage() + 1;
                         pagination.setPageCount(totalPages);
-                        System.out.println(retrievedObjects.size());
                         pagination.setPageFactory(new Callback<Integer, Node>() {
                             @Override
                             public Node call(Integer pageIndex) {
