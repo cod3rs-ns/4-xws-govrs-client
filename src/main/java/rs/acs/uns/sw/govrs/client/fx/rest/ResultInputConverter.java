@@ -36,7 +36,7 @@ public class ResultInputConverter extends InputStreamInputConverter<Object> {
                     writer.write(line);
                 }
             }
-            //Logger.getLogger(LawInputConverter.class.getName()).log(Level.INFO, stringWriter.toString());
+            //Logger.getLogger(getClass().getName()).log(Level.INFO, stringWriter.toString());
             JAXBContext context = JAXBContext.newInstance(returnObjectType);
             Unmarshaller unMarshaller = context.createUnmarshaller();
             return unMarshaller.unmarshal(new StringReader(stringWriter.toString()));

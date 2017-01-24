@@ -2,37 +2,31 @@ package rs.acs.uns.sw.govrs.client.fx.rest;
 
 
 import com.gluonhq.connect.GluonObservableObject;
+import com.gluonhq.connect.converter.JsonInputConverter;
 import com.gluonhq.connect.converter.StringInputConverter;
 import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.AppUser;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.ObjectFactory;
+import rs.acs.uns.sw.govrs.client.fx.util.Token;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import java.io.FileOutputStream;
 import java.io.StringWriter;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RestClientProvider {
 
     private static RestClientProvider instance = null;
-    public String username = "keky";
+    private ObjectProperty<AppUser> user = new SimpleObjectProperty<>();
+
+    private String token;
     private JAXBContext amendmentsContext;
     private Marshaller amendmentsMarshaller;
     private JAXBContext lawContext;
@@ -137,6 +131,58 @@ public class RestClientProvider {
         return htmlProperty;
     }
 
+    public void login(String username, String password) {
+        RestClient restClientToken = RestClient.create()
+                .method("POST")
+                .host("http://localhost:9000")
+                .path("/api/users/auth")
+                .formParam("username", username)
+                .formParam("password", password);
+        // retrieve a list from the DataProvider
+        GluonObservableObject<Token> tokenProperty;
+        JsonInputConverter<Token> tokenConverter = new JsonInputConverter<>(Token.class);
+        tokenProperty = DataProvider.retrieveObject(restClientToken.createObjectDataReader(tokenConverter));
+        tokenProperty.initializedProperty().addListener((observable, oldValue, newValue) ->
+        {
+            token = tokenProperty.get().getToken();
+            RestClient restClientUser = RestClient.create()
+                    .method("GET")
+                    .host("http://localhost:9000")
+                    .path("/api/users/login")
+                    .header("X-AUTH-TOKEN", token);
+
+
+            ResultInputConverter userConverter = new ResultInputConverter(AppUser.class);
+            GluonObservableObject<Object> userProperty = DataProvider.retrieveObject(restClientUser.createObjectDataReader(userConverter));
+            userProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
+                AppUser loggedUser = (AppUser) userProperty.get();
+                System.out.println(loggedUser.getKorisnickoIme());
+                System.out.println(loggedUser.getEmail());
+                System.out.println(loggedUser.getUloga());
+                user.set(loggedUser);
+            });
+        });
+    }
+
+    public AppUser getUser() {
+        return user.get();
+    }
+
+    public ObjectProperty<AppUser> userProperty() {
+        return user;
+    }
+
+    public void setUser(AppUser user) {
+        this.user.set(user);
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
 
 

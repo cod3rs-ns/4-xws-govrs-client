@@ -8,10 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import rs.acs.uns.sw.govrs.client.fx.domain.User;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.login.LoginController;
-import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
+import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +21,6 @@ import java.util.logging.Logger;
  * Main JavaFX application. Everything Starts here.
  */
 public class MainFXApp extends Application {
-    private User loggedUser;
     private Stage stage;
 
     /**
@@ -92,12 +90,9 @@ public class MainFXApp extends Application {
 
     /**
      * Log-in provided user and redirect to Home stage.
-     *
-     * @param user User to be logged-in.
      */
-    public void login(User user) {
-        loggedUser = user;
-        Logger.getLogger(MainFXApp.class.getName()).log(Level.INFO, loggedUser.toString());
+    public void login() {
+        Logger.getLogger(MainFXApp.class.getName()).log(Level.INFO, RestClientProvider.getInstance().getUser().toString());
         gotoHome();
     }
 
@@ -105,12 +100,9 @@ public class MainFXApp extends Application {
      * Log-out current user and redirect to Login stage.
      */
     public void logout() {
-        this.loggedUser = null;
+        RestClientProvider.getInstance().setUser(null);
+        RestClientProvider.getInstance().setToken(null);
         gotoLogin();
-    }
-
-    public User getLoggedUser() {
-        return loggedUser;
     }
 
     public Stage getStage() {

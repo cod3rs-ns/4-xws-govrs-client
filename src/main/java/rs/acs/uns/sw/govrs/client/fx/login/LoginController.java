@@ -6,11 +6,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
-import rs.acs.uns.sw.govrs.client.fx.domain.User;
+import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.AppUser;
 import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controls user log-in.
@@ -34,6 +37,8 @@ public class LoginController extends AnchorPane implements Initializable {
     private AnchorPane mainContainer;
     @FXML
     private Hyperlink citizenHyperlink;
+    @FXML
+    private ProgressIndicator indicator;
 
     private MainFXApp app;
 
@@ -41,9 +46,9 @@ public class LoginController extends AnchorPane implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: delete this
         // This is only for test purpose, because it speeds up log-in process
-        usernameField.setText("predsednik");
-        passwordField.setText("pass");
-
+        usernameField.setText("zivan");
+        passwordField.setText("123456");
+        indicator.setVisible(false);
         errorLabel.setText("");
 
         // add window dragging
@@ -61,13 +66,16 @@ public class LoginController extends AnchorPane implements Initializable {
 
         // TODO: implement real login functionality
         loginButton.setOnAction(event -> {
-            if (usernameField.getText().equals(Constants.PRESIDENT) && "pass".equals(passwordField.getText())) {
-                User u = new User("predsednik", "pass", "Petar", "Petrović", Constants.PRESIDENT);
-                app.login(u);
-            } else if (usernameField.getText().equals(Constants.ALDERMAN) && "pass".equals(passwordField.getText())) {
-                User u = new User("odbornik", "pass", "Nikola", "Nikolić", Constants.ALDERMAN);
-                app.login(u);
-            } else {
+            try {
+                indicator.setVisible(true);
+                RestClientProvider.getInstance().userProperty().addListener((observable, oldValue, newValue) -> {
+                    indicator.setVisible(false);
+                    if(newValue!=null) app.login();
+                });
+                RestClientProvider.getInstance().login(usernameField.getText(), passwordField.getText());
+            } catch (Exception e) {
+                indicator.setVisible(false);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Invalid user information.");
                 usernameField.setText("");
                 passwordField.setText("");
                 errorLabel.setText("Neuspešna autorizacija!");
@@ -76,8 +84,14 @@ public class LoginController extends AnchorPane implements Initializable {
 
         // citizen login
         citizenHyperlink.setOnAction(event -> {
-            User u = new User("gradjanin", "pass", "Marko", "Marković", Constants.CITIZEN);
-            app.login(u);
+            AppUser user = new AppUser();
+            user.setId("gradjanin");
+            user.setKorisnickoIme("gradjanin");
+            user.setIme("ulogovan");
+            user.setPrezime("kao");
+            user.setUloga(Constants.CITIZEN);
+            RestClientProvider.getInstance().setUser(user);
+            app.login();
         });
     }
 

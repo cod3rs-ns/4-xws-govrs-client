@@ -40,7 +40,7 @@ public class Creator {
         law.getHead().setStatus(factory.createLawHeadStatus());
         law.getHead().setPodnosilac(factory.createLawHeadPodnosilac());
         law.getHead().getPodnosilac().getOtherAttributes().put(new QName("rel"), "pred:predlozenOd");
-        law.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().username);
+        law.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().getUser().getKorisnickoIme());
         law.getHead().getPodnosilac().getOtherAttributes().put(new QName("typeOf"), "pred:Odbornik");
         law.getHead().getOtherAttributes().put(new QName("vocab"), "http://www.parlament.gov.rs/rdf_schema/skupstina");
         law.getHead().getOtherAttributes().put(new QName("about"), "http://www.ftn.uns.ac.rs/rdf/examples/laws/" + law.idProperty().get());
@@ -60,7 +60,7 @@ public class Creator {
 
 
         Ref ref = factory.createRef();
-        ref.setId(RestClientProvider.getInstance().username);
+        ref.setId(RestClientProvider.getInstance().getUser().getKorisnickoIme());
         law.getHead().getPodnosilac().setRef(ref);
         law.getHead().setMjesto("New York");
 
@@ -95,7 +95,7 @@ public class Creator {
         amendments.getHead().setPropis(createPropis(lawId));
 
         amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("rel"), "pred:predlozenOd");
-        amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().username);
+        amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().getUser().getKorisnickoIme());
         amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("typeOf"), "pred:Odbornik");
 
         amendments.getHead().getOtherAttributes().put(new QName("vocab"), "http://www.parlament.gov.rs/rdf_schema/skupstina");

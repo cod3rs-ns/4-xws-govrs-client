@@ -27,7 +27,7 @@ public class IdentityGenerator {
         StringBuilder sb = new StringBuilder();
         // generate for root element
         if (parent == null) {
-            sb.append(client.username);
+            sb.append(client.getUser().getKorisnickoIme());
             sb.append("_");
             sb.append(type.toString());
             sb.append("_");

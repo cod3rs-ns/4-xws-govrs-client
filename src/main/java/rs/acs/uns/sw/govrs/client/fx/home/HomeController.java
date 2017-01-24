@@ -20,6 +20,7 @@ import javafx.stage.Screen;
 import org.controlsfx.control.StatusBar;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
+import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
 import java.net.URL;
@@ -218,7 +219,7 @@ public class HomeController extends AnchorPane implements Initializable {
      */
     public void setAppAndInitializeActions(MainFXApp app) {
         this.app = app;
-        switch (app.getLoggedUser().getType()) {
+        switch (RestClientProvider.getInstance().getUser().getUloga()) {
             case Constants.PRESIDENT:
                 setPresidentActions();
                 break;
@@ -230,8 +231,8 @@ public class HomeController extends AnchorPane implements Initializable {
                 break;
         }
         // user info
-        this.userLabel.setText(app.getLoggedUser().getFirstName() + ' ' + app.getLoggedUser().getLastName());
-        this.userTypeLabel.setText(app.getLoggedUser().getType());
+        this.userLabel.setText(RestClientProvider.getInstance().getUser().getIme() + ' ' + RestClientProvider.getInstance().getUser().getPrezime());
+        this.userTypeLabel.setText(RestClientProvider.getInstance().getUser().getUloga());
 
         // first state
         stateManager.switchState(Constants.LAW_SEARCH_FXML);

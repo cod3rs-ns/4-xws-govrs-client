@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
@@ -78,5 +79,6 @@
             </AnchorPane>
          </children>
       </HBox>
+      <ProgressIndicator fx:id="indicator" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="175.0" />
    </children>
 </AnchorPane>
