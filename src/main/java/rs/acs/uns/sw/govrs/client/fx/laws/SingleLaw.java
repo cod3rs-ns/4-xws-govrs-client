@@ -97,7 +97,6 @@ public class SingleLaw extends AnchorPane implements Initializable {
 
     @FXML
     public void previewHtml() {
-
         WebView webView = new WebView();
         parent.previewHtml.setCenter(webView);
         GluonObservableObject<String> htmlProperty = RestClientProvider.getInstance().getLawHtml(id);

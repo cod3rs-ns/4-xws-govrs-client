@@ -8,10 +8,7 @@ import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.AppUser;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.ObjectFactory;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 import rs.acs.uns.sw.govrs.client.fx.util.Token;
 
@@ -177,6 +174,27 @@ public class RestClientProvider {
         // retrieve an object from the DataProvider
         PDFInputConverter pdfInputConverter = new PDFInputConverter(filePath);
         return DataProvider.retrieveObject(restClient.createObjectDataReader(pdfInputConverter));
+    }
+
+    public GluonObservableObject<Object> getParliament() {
+        RestClient restClient = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000/api")
+                .path("/parliaments/");
+
+        // retrieve an object from the DataProvider
+        ResultInputConverter converter = new ResultInputConverter(Parliament.class);
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
+    public GluonObservableObject<Object> getUser(String userId) {
+        RestClient restClientUser = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000")
+                .path("/api/users/" + userId);
+
+        ResultInputConverter userConverter = new ResultInputConverter(AppUser.class);
+        return  DataProvider.retrieveObject(restClientUser.createObjectDataReader(userConverter));
     }
 
     public AppUser getUser() {

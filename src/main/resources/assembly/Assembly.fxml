@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -96,6 +97,7 @@
                                                 <Label fx:id="dateLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                              </children>
                                           </GridPane>
+                                          <Hyperlink onAction="#previewLaw" text="pregledaj" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0" />
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -141,10 +143,13 @@
                   <Insets left="2.0" right="4.0" />
                </BorderPane.margin>
                <children>
-                  <TitledPane fx:id="previewContainer" collapsible="false" minWidth="400.0" prefHeight="598.0" prefWidth="400.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane collapsible="false" minWidth="400.0" prefHeight="598.0" prefWidth="403.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </padding>
+                     <content>
+                        <BorderPane fx:id="previewContainer" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
                   </TitledPane>
                </children>
             </AnchorPane>

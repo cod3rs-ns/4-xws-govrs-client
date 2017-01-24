@@ -2,6 +2,8 @@
 package rs.acs.uns.sw.govrs.client.fx.serverdomain;
 
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.DatePropertyAdapter;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters.IntegerPropertyAdapter;
@@ -105,6 +107,9 @@ public class Parliament extends Element{
     @XmlAttribute(name = "name")
     @XmlJavaTypeAdapter(StringPropertyAdapter.class)
     protected StringProperty name = new SimpleStringProperty();
+
+    @XmlTransient
+    public ObservableList<Law> laws = FXCollections.observableArrayList();
 
     /**
      * Gets the value of the head property.
