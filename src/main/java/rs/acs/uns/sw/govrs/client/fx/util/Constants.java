@@ -21,6 +21,7 @@ public class Constants {
     public static final String LAW_EDITOR_FXML = "/editor/XMLEditor.fxml";
     public static final String AMENDMENTS_EDITOR_FXML = "/amendments/Amendments.fxml";
     public static final String ASSEMBLY_XML_EDITOR_FXML = "/assembly/Assembly.fxml";
+    public static final String MY_PROFILE = "/review/Overview.fxml";
 
 
     private Constants() {

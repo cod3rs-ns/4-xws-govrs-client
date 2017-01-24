@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.review.OverviewController">
+   <children>
+      <AnchorPane maxWidth="354.0" minWidth="354.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="356.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TitledPane collapsible="false" minWidth="300.0" prefHeight="598.0" prefWidth="354.0" text="Amandmani" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <ScrollPane fx:id="scrolledContainer1" hbarPolicy="NEVER" layoutX="2.0" layoutY="2.0" prefHeight="520.0" prefWidth="554.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <content>
+                              <VBox fx:id="amendmentsContainer" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="520.0" style="-fx-spacing: 5;">
+                                 <opaqueInsets>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane maxWidth="354.0" minWidth="354.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TitledPane collapsible="false" minWidth="300.0" prefHeight="598.0" prefWidth="354.0" text="Propisi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <ScrollPane fx:id="scrolledContainer" hbarPolicy="NEVER" layoutX="2.0" layoutY="2.0" prefHeight="520.0" prefWidth="554.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <content>
+                              <VBox fx:id="lawsContainer" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="520.0" style="-fx-spacing: 5;">
+                                 <opaqueInsets>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="712.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TitledPane collapsible="false" minWidth="400.0" prefHeight="598.0" prefWidth="400.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
+               <content>
+                  <BorderPane fx:id="previewContainer" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </TitledPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

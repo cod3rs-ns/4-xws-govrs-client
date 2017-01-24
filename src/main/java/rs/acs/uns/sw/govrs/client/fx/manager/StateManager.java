@@ -10,6 +10,7 @@ import rs.acs.uns.sw.govrs.client.fx.assembly.AssemblyController;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.laws.LawSearchController;
+import rs.acs.uns.sw.govrs.client.fx.review.OverviewController;
 import rs.acs.uns.sw.govrs.client.fx.util.Constants;
 
 import java.io.IOException;
@@ -40,6 +41,10 @@ public class StateManager {
     /** Assembly screen */
     private AnchorPane assemblyPane;
     private AssemblyController assemblyController;
+
+    /** Overview screen */
+    private AnchorPane overviewPane;
+    private OverviewController overviewController;
 
     /**
      * Root container.
@@ -107,6 +112,16 @@ public class StateManager {
                     rootContainer.getChildren().remove(0);
                 }
                 rootContainer.setCenter(assemblyPane);
+            }else if (Constants.MY_PROFILE.equals(fxml)) {
+                if (overviewPane == null) {
+                    overviewPane = loader.load(in);
+                    overviewController = loader.getController();
+                    overviewController.setStateManager(this);
+                }
+                if (rootContainer.getChildren().size() > 0) {
+                    rootContainer.getChildren().remove(0);
+                }
+                rootContainer.setCenter(overviewPane);
             } else {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unsupported State!");
             }
