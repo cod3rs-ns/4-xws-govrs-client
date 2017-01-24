@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 import rs.acs.uns.sw.govrs.client.fx.amendments.AmendmentsController;
+import rs.acs.uns.sw.govrs.client.fx.assembly.AssemblyController;
 import rs.acs.uns.sw.govrs.client.fx.editor.XMLEditorController;
 import rs.acs.uns.sw.govrs.client.fx.home.HomeController;
 import rs.acs.uns.sw.govrs.client.fx.laws.LawSearchController;
@@ -35,6 +36,10 @@ public class StateManager {
     /** Amendments editor state components */
     private AnchorPane amendmentsPane;
     private AmendmentsController amendmentsController;
+
+    /** Assembly screen */
+    private AnchorPane assemblyPane;
+    private AssemblyController assemblyController;
 
     /**
      * Root container.
@@ -91,6 +96,17 @@ public class StateManager {
                     rootContainer.getChildren().remove(0);
                 }
                 rootContainer.setCenter(amendmentsPane);
+            }else if (Constants.ASSEMBLY_XML_EDITOR_FXML.equals(fxml)) {
+                if (assemblyPane == null) {
+                    assemblyPane = loader.load(in);
+                    assemblyController = loader.getController();
+                    assemblyController.setStateManager(this);
+                    assemblyController.loadTestData();
+                }
+                if (rootContainer.getChildren().size() > 0) {
+                    rootContainer.getChildren().remove(0);
+                }
+                rootContainer.setCenter(assemblyPane);
             } else {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unsupported State!");
             }

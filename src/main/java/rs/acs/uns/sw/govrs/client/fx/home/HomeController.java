@@ -191,6 +191,7 @@ public class HomeController extends AnchorPane implements Initializable {
         stateManager.switchState(Constants.AMENDMENTS_EDITOR_FXML);
     }
 
+    private void assemblyAction() { stateManager.switchState(Constants.ASSEMBLY_XML_EDITOR_FXML);}
     /**
      * Initializes actions for user - Alderman.
      */
@@ -209,7 +210,7 @@ public class HomeController extends AnchorPane implements Initializable {
         actionContainer.getChildren().add(createButton(Constants.LAW, this::lawAction, "Propis"));
         actionContainer.getChildren().add(createButton(Constants.AMENDMENT, this::amendmentAction, "Amandman"));
         actionContainer.getChildren().add(createButton(Constants.ALL, this::action, "Moji predlozi"));
-        actionContainer.getChildren().add(createButton(Constants.VOTE, this::action, "Skupština"));
+        actionContainer.getChildren().add(createButton(Constants.VOTE, this::assemblyAction, "Skupština"));
     }
 
     /**
