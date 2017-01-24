@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.control.PropertySheet;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyledTextArea;
@@ -34,11 +35,13 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.StringWrapper;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Creator;
+import rs.acs.uns.sw.govrs.client.fx.util.Loader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -103,6 +106,8 @@ public class XMLEditorController implements TreeController {
     private ImageView saveAsButton;
     @FXML
     private ImageView newLawButton;
+    @FXML
+    private ImageView uploadButton;
     // -------------------------------------------------
 
     // ------------------ components -------------------
@@ -168,6 +173,8 @@ public class XMLEditorController implements TreeController {
         Tooltip.install(openButton, new Tooltip("Otvorite novi dokument"));
         Tooltip.install(saveButton, new Tooltip("Sačuvajte dokument"));
         Tooltip.install(saveAsButton, new Tooltip("Sačuvajte dokument kao..."));
+        Tooltip.install(newLawButton, new Tooltip("Kreirajte novi propis"));
+        Tooltip.install(uploadButton, new Tooltip("Postavite propis na skupštinski red"));
     }
 
     public void loadTestData() {
@@ -495,7 +502,7 @@ public class XMLEditorController implements TreeController {
     @FXML
     private void saveAsAction() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sačuvaj law kao...");
+        fileChooser.setTitle("Sačuvajate propis kao...");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("XML files", "*.xml")
         );
@@ -531,7 +538,21 @@ public class XMLEditorController implements TreeController {
         result.ifPresent(name -> {
             Law newl = Creator.createNewLaw();
             switchViewToNewLaw(newl);
+            Notifications.create().owner(treeContainer.getScene().getWindow()).title("Propis").text("Propis je uspešno kreiran!").showInformation();
         });
+    }
+
+    @FXML
+    private void uploadLaw() {
+        law.preMarshaller();
+        GluonObservableObject<Law> lawProperty =
+                RestClientProvider.getInstance().postLaw(law);
+        Stage stage = Loader.createLoader(treeContainer.getScene());
+        stage.show();
+
+        lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+            stage.close();
+        }));
     }
 
     /**

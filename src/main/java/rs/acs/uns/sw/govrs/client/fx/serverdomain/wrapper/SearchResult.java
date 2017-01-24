@@ -1,30 +1,28 @@
 package rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper;
 
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Part;
-
-import javax.xml.bind.annotation.*;
-import java.util.LinkedList;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "result")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({Part.class, Law.class})
 public class SearchResult {
 
-    private List<Object> set = new LinkedList<>();
+    @XmlElement
+    private List<SearchObject> set;
 
+    @SuppressWarnings("unused")
     public SearchResult() {
         super();
     }
 
-    public SearchResult(List<Object> set) {
+    public SearchResult(List<SearchObject> set) {
         this.set = set;
     }
 
-    @XmlMixed
-    @XmlAnyElement(lax = true)
-    public List<Object> getSet() {
+    public List<SearchObject> getSet() {
         return set;
     }
 }
