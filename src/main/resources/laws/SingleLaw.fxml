@@ -8,27 +8,47 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="160.0" maxWidth="600.0" minHeight="150.0" minWidth="600.0" prefHeight="150.0" prefWidth="600.0" style="-fx-border-color: #03A9F4; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.laws.SingleLaw">
+<AnchorPane maxHeight="150.0" maxWidth="500.0" minHeight="150.0" minWidth="500.0" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: #37474F; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.laws.SingleLaw">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#03a9f4" height="26.0" layoutX="64.0" layoutY="22.0" stroke="WHITE" strokeLineCap="ROUND" strokeType="INSIDE" width="596.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0" />
-      <Hyperlink fx:id="lawName" layoutX="14.0" layoutY="14.0" text="Naziv propisa" textFill="WHITE" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0" />
-      <Label fx:id="lawStatus" alignment="CENTER" layoutX="558.0" layoutY="8.0" text="Status propisa" textAlignment="CENTER" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
-      <Label layoutX="14.0" layoutY="30.0" text="podnosilac:" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="25.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d6c83" height="26.0" layoutX="64.0" layoutY="22.0" stroke="WHITE" strokeLineCap="ROUND" strokeType="INSIDE" width="496.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0" />
+      <Hyperlink fx:id="lawName" layoutX="14.0" layoutY="14.0" onAction="#previewHtml" text="Naziv propisa" textFill="WHITE" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0" />
+      <Label fx:id="lawStatus" alignment="CENTER" layoutX="558.0" layoutY="8.0" text="Status propisa" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font></Label>
+      <Label layoutX="14.0" layoutY="30.0" text="predložen:" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="25.0">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="47.0" text="datum:" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="40.0" />
-      <Label fx:id="authorName" layoutX="85.0" layoutY="35.0" text="Marko Marković" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="25.0">
+      <Label layoutX="14.0" layoutY="47.0" text="izglasan:" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="40.0">
          <font>
             <Font name="System Bold Italic" size="12.0" />
-         </font>
-      </Label>
-      <Label fx:id="lawDate" layoutX="24.0" layoutY="57.0" text="28.1.2016" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="40.0" />
+         </font></Label>
+      <Label fx:id="proposedDate" layoutX="85.0" layoutY="35.0" text="n/a" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="25.0" />
+      <Label fx:id="votingDate" layoutX="24.0" layoutY="57.0" text="n/a" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="41.0" />
       <TextArea fx:id="lawPreview" editable="false" layoutX="14.0" layoutY="75.0" prefHeight="118.0" prefWidth="576.0" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="60.0">
          <font>
             <Font name="System Italic" size="12.0" />
          </font></TextArea>
+      <Label layoutX="260.0" layoutY="36.0" text="ZA:" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="34.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="307.0" layoutY="36.0" text="PROTIV:" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="34.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="381.0" layoutY="42.0" text="SUZDRŽANIH:" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="34.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="forLabel" layoutX="278.0" layoutY="34.0" text="n/a" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="34.0" />
+      <Label fx:id="againstLabel" layoutX="288.0" layoutY="44.0" text="n/a" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="34.0" />
+      <Label fx:id="neutralLabel" layoutX="288.0" layoutY="44.0" text="n/a" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="34.0" />
    </children>
    <padding>
       <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
