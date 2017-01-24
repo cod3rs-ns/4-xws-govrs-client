@@ -12,11 +12,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="346.0" style="-fx-border-color: #264868;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.laws.LawItemController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="340.0" style="-fx-border-color: #363f45;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.laws.LawItemController">
    <children>
-      <Rectangle arcWidth="5.0" fill="#264868" height="24.0" layoutX="-6.0" layoutY="-86.0" stroke="#264868" strokeType="INSIDE" width="346.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <GridPane layoutX="73.0" layoutY="37.0" prefHeight="150.0" prefWidth="346.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+      <Rectangle arcWidth="5.0" fill="#363f45" height="24.0" layoutX="-6.0" layoutY="-86.0" stroke="#363f45" strokeType="INSIDE" width="338.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <GridPane layoutX="73.0" layoutY="37.0" prefHeight="150.0" prefWidth="346.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="109.0" minWidth="10.0" prefWidth="57.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="181.0" minWidth="10.0" prefWidth="104.0" />
@@ -114,6 +113,6 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <Hyperlink fx:id="nameLink" layoutX="184.0" layoutY="3.0" onAction="#preview" text="pregledaj" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="0.0" />
+      <Hyperlink fx:id="nameLink" layoutX="184.0" layoutY="3.0" onAction="#preview" text="pregledaj" textFill="WHITE" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

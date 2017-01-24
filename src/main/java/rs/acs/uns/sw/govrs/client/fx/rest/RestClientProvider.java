@@ -9,6 +9,7 @@ import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 import rs.acs.uns.sw.govrs.client.fx.util.Token;
 
@@ -130,6 +131,20 @@ public class RestClientProvider {
         return htmlProperty;
     }
 
+    public GluonObservableObject<String> getAmendmentHtml(String fullId) {
+        // create a RestClient to the specific URL
+        RestClient restClientHtml = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000")
+                .header("Accept", "application/xhtml+xml")
+                .path("/api/amendments/" + fullId);
+        // retrieve a list from the DataProvider
+        GluonObservableObject<String> htmlProperty;
+        StringInputConverter converterString = new StringInputConverter();
+        htmlProperty = DataProvider.retrieveObject(restClientHtml.createObjectDataReader(converterString));
+        return htmlProperty;
+    }
+
     public void login(String username, String password) {
         RestClient restClientToken = RestClient.create()
                 .method("POST")
@@ -195,6 +210,26 @@ public class RestClientProvider {
 
         ResultInputConverter userConverter = new ResultInputConverter(AppUser.class);
         return  DataProvider.retrieveObject(restClientUser.createObjectDataReader(userConverter));
+    }
+
+    public GluonObservableObject<SearchResult> getLawsByUser(String userId) {
+        RestClient restClient = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000")
+                .path("/api/laws/users/" + userId);
+
+        SearchResultInputConverter converter = new SearchResultInputConverter();
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
+    public GluonObservableObject<SearchResult> getAmendmentsByUser(String userId) {
+        RestClient restClient = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000")
+                .path("/api/amendments/users/" + userId);
+
+        SearchResultInputConverter converter = new SearchResultInputConverter();
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
     }
 
     public AppUser getUser() {

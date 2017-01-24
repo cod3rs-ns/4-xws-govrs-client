@@ -42,13 +42,14 @@ public class LawItemController implements Initializable {
     @FXML
     private BorderPane previewPane;
 
-    public LawItemController(Law law, BorderPane preview) {
-        this.law = law;
-        previewPane = preview;
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void display(Law law, BorderPane preview) {
+        this.law = law;
+        previewPane = preview;
         idLabel.setText(law.getId());
         statusLabel.setText(law.getHead().getStatus().getValue());
         forLabel.setText(String.valueOf(law.getHead().getGlasovaZa().getValue()));
@@ -57,7 +58,7 @@ public class LawItemController implements Initializable {
         Tooltip.install(withdrawButton, new Tooltip("Povucite propis"));
         proposedLabel.setText(DateUtils.dateToString(law.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         votedLabel.setText(DateUtils.dateToString(law.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
-        votedLabel.setText(law.getName());
+        nameLink.setText(law.getName());
     }
 
     @FXML

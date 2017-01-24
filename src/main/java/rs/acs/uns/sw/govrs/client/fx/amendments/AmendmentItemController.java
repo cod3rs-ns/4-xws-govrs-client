@@ -41,13 +41,18 @@ public class AmendmentItemController implements Initializable {
 
     private BorderPane previewPane;
 
-    public AmendmentItemController(Amendments amendment, BorderPane preview) {
-        this.amendment = amendment;
-        previewPane = preview;
+    public AmendmentItemController() {
+
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void display(Amendments amendment, BorderPane preview) {
+        this.amendment = amendment;
+        previewPane = preview;
         idLabel.setText(amendment.getId());
         statusLabel.setText(amendment.getHead().getStatus().getValue());
         forLabel.setText(String.valueOf(amendment.getHead().getGlasovaZa().getValue()));
@@ -56,7 +61,7 @@ public class AmendmentItemController implements Initializable {
         Tooltip.install(withdrawButton, new Tooltip("Povucite amandman"));
         proposedLabel.setText(DateUtils.dateToString(amendment.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         votedLabel.setText(DateUtils.dateToString(amendment.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
-        votedLabel.setText(amendment.getName());
+        nameLink.setText(amendment.getName());
     }
 
     @FXML
@@ -83,7 +88,7 @@ public class AmendmentItemController implements Initializable {
     private void preview () {
         WebView webView = new WebView();
         previewPane.setCenter(webView);
-        GluonObservableObject<String> htmlProperty = RestClientProvider.getInstance().getLawHtml(idLabel.getText());
+        GluonObservableObject<String> htmlProperty = RestClientProvider.getInstance().getAmendmentHtml(idLabel.getText());
         htmlProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
             webView.getEngine().loadContent(htmlProperty.get());
             webView.requestLayout();
