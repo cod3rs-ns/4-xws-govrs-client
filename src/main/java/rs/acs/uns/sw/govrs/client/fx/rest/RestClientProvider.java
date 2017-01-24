@@ -12,11 +12,13 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.AppUser;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.ObjectFactory;
+import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 import rs.acs.uns.sw.govrs.client.fx.util.Token;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import java.io.File;
 import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -162,6 +164,19 @@ public class RestClientProvider {
                 user.set(loggedUser);
             });
         });
+    }
+
+    public GluonObservableObject<Object> downloadPDF(String filePath, String lawId) {
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("GET")
+                .host("http://localhost:9000/api")
+                .header("Accept", "application/octet-stream")
+                .path("/laws/" + lawId);
+
+        // retrieve an object from the DataProvider
+        PDFInputConverter pdfInputConverter = new PDFInputConverter(filePath);
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(pdfInputConverter));
     }
 
     public AppUser getUser() {
