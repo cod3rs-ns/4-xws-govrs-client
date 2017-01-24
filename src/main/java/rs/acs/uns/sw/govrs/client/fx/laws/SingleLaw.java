@@ -75,9 +75,12 @@ public class SingleLaw extends AnchorPane implements Initializable {
 
     @FXML
     public void previewHtml() {
+        String link = lawName.getText();
+        String [] links = link.split("/");
+        String id = links[links.length-1];
         WebView webView = new WebView();
         parent.previewHtml.setCenter(webView);
-        GluonObservableObject<String> htmlProperty = RestClientProvider.getInstance().getLawHtml(lawName.getText());
+        GluonObservableObject<String> htmlProperty = RestClientProvider.getInstance().getLawHtml(id);
         htmlProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
             webView.getEngine().loadContent(htmlProperty.get());
             webView.requestLayout();

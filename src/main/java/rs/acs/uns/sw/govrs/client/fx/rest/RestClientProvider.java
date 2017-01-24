@@ -129,7 +129,7 @@ public class RestClientProvider {
                 .method("GET")
                 .host("http://localhost:9000")
                 .header("Accept", "application/xhtml+xml")
-                .path(fullId);
+                .path("/api/laws/" + fullId);
         // retrieve a list from the DataProvider
         GluonObservableObject<String> htmlProperty;
         StringInputConverter converterString = new StringInputConverter();
