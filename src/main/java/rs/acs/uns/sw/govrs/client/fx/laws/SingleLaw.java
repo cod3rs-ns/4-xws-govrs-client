@@ -44,7 +44,7 @@ public class SingleLaw extends AnchorPane implements Initializable {
     public void setInfo(LawSearchController controller, SearchObject searchObject) {
         System.out.println(searchObject);
         this.lawName.setText(searchObject.getPath());
-        if (!searchObject.getPreview().equals("")) {
+        if (!"".equals(searchObject.getPreview())) {
             this.lawPreview.setText(searchObject.getPreview());
         }
         if (searchObject.getMetadata() != null) {

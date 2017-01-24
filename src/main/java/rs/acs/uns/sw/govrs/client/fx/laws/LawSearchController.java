@@ -93,7 +93,7 @@ public class LawSearchController extends AnchorPane implements Initializable {
         catch (Exception e){
 
         }
-        if (!queryStringProperty.get().equals("")) {
+        if (!searchField.getText().trim().equals("")) {
             queryStringProperty.setValue(queryStringProperty.get() + "query=" + StringCleaner.deleteWhitespace(searchField.getText()));
         }
         if (startVotesFor.get() != 0) {
