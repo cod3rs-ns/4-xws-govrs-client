@@ -1,5 +1,6 @@
 package rs.acs.uns.sw.govrs.client.fx.util;
 
+import javafx.beans.property.ObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
@@ -7,6 +8,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
+import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
@@ -37,8 +39,11 @@ public class Creator {
         law.getHead().setGlasovaZa(factory.createLawHeadGlasovaZa());
         law.getHead().setStatus(factory.createLawHeadStatus());
         law.getHead().setPodnosilac(factory.createLawHeadPodnosilac());
+        Ref podnosilacRef = new Ref();
+        podnosilacRef.setContent("");
+        podnosilacRef.setId(RestClientProvider.getInstance().getUser().getKorisnickoIme());
         law.getHead().getPodnosilac().getOtherAttributes().put(new QName("rel"), "pred:predlozenOd");
-        law.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().username);
+        law.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().getUser().getKorisnickoIme());
         law.getHead().getPodnosilac().getOtherAttributes().put(new QName("typeOf"), "pred:Odbornik");
         law.getHead().getOtherAttributes().put(new QName("vocab"), "http://www.parlament.gov.rs/rdf_schema/skupstina");
         law.getHead().getOtherAttributes().put(new QName("about"), "http://www.ftn.uns.ac.rs/rdf/examples/laws/" + law.idProperty().get());
@@ -58,7 +63,7 @@ public class Creator {
 
 
         Ref ref = factory.createRef();
-        ref.setId(RestClientProvider.getInstance().username);
+        ref.setId(RestClientProvider.getInstance().getUser().getKorisnickoIme());
         law.getHead().getPodnosilac().setRef(ref);
         law.getHead().setMjesto("New York");
 
@@ -77,6 +82,7 @@ public class Creator {
         Amendments amendments = factory.createAmendments();
         amendments.setHead(factory.createAmendmentsHead());
         amendments.setBody(factory.createAmendmentsBody());
+        amendments.getBody().setPravniOsnov(createPravniOsnov());
         amendments.setId(IdentityGenerator.get().generate(null, ElementType.Amendments));
         amendments.setName("Neki novi amandmani");
         amendments.getHead().setDatumIzglasavanja(factory.createAmendmentsHeadDatumIzglasavanja());
@@ -91,8 +97,12 @@ public class Creator {
         // TODO change to real law ID
         amendments.getHead().setPropis(createPropis(lawId));
 
+        Ref podnosilacRef = new Ref();
+        podnosilacRef.setContent("");
+        podnosilacRef.setId(RestClientProvider.getInstance().getUser().getKorisnickoIme());
+        amendments.getHead().getPodnosilac().setRef(podnosilacRef);
         amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("rel"), "pred:predlozenOd");
-        amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().username);
+        amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("href"), "http://www.ftn.uns.ac.rs/rdf/examples/users/" + RestClientProvider.getInstance().getUser().getKorisnickoIme());
         amendments.getHead().getPodnosilac().getOtherAttributes().put(new QName("typeOf"), "pred:Odbornik");
 
         amendments.getHead().getOtherAttributes().put(new QName("vocab"), "http://www.parlament.gov.rs/rdf_schema/skupstina");
@@ -121,11 +131,6 @@ public class Creator {
         amendment.setName("Novi amandman");
         amendment.setHead(factory.createAmendmentHead());
         amendment.setBody(factory.createAmendmentBody());
-        /*
-        amendment.getHead().setPredmet(factory.createAmendmentHeadPredmet());
-        amendment.getHead().getPredmet().setRef(factory.createRef());
-        amendment.getHead().getPredmet().getRef().setId("article01");
-        */
         amendment.getBody().setObrazlozenje(factory.createExplanation());
         amendment.getHead().setRjesenje("");
         return amendment;
@@ -148,5 +153,23 @@ public class Creator {
         ObjectFactory factory = new ObjectFactory();
         Amendment.Body.Odredba odredba = factory.createAmendmentBodyOdredba();
         return odredba;
+    }
+
+    public static Amendments.Body.PravniOsnov createPravniOsnov() {
+        ObjectFactory factory = new ObjectFactory();
+        Amendments.Body.PravniOsnov pravniOsnov = factory.createAmendmentsBodyPravniOsnov();
+        Article a = new Article();
+        a.setId("pravni_osnov");
+        a.setName("Pravni osnov");
+        a.initElement();
+        Paragraph p = new Paragraph();
+        p.setId("pravni_osnov/pp_id");
+        p.setName("Stav 1");
+        StringWrapper sw = new StringWrapper("Prema Stavu 1. Člana 7, Zakona o podnošenju amandmana na predlog zakona, donosi se amandman u sledećoj pisanoj formi.");
+        a.createAndAddChild(p);
+        p.createAndAddChild(sw);
+        a.preMarshaller();
+        pravniOsnov.setClan(a);
+        return pravniOsnov;
     }
 }

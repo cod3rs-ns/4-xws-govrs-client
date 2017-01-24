@@ -1207,13 +1207,13 @@ public class Law extends Element {
         if (name.get() == null || "".equals(name.get()))
             errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Ime zakona je obavezno."));
         if (getChildren().size() == 0)
-            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može biti prazan"));
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može biti prazan."));
         if (body.getDio().size() > 2)
-            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može da ima više od dva dijela"));
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može da ima više od dva dijela."));
         if (body.getGlava().size() > 2)
-            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može da ima više od dvije glave"));
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može da ima više od dvije glave."));
         if (body.getGlava().size() > 0 && body.getDio().size() > 0) {
-            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može istovremeno da sadrži i glave i dijelove kao korijenski element"));
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Law, "Zakon ne može istovremeno da sadrži i \nglave  i dijelove kao korijenski element."));
         }
 
         // validate children elements

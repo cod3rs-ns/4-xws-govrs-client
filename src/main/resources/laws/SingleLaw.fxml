@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -49,6 +52,22 @@
       <Label fx:id="forLabel" layoutX="278.0" layoutY="34.0" text="n/a" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="34.0" />
       <Label fx:id="againstLabel" layoutX="288.0" layoutY="44.0" text="n/a" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="34.0" />
       <Label fx:id="neutralLabel" layoutX="288.0" layoutY="44.0" text="n/a" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="34.0" />
+      <ImageView fx:id="pdfButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#downloadPdf" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="3.0">
+         <image>
+            <Image url="@../images/pdf.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="htmlButton" fitHeight="20.0" fitWidth="20.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#downloadHtml" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="3.0">
+         <image>
+            <Image url="@../images/html.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
    </children>
    <padding>
       <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
