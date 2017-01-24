@@ -8,8 +8,10 @@ import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 import java.util.function.Function;
 
 public abstract class Element {
@@ -132,4 +134,5 @@ public abstract class Element {
         return "";
     }
 
+    public abstract void validate(List<ErrorMessage> errorMessageList);
 }

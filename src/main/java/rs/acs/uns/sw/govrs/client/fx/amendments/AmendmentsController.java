@@ -19,11 +19,14 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Loader;
 import rs.acs.uns.sw.govrs.client.fx.util.Creator;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -233,6 +236,10 @@ public class AmendmentsController {
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
+                List<ErrorMessage> messages = new ArrayList<>();
+                amendments.validate(messages);
+                System.out.println(messages);
+
                 amendments.preMarshaller();
                 JAXBContext context = JAXBContext.newInstance(Amendments.class);
                 Marshaller marshaller = context.createMarshaller();

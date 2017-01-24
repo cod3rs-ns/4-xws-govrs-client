@@ -17,6 +17,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.ItemWrapper;
 import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
+import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -252,4 +253,23 @@ public class Subclause extends Element {
         }
     }
 
+    @Override
+    public void validate(List<ErrorMessage> errorMessageList) {
+        if (name.get() == null || "".equals(name.get()))
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Subclause, "Ime podtačke je obavezno."));
+        if (getChildren().size() == 0)
+            errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Subclause, "Podtačka ne može biti prazna."));
+        else {
+            for (int i = 1; i < getChildren().size(); i++) {
+                if (getChildren().get(i) instanceof StringWrapper) {
+                    errorMessageList.add(new ErrorMessage(id.get(), name.getName(), ElementType.Subclause, "Podtačka ne može imati nestruktuiran tekst nakon alineje."));
+                }
+            }
+        }
+
+        // validate children elements
+        for (Element child : getChildren()) {
+            child.validate(errorMessageList);
+        }
+    }
 }
