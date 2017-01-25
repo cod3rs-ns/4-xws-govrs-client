@@ -32,6 +32,9 @@ public class RestClientProvider {
     private JAXBContext lawContext;
     private Marshaller lawMarshaller;
 
+    private Parliament activeParliament;
+
+
     private RestClientProvider() {
         try {
             amendmentsContext = JAXBContext.newInstance(Amendments.class);
@@ -171,9 +174,12 @@ public class RestClientProvider {
             userProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
                 AppUser loggedUser = (AppUser) userProperty.get();
                 System.out.println(loggedUser.getKorisnickoIme());
-                System.out.println(loggedUser.getEmail());
-                System.out.println(loggedUser.getUloga());
                 user.set(loggedUser);
+                GluonObservableObject<Object> parliamentProperty = getParliament();
+                parliamentProperty.initializedProperty().addListener((observable2, oldValue2, newValue2) -> {
+                    activeParliament = (Parliament) parliamentProperty.get();
+                    System.out.println("Parliement retrieved");
+                });
             });
         });
     }
@@ -260,6 +266,10 @@ public class RestClientProvider {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Parliament getActiveParliament() {
+        return activeParliament;
     }
 }
 
