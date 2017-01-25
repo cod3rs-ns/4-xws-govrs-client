@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,7 +18,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.HyperlinkLabel?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.assembly.AssemblyController">
    <children>
@@ -24,7 +25,7 @@
          <items>
             <AnchorPane maxWidth="244.0" minWidth="244.0" prefWidth="244.0">
                <children>
-                  <TitledPane collapsible="false" maxWidth="244.0" minWidth="244.0" prefHeight="598.0" prefWidth="244.0" text="Na dnevnom redu" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane fx:id="lawTable" collapsible="false" maxWidth="244.0" minWidth="244.0" prefHeight="598.0" prefWidth="244.0" text="Na dnevnom redu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </padding>
@@ -36,23 +37,59 @@
                         </TableView>
                      </content>
                   </TitledPane>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="8.0" top="2.0" />
-                     </padding>
-                     <children>
-                        <HyperlinkLabel text="Neke akcije" />
-                     </children>
-                  </HBox>
+                  <TitledPane animated="false" collapsible="false" layoutX="21.0" layoutY="-23.0" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" text="Skupština" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane layoutX="14.0" layoutY="14.0" prefHeight="124.0" prefWidth="242.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Datum:">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Mesto:" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Status:" textFill="#0261a4" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="parliamentDateLabel" text="n/a" GridPane.columnIndex="1" />
+                                    <Label fx:id="placeLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label fx:id="stateLabel" text="n/a" textFill="#0261a4" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font name="System Bold Italic" size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </GridPane>
+                              <HBox fx:id="buttonContainer" alignment="BASELINE_RIGHT" layoutX="10.0" layoutY="42.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </TitledPane>
                </children>
             </AnchorPane>
             <AnchorPane maxWidth="580.0" minWidth="580.0" prefWidth="580.0">
                <children>
-                  <SplitPane dividerPositions="0.5" maxWidth="575.0" minWidth="575.0" orientation="VERTICAL" prefHeight="598.0" prefWidth="580.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.5, 0.5" maxWidth="575.0" minWidth="575.0" orientation="VERTICAL" prefHeight="598.0" prefWidth="580.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <AnchorPane maxHeight="150.0" minHeight="150.0" prefHeight="150.0">
                            <children>
-                              <TitledPane collapsible="false" minHeight="200.0" prefHeight="150.0" prefWidth="578.0" text="Podaci o izabranom propisu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TitledPane fx:id="lawInfoPane" collapsible="false" minHeight="200.0" prefHeight="150.0" prefWidth="578.0" text="Podaci o izabranom propisu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
                                     <AnchorPane>
                                        <padding>
@@ -69,6 +106,7 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
                                                 <Label text="ID propisa:">
@@ -95,6 +133,12 @@
                                                 <Label fx:id="nameLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Label fx:id="authorLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                 <Label fx:id="dateLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <Label text="Status:" GridPane.rowIndex="4">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="lawStatusLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                              </children>
                                           </GridPane>
                                           <Hyperlink onAction="#previewLaw" text="pregledaj" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0" />
@@ -106,7 +150,7 @@
                         </AnchorPane>
                         <AnchorPane maxWidth="580.0" minWidth="580.0" prefWidth="580.0">
                            <children>
-                              <TitledPane collapsible="false" minWidth="300.0" prefHeight="440.0" prefWidth="570.0" text="Amandmani" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TitledPane fx:id="amendmentsContainerPane" collapsible="false" minWidth="300.0" prefHeight="440.0" prefWidth="570.0" text="Amandmani" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <padding>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </padding>
@@ -134,6 +178,67 @@
                               </TitledPane>
                            </children>
                         </AnchorPane>
+                        <AnchorPane maxHeight="150.0" minHeight="150.0" prefHeight="150.0">
+                           <children>
+                              <TitledPane fx:id="lawVotePane" animated="false" collapsible="false" prefHeight="361.0" text="Odluka o propisu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <GridPane layoutY="2.0" prefHeight="92.0" prefWidth="313.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="110.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.0" minWidth="10.0" prefWidth="102.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="79.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
+                                             <children>
+                                                <Label text="ZA:" textFill="#006f1e">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="SUZDRŽANIH:" GridPane.rowIndex="1">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="PROTIV:" textFill="#f85353" GridPane.rowIndex="2">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Slider fx:id="forSlider" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" />
+                                                <Slider fx:id="neutralSlider" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <Slider fx:id="againstSlider" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <Label fx:id="votesForLabel" text="0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="votesNeutralLabel" text="0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="votesAgainstLabel" text="0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="12.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button fx:id="voteButton" mnemonicParsing="false" onAction="#vote" text="Glasaj" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                             </children>
+                                          </GridPane>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
                      </items>
                   </SplitPane>
                </children>
@@ -143,7 +248,7 @@
                   <Insets left="2.0" right="4.0" />
                </BorderPane.margin>
                <children>
-                  <TitledPane collapsible="false" minWidth="400.0" prefHeight="598.0" prefWidth="403.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane fx:id="prevTitle" collapsible="false" minWidth="400.0" prefHeight="598.0" prefWidth="403.0" text="Pregled" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <padding>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </padding>

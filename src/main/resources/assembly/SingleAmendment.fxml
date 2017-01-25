@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.assembly.AmendmentVoteController">
    <children>
       <TitledPane collapsible="false" layoutX="211.0" layoutY="-20.0" prefHeight="180.0" prefWidth="550.0" text="Amandman" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -64,7 +63,12 @@
                               <Label fx:id="nameLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label fx:id="authorNameLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label fx:id="dateLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Hyperlink onAction="#preview" text="pregledaj" GridPane.rowIndex="4" />
+                              <Label text="Status:" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="statusLabel" text="n/a" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
                         <AnchorPane GridPane.columnIndex="1">
@@ -115,7 +119,8 @@
                                           <Font name="System Bold Italic" size="12.0" />
                                        </font>
                                     </Label>
-                                    <Button mnemonicParsing="false" onAction="#voteForAmendment" text="Glasaj" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                    <Button fx:id="voteButton" mnemonicParsing="false" onAction="#voteForAmendment" text="Glasaj" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                    <Hyperlink onAction="#preview" text="pregledaj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                                  </children>
                               </GridPane>
                            </children>

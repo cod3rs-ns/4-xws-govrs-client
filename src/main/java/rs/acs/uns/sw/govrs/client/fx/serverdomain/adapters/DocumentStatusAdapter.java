@@ -2,6 +2,7 @@ package rs.acs.uns.sw.govrs.client.fx.serverdomain.adapters;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -16,6 +17,9 @@ public class DocumentStatusAdapter extends XmlAdapter<String, ObjectProperty<rs.
         }
         if (v.equals("odbijen")) {
             return new SimpleObjectProperty<>(rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus.Odbijen);
+        }
+        if (v.equals("povuečen")) {
+            return new SimpleObjectProperty<>(DocumentStatus.Povucen);
         }
         return null;
     }
@@ -32,6 +36,9 @@ public class DocumentStatusAdapter extends XmlAdapter<String, ObjectProperty<rs.
 
         if (v.get() == rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus.Odbijen) {
             return "odbijen";
+        }
+        if (v.get() == DocumentStatus.Povucen) {
+            return "povučen";
         }
         return "";
     }
