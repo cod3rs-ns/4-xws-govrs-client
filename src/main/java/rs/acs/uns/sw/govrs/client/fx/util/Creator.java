@@ -107,20 +107,20 @@ public class Creator {
 
         amendments.getHead().getOtherAttributes().put(new QName("vocab"), "http://www.parlament.gov.rs/rdf_schema/skupstina");
         amendments.getHead().getOtherAttributes().put(new QName("about"), "http://www.ftn.uns.ac.rs/rdf/examples/amendments/" + amendments.idProperty().get());
-        amendments.getHead().getOtherAttributes().put(new QName("typeOf"), "pred:Odluka");
+        amendments.getHead().getOtherAttributes().put(new QName("typeOf"), "pred:Amandman");
 
         amendments.getHead().getDatumPredloga().getOtherAttributes().put(new QName("datatype"), "xs:date");
         amendments.getHead().getDatumPredloga().getOtherAttributes().put(new QName("property"), "pred:datumPredloga");
         amendments.getHead().getDatumIzglasavanja().getOtherAttributes().put(new QName("datatype"), "xs:date");
         amendments.getHead().getDatumIzglasavanja().getOtherAttributes().put(new QName("property"), "pred:datumIzglasavanja");
         amendments.getHead().getStatus().getOtherAttributes().put(new QName("datatype"), "xs:string");
-        amendments.getHead().getStatus().getOtherAttributes().put(new QName("property"), "pred:StatusAmandmana");
+        amendments.getHead().getStatus().getOtherAttributes().put(new QName("property"), "pred:statusAmandmana");
         amendments.getHead().getGlasovaZa().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        amendments.getHead().getGlasovaZa().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaZa");
+        amendments.getHead().getGlasovaZa().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaZa");
         amendments.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        amendments.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaProtiv");
+        amendments.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaProtiv");
         amendments.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        amendments.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaUzdrzanih");
+        amendments.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaUzdrzanih");
 
         return amendments;
     }

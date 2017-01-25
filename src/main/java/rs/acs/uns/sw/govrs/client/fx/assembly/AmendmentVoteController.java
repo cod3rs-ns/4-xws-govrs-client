@@ -3,16 +3,15 @@ package rs.acs.uns.sw.govrs.client.fx.assembly;
 
 import com.gluonhq.connect.GluonObservableObject;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebView;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.AppUser;
-import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
 import rs.acs.uns.sw.govrs.client.fx.util.DateUtils;
-import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 
 public class AmendmentVoteController {
     @FXML
@@ -35,6 +34,10 @@ public class AmendmentVoteController {
     private Slider neutralSlider;
     @FXML
     private Slider againstSlider;
+    @FXML
+    private Button voteButton;
+    @FXML
+    private Label statusLabel;
 
 
     private Amendments amendment;
@@ -52,6 +55,7 @@ public class AmendmentVoteController {
         neutralSlider.setValue(amendment.getHead().getGlasovaSuzdrzani().getValue());
         forSlider.setValue(amendment.getHead().getGlasovaZa().getValue());
         againstSlider.setValue(amendment.getHead().getGlasovaProtiv().getValue());
+        statusLabel.setText(amendment.getHead().getStatus().getValue());
         dateLabel.setText(DateUtils.dateToString(amendment.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         nameLabel.setText(amendment.getName());
         GluonObservableObject<Object> userProp = RestClientProvider.getInstance().getUser(amendment.getHead().getPodnosilac().getRef().getId());
@@ -71,11 +75,35 @@ public class AmendmentVoteController {
             votesNeutralLabel.setText(String.valueOf(Integer.valueOf(newValue.intValue())));
         });
 
+        if (!DocumentStatus.Predlozen.toString().equals(amendment.getHead().getStatus().getValue())) {
+            voteButton.setDisable(true);
+            forSlider.setDisable(true);
+            againstSlider.setDisable(true);
+            neutralSlider.setDisable(true);
+        }
+
+        amendment.getHead().getStatus().valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(!DocumentStatus.Predlozen.toString().equals(amendment.getHead().getStatus().getValue())) {
+                voteButton.setDisable(true);
+                forSlider.setDisable(true);
+                againstSlider.setDisable(true);
+                neutralSlider.setDisable(true);
+            }
+        });
+
     }
 
     @FXML
     private void voteForAmendment() {
-
+        VotingObject vo = new VotingObject();
+        vo.setVotesAgainst((int)againstSlider.getValue());
+        vo.setVotesFor((int)forSlider.getValue());
+        vo.setVotesNeutral((int)neutralSlider.getValue());
+        GluonObservableObject<Object> updateProperty = RestClientProvider.getInstance().updateAmandmentsVotes(vo, idLabel.getText());
+        updateProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+            Amendments a = (Amendments)updateProperty.get();
+            amendment.getHead().getStatus().valueProperty().set(a.getHead().getStatus().valueProperty().get());
+        });
     }
 
     @FXML

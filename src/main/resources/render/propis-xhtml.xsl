@@ -83,37 +83,49 @@
             <xsl:attribute name="id">
                 <xsl:value-of select="@id"/>
             </xsl:attribute>
-            <xsl:value-of select="current()"/>
-        </p>
-        <xsl:if test="elem:tacka">
+
             <ol>
-                <xsl:for-each select="elem:tacka">
-                    <li style="font-size: 11pt; text-align: justify">
-                        <xsl:attribute name="id">
-                            <xsl:value-of select="@id"/>
-                        </xsl:attribute>
-                        <xsl:value-of select="current()"/>
-                        <xsl:if test="elem:podtacka">
-                            <ol class="podtacka">
-                                <xsl:for-each select="elem:podtacka">
-                                    <li style="font-size: 11pt; text-align: justify">
-                                        <xsl:attribute name="id">
-                                            <xsl:value-of select="@id"/>
-                                        </xsl:attribute>
-                                        <xsl:value-of select="current()"/>
-                                        <xsl:apply-templates select="elem:alineja"/>
-                                    </li>
-                                </xsl:for-each>
-                            </ol>
-                        </xsl:if>
-                        <xsl:apply-templates select="elem:alineja"/>
-                    </li>
-                </xsl:for-each>
+                <xsl:apply-templates />
             </ol>
-        </xsl:if>
+        </p>
     </xsl:template>
 
-    <xsl:template match="elem:alineja">
+    <xsl:template match="elem:stav//*">
+        <xsl:copy>
+            <xsl:copy-of select="@*" />
+            <xsl:apply-templates />
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="elem:stav//elem:tacka">
+
+        <li style="font-size: 11pt; text-align: justify">
+            <xsl:attribute name="id">
+                <xsl:value-of select="@id"/>
+            </xsl:attribute>
+            <xsl:value-of select="current()"/>
+            <xsl:if test="elem:podtacka">
+                <ol class="podtacka">
+                    <xsl:for-each select="elem:podtacka">
+                        <li style="font-size: 11pt; text-align: justify">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="@id"/>
+                            </xsl:attribute>
+                            <xsl:value-of select="current()"/>
+                            <xsl:apply-templates select="elem:alineja"/>
+                        </li>
+                    </xsl:for-each>
+                </ol>
+            </xsl:if>
+        </li>
+
+    </xsl:template>
+
+    <xsl:template match="text()">
+        <xsl:value-of select="current()"/>
+    </xsl:template>
+
+    <xsl:template match="elem:stav//elem:tacka//elem:alineja">
         <p style="margin-left: 5em;">
             <xsl:attribute name="id">
                 <xsl:value-of select="@id"/>

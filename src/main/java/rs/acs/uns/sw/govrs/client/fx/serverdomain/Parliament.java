@@ -438,7 +438,7 @@ public class Parliament extends Element{
 
         @XmlElement(namespace = "http://www.parlament.gov.rs/schema/skupstina", required = true)
         @XmlJavaTypeAdapter(StringPropertyAdapter.class)
-        protected StringProperty status;
+        protected StringProperty status = new SimpleStringProperty();
 
         /**
          * Gets the value of the datumOdrzavanja property.

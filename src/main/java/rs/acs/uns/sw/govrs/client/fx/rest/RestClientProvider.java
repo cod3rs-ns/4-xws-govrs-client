@@ -8,6 +8,8 @@ import com.gluonhq.connect.provider.DataProvider;
 import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
 import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
@@ -25,12 +27,20 @@ public class RestClientProvider {
 
     private static RestClientProvider instance = null;
     private ObjectProperty<AppUser> user = new SimpleObjectProperty<>();
+    public StringProperty parliamentState = new SimpleStringProperty();
 
     private String token;
     private JAXBContext amendmentsContext;
     private Marshaller amendmentsMarshaller;
     private JAXBContext lawContext;
     private Marshaller lawMarshaller;
+    private JAXBContext votingContext;
+    private Marshaller votingMarshaller;
+    private JAXBContext parliamentContext;
+    private Marshaller parliamentMarshaller;
+
+    private Parliament activeParliament;
+
 
     private RestClientProvider() {
         try {
@@ -38,6 +48,10 @@ public class RestClientProvider {
             amendmentsMarshaller = amendmentsContext.createMarshaller();
             lawContext = JAXBContext.newInstance(Law.class);
             lawMarshaller = lawContext.createMarshaller();
+            votingContext = JAXBContext.newInstance(VotingObject.class);
+            votingMarshaller = votingContext.createMarshaller();
+            parliamentContext = JAXBContext.newInstance(Parliament.class);
+            parliamentMarshaller = parliamentContext.createMarshaller();
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -57,6 +71,20 @@ public class RestClientProvider {
                 .host("http://localhost:9000/api")
                 .header("Accept", "application/xml")
                 .path("/laws/" + lawId);
+
+        // retrieve an object from the DataProvider
+        LawInputConverter converter = new LawInputConverter();
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
+
+    public GluonObservableObject<Law> patchLaw(String amendmentId) {
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("PUT")
+                .host("http://localhost:9000/api")
+                .header("Accept", "application/xml")
+                .path("/laws/update/" + amendmentId);
 
         // retrieve an object from the DataProvider
         LawInputConverter converter = new LawInputConverter();
@@ -171,9 +199,13 @@ public class RestClientProvider {
             userProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
                 AppUser loggedUser = (AppUser) userProperty.get();
                 System.out.println(loggedUser.getKorisnickoIme());
-                System.out.println(loggedUser.getEmail());
-                System.out.println(loggedUser.getUloga());
                 user.set(loggedUser);
+                GluonObservableObject<Object> parliamentProperty = getParliament();
+                parliamentProperty.initializedProperty().addListener((observable2, oldValue2, newValue2) -> {
+                    activeParliament = (Parliament) parliamentProperty.get();
+                    parliamentState.set(activeParliament.getHead().getStatus());
+                    System.out.println("Parliement retrieved");
+                });
             });
         });
     }
@@ -242,6 +274,98 @@ public class RestClientProvider {
         return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
     }
 
+    public GluonObservableObject<Object> updateAmandmentsVotes(VotingObject votes, String id) {
+        StringWriter writer = new StringWriter();
+        try {
+            votingMarshaller.marshal(votes, writer);
+        } catch (JAXBException e) {
+            System.out.println();
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal Amendments", e);
+        }
+        String marshalledData = writer.toString();
+        System.out.println(marshalledData);
+        System.out.println(id);
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("PUT")
+                .host("http://localhost:9000/api")
+                .contentType("application/xml")
+                .header("Accept", "application/xml")
+                .path("/amendments/voting/" + id + "/")
+                .dataString(marshalledData);
+
+        ResultInputConverter converter = new ResultInputConverter(Amendments.class);
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
+    public GluonObservableObject<Object> updateLawVotes(VotingObject votes, String id) {
+        StringWriter writer = new StringWriter();
+        try {
+            votingMarshaller.marshal(votes, writer);
+        } catch (JAXBException e) {
+            System.out.println();
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal Amendments", e);
+        }
+        String marshalledData = writer.toString();
+        System.out.println(marshalledData);
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("PUT")
+                .host("http://localhost:9000/api")
+                .contentType("application/xml")
+                .header("Accept", "application/xml")
+                .path("/laws/voting/" + id + "/")
+                .dataString(marshalledData);
+
+        ResultInputConverter converter = new ResultInputConverter(Law.class);
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
+    public void changeParliamentStatus(String status) {
+        RestClient restClient = RestClient.create()
+                .method("PUT")
+                .host("http://localhost:9000/api")
+                .header("Accept", "application/xml")
+                .path("/parliaments/change-state/" + status);
+
+        // retrieve an object from the DataProvider
+        ResultInputConverter converter = new ResultInputConverter(Parliament.class);
+        GluonObservableObject<Object> parliamentProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+        parliamentProperty.initializedProperty().addListener((observable2, oldValue2, newValue2) -> {
+            activeParliament = (Parliament) parliamentProperty.get();
+            parliamentState.set(activeParliament.getHead().getStatus());
+        });
+    }
+
+    public void createParliament(Parliament parliament) {
+        StringWriter writer = new StringWriter();
+        try {
+            parliamentMarshaller.marshal(parliament, writer);
+        } catch (JAXBException e) {
+            System.out.println();
+            System.out.println();
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal", e);
+        }
+        String marshalledData = writer.toString();
+        // create a RestClient to the specific URL
+        RestClient restClient = RestClient.create()
+                .method("POST")
+                .host("http://localhost:9000/api")
+                .contentType("application/xml")
+                .header("Accept", "application/xml")
+                .path("/parliaments/")
+                .dataString(marshalledData);
+
+        ResultInputConverter converter = new ResultInputConverter(Parliament.class);
+        GluonObservableObject<Object> parliamentProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+        parliamentProperty.initializedProperty().addListener((observable2, oldValue2, newValue2) -> {
+            activeParliament = (Parliament) parliamentProperty.get();
+            parliamentState.set(activeParliament.getHead().getStatus());
+        });
+    }
+
+
+
     public AppUser getUser() {
         return user.get();
     }
@@ -260,6 +384,10 @@ public class RestClientProvider {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Parliament getActiveParliament() {
+        return activeParliament;
     }
 }
 
