@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 
+import java.util.List;
+
 public class CustomDialogCreator {
 
     public static final ButtonType YES = new ButtonType("Da", ButtonBar.ButtonData.YES);
@@ -58,5 +60,13 @@ public class CustomDialogCreator {
         stage.getIcons().add(
                 new Image(MainFXApp.class.getResource("/images/dialog.png").toString()));
         return alert;
+    }
+
+    public static ChoiceDialog<String> createSelectLawDialog(List<String> choices) {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("", choices);
+        dialog.setTitle("Izbor Propisa");
+        dialog.setHeaderText("Upravo dodajete novi amandman!");
+        dialog.setContentText("Izaberite jedna od propisa:");
+        return dialog;
     }
 }

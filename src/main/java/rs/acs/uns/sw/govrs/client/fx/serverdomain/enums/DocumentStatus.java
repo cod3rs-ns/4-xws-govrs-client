@@ -16,5 +16,8 @@ public enum DocumentStatus {
         public String toString() {
             return "odbijen";
         }
+    },
+    Povucen {
+        public String toString() { return "povučen"; }
     }
 }

@@ -1568,6 +1568,9 @@ public class Amendments extends Element {
                 if (value.get() == DocumentStatus.Odbijen) {
                     return "odbijen";
                 }
+                if (value.get() == DocumentStatus.Povucen) {
+                    return "povučen";
+                }
                 return "";
             }
 
@@ -1588,6 +1591,9 @@ public class Amendments extends Element {
                 }
                 if (value.equals("odbijen")) {
                     this.value.set(DocumentStatus.Odbijen);
+                }
+                if (value.equals("povučen")) {
+                    this.value.set(DocumentStatus.Povucen);
                 }
             }
 
