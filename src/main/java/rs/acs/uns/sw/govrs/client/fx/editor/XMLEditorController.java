@@ -491,12 +491,7 @@ public class XMLEditorController implements TreeController {
                         Marshaller marshaller = context.createMarshaller();
                         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                         marshaller.marshal(law, activeFile);
-
-                        CustomDialogCreator.createInformationAlert(
-                                "GovRS",
-                                "Čuvanje XML datoteke",
-                                "Fajl je uspešno sačuvan."
-                        ).showAndWait();
+                        Notifications.create().owner(areaContainer.getScene().getWindow()).title("Skladištenje XML datoteke").text("Fajl je uspešno sačuvan").showConfirm();
                     }
                 }
             } catch (Exception e) {
@@ -542,11 +537,7 @@ public class XMLEditorController implements TreeController {
                         Marshaller marshaller = context.createMarshaller();
                         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                         marshaller.marshal(law, file);
-                        CustomDialogCreator.createInformationAlert(
-                                "GovRS",
-                                "Čuvanje XML datoteke",
-                                "Fajl je uspešno sačuvan."
-                        ).showAndWait();
+                        Notifications.create().owner(areaContainer.getScene().getWindow()).title("Skladištenje XML datoteke").text("Fajl je uspešno sačuvan").showConfirm();
                     }
                 } catch (Exception e) {
                     CustomDialogCreator.createErrorAlert(

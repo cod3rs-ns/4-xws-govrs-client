@@ -12,7 +12,7 @@ public class DocumentStatusPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    private ObjectProperty<DocumentStatus> property;
+    public ObjectProperty<DocumentStatus> property;
 
     public DocumentStatusPropertyItem(ObjectProperty property, String category, String name, String description, boolean editable) {
         this.property = property;

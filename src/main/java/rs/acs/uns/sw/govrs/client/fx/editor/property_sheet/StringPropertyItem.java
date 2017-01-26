@@ -11,7 +11,7 @@ public class StringPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    private StringProperty property;
+    public StringProperty property;
 
     public StringPropertyItem(StringProperty property, String category, String name, String description, boolean editable) {
         this.property = property;

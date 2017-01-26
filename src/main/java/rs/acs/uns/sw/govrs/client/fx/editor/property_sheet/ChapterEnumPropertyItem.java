@@ -13,7 +13,7 @@ public class ChapterEnumPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    private ObjectProperty<ChapterRoles> property;
+    public ObjectProperty<ChapterRoles> property;
 
     public ChapterEnumPropertyItem(ObjectProperty property, String category, String name, String description, boolean editable) {
         this.property = property;

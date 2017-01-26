@@ -1,6 +1,8 @@
 package rs.acs.uns.sw.govrs.client.fx.amendments;
 
 import com.gluonhq.connect.GluonObservableObject;
+import javafx.beans.property.Property;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,10 +15,14 @@ import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.ContextMenuHandler;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentTypePropertyItem;
+import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendment;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Parliament;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Ref;
 import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Loader;
@@ -108,6 +114,14 @@ public class AmendmentsController {
                         amendmentProperties.getItems().clear();
                         amendmentProperties.getItems().addAll(newValue.getPropertyItems());
                         preview.update();
+                        for(PropertySheet.Item i : amendmentProperties.getItems()) {
+                            if (i instanceof StringPropertyItem) {
+                                ((StringPropertyItem) i).property.addListener((o, ol, oll) ->
+                                {
+                                    if(preview != null) preview.update();
+                                });
+                            }
+                        }
                         newValue.getPropertyItems().addListener(new ListChangeListener<PropertySheet.Item>() {
                             @Override
                             public void onChanged(Change<? extends PropertySheet.Item> c) {
@@ -115,6 +129,7 @@ public class AmendmentsController {
                                 amendmentProperties.getItems().addAll(newValue.getPropertyItems());
                             }
                         });
+
                     }
 
                 });
@@ -123,6 +138,7 @@ public class AmendmentsController {
 
     public void loadTestData() {
         // send request
+        /*
         GluonObservableObject<Object> amendmentsProperty =
                 RestClientProvider.getInstance().getAmendments("amendments02");
 
@@ -156,7 +172,7 @@ public class AmendmentsController {
             stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
 
         }));
-
+    */
     }
 
     /**
@@ -178,11 +194,7 @@ public class AmendmentsController {
                 Unmarshaller unMarshaller = context.createUnmarshaller();
                 Amendments openNew = (Amendments) unMarshaller.unmarshal(file);
                 switchViewToNewAmendment(openNew);
-                CustomDialogCreator.createInformationAlert(
-                        "GovRS",
-                        "Otvaranje XML datoteke",
-                        "Fajl je uspešno otvoren."
-                ).showAndWait();
+                Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("Otvaranje XML fajl").text("XML fajl je uspešno otvoren").showConfirm();
             } catch (Exception e) {
                 CustomDialogCreator.createErrorAlert(
                         "GovRS",
@@ -199,38 +211,37 @@ public class AmendmentsController {
      */
     @FXML
     private void saveAction() {
-        try {
-            List<ErrorMessage> errors = new ArrayList<>();
-            amendments.validate(errors);
-            if (errors.size() > 0) {
-                for (ErrorMessage em : errors) {
-                    Notifications.create().owner(previewContainer.getScene().getWindow())
-                            .title("Greška <" + em.getElementType().toString() + ">")
-                            .text(em.getMessage())
-                            .showError();
+        if (amendments != null) {
+            try {
+                List<ErrorMessage> errors = new ArrayList<>();
+                amendments.validate(errors);
+                if (errors.size() > 0) {
+                    for (ErrorMessage em : errors) {
+                        Notifications.create().owner(previewContainer.getScene().getWindow())
+                                .title("Greška <" + em.getElementType().toString() + ">")
+                                .text(em.getMessage())
+                                .showError();
+                    }
+                } else {
+                    amendments.preMarshaller();
+                    if (activeFile != null) {
+                        JAXBContext context = JAXBContext.newInstance(Amendments.class);
+                        Marshaller marshaller = context.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                        marshaller.marshal(amendments, activeFile);
+                        Notifications.create().owner(previewContainer.getScene().getWindow()).title("Skladištenje XML datoteke").text("Fajl je uspešno sačuvan").showConfirm();
+                    }
                 }
-            } else {
-                amendments.preMarshaller();
-                if (activeFile != null) {
-                    JAXBContext context = JAXBContext.newInstance(Amendments.class);
-                    Marshaller marshaller = context.createMarshaller();
-                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                    marshaller.marshal(amendments, activeFile);
-
-                    CustomDialogCreator.createInformationAlert(
-                            "GovRS",
-                            "Čuvanje XML datoteke",
-                            "Fajl je uspešno sačuvan."
-                    ).showAndWait();
-                }
+            } catch (Exception e) {
+                CustomDialogCreator.createErrorAlert(
+                        "GovRS",
+                        "Skladištenje XML datoteke",
+                        "Fajl nije uspešno sačuvan."
+                ).showAndWait();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
             }
-        } catch (Exception e) {
-            CustomDialogCreator.createErrorAlert(
-                    "GovRS",
-                    "Čucanje XML datoteke",
-                    "Fajl nije uspešno sačuvan."
-            ).showAndWait();
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
+        } else {
+            Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("Neispravna akcija").text("Morate prvo otvoriti/napraviti novi amandman").showWarning();
         }
     }
 
@@ -239,63 +250,7 @@ public class AmendmentsController {
      */
     @FXML
     private void saveAsAction() {
-        List<ErrorMessage> errors = new ArrayList<>();
-        amendments.validate(errors);
-        if (errors.size() > 0) {
-            for (ErrorMessage em : errors) {
-                Notifications.create().owner(previewContainer.getScene().getWindow())
-                        .title("Greška <" + em.getElementType().toString() + ">")
-                        .text(em.getMessage())
-                        .showError();
-            }
-        } else {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Sačuvaj amandman kao...");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("XML files", "*.xml")
-            );
-
-            Stage stage = (Stage) amendmentsTable.getScene().getWindow();
-            File file = fileChooser.showSaveDialog(stage);
-            if (file != null) {
-                try {
-                    amendments.preMarshaller();
-                    JAXBContext context = JAXBContext.newInstance(Amendments.class);
-                    Marshaller marshaller = context.createMarshaller();
-                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                    marshaller.marshal(amendments, file);
-                    CustomDialogCreator.createInformationAlert(
-                            "GovRS",
-                            "Čuvanje XML datoteke",
-                            "Fajl je uspešno sačuvan."
-                    ).showAndWait();
-                } catch (Exception e) {
-                    CustomDialogCreator.createErrorAlert(
-                            "GovRS",
-                            "Čuvanje XML datoteke",
-                            "Fajl nije uspešno sačuvan."
-                    ).showAndWait();
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
-                }
-            }
-        }
-    }
-
-    @FXML
-    private void createNewAmendments() {
-        TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Neki novi amandmani");
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(name -> {
-            // TODO change to real Law ID
-            // TODO add notification
-            Amendments newl = Creator.createNewAmendments("law01");
-            switchViewToNewAmendment(newl);
-        });
-    }
-
-    @FXML
-    private void uploadAmendment() {
-        try {
+        if (amendments != null) {
             List<ErrorMessage> errors = new ArrayList<>();
             amendments.validate(errors);
             if (errors.size() > 0) {
@@ -306,18 +261,102 @@ public class AmendmentsController {
                             .showError();
                 }
             } else {
-                amendments.preMarshaller();
-                GluonObservableObject<Object> amendmentsProperty =
-                        RestClientProvider.getInstance().postAmendments(amendments);
-                Stage stage = Loader.createLoader(amendmentsTable.getScene());
-                stage.show();
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Sačuvaj amandman kao...");
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("XML files", "*.xml")
+                );
 
-                amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-                    stage.close();
-                }));
+                Stage stage = (Stage) amendmentsTable.getScene().getWindow();
+                File file = fileChooser.showSaveDialog(stage);
+                if (file != null) {
+                    try {
+                        amendments.preMarshaller();
+                        JAXBContext context = JAXBContext.newInstance(Amendments.class);
+                        Marshaller marshaller = context.createMarshaller();
+                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                        marshaller.marshal(amendments, file);
+                        Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("Skladištenje XML datoteke").text("Fajl je uspešno sačuvan").showConfirm();
+                    } catch (Exception e) {
+                        CustomDialogCreator.createErrorAlert(
+                                "GovRS",
+                                "Čuvanje XML datoteke",
+                                "Fajl nije uspešno sačuvan."
+                        ).showAndWait();
+                        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unable to save file.");
+                    }
+                }
             }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
+        } else {
+            Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("Neispravna akcija").text("Morate prvo otvoriti/napraviti novi amandman").showWarning();
+        }
+    }
+
+    @FXML
+    private void createNewAmendments() {
+        String lawId = "";
+        Parliament parliament = RestClientProvider.getInstance().getActiveParliament();
+        if ("sazvana".equals(RestClientProvider.getInstance().parliamentState.get())) {
+            List<String> possibleLaws = new ArrayList<>();
+            for (Ref r : parliament.getBody().getAkti().getRef()) {
+                if ("law".equals(r.getType())) {
+                    possibleLaws.add(r.getId());
+                }
+            }
+            ChoiceDialog<String> choice = CustomDialogCreator.createSelectLawDialog(possibleLaws);
+            Optional<String> selected = choice.showAndWait();
+            selected.ifPresent(id -> {
+                if (!id.equals("")) {
+                    TextInputDialog dialog = CustomDialogCreator.createNewEntryDialog("Neki novi amandmani");
+                    Optional<String> result = dialog.showAndWait();
+                    result.ifPresent(name -> {
+                        Amendments newl = Creator.createNewAmendments(id);
+                        switchViewToNewAmendment(newl);
+
+                    });
+                } else {
+                    Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspešna akcija").text("Morate izabrati Propis za koji pišete Amandman").showWarning();
+                }
+            });
+
+        } else {
+            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
+        }
+
+    }
+
+    @FXML
+    private void uploadAmendment() {
+        if (amendments != null) {
+            try {
+                List<ErrorMessage> errors = new ArrayList<>();
+                amendments.validate(errors);
+                if (errors.size() > 0) {
+                    for (ErrorMessage em : errors) {
+                        Notifications.create().owner(previewContainer.getScene().getWindow())
+                                .title("Greška <" + em.getElementType().toString() + ">")
+                                .text(em.getMessage())
+                                .showError();
+                    }
+                } else {
+                    amendments.preMarshaller();
+                    GluonObservableObject<Object> amendmentsProperty =
+                            RestClientProvider.getInstance().postAmendments(amendments);
+                    Stage stage = Loader.createLoader(amendmentsTable.getScene());
+                    stage.show();
+
+                    amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                        stage.close();
+                        if (amendmentsProperty.get() == null) {
+                            Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("GREŠKA!").text("Amandman sa ovim identifikatorom već postoji!").showError();
+                        }
+                    }));
+                }
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
+            }
+        } else {
+            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
         }
 
     }
@@ -330,17 +369,34 @@ public class AmendmentsController {
     private void switchViewToNewAmendment(Amendments newAmendnents) {
         amendments = newAmendnents;
         amendments.initElement();
+        generalProperties.getItems().clear();
+        generalProperties.getItems().addAll(amendments.getPropertyItems());
+        //amendments.initElement();
+        preview = new HtmlPreview(amendments, "amandman", Amendments.class);
+        previewContainer.setContent(preview.getNode());
+        amendmentsTable.setItems(amendments.getChildren());
+        amendmentsTable.refresh();
         preview.setRootElement(amendments);
         preview.update();
         amendmentsTable.getItems().clear();
         amendmentsTable.setItems(amendments.getChildren());
         generalProperties.getItems().clear();
         generalProperties.getItems().addAll(amendments.getPropertyItems());
+        for(PropertySheet.Item i : generalProperties.getItems()) {
+           if (i instanceof StringPropertyItem) {
+               ((StringPropertyItem) i).property.addListener((observable, oldValue, newValue) -> preview.update());
+           }
+        }
+
     }
 
     @FXML
     private void addAmendment() {
-        amendments.createAndAddChild(Creator.createOneAmendment());
+        if (amendments != null) {
+            amendments.createAndAddChild(Creator.createOneAmendment());
+        } else {
+            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Morate prvo napraviti novi Amandman.").showWarning();
+        }
     }
 
     @FXML
