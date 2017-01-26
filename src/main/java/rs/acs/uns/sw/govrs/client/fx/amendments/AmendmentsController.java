@@ -328,35 +328,41 @@ public class AmendmentsController {
     @FXML
     private void uploadAmendment() {
         if (amendments != null) {
-            try {
-                List<ErrorMessage> errors = new ArrayList<>();
-                amendments.validate(errors);
-                if (errors.size() > 0) {
-                    for (ErrorMessage em : errors) {
-                        Notifications.create().owner(previewContainer.getScene().getWindow())
-                                .title("Greška <" + em.getElementType().toString() + ">")
-                                .text(em.getMessage())
-                                .showError();
-                    }
-                } else {
-                    amendments.preMarshaller();
-                    GluonObservableObject<Object> amendmentsProperty =
-                            RestClientProvider.getInstance().postAmendments(amendments);
-                    Stage stage = Loader.createLoader(amendmentsTable.getScene());
-                    stage.show();
-
-                    amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-                        stage.close();
-                        if (amendmentsProperty.get() == null) {
-                            Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("GREŠKA!").text("Amandman sa ovim identifikatorom već postoji!").showError();
+            if ("sazvana".equals(RestClientProvider.getInstance().parliamentState.get())) {
+                try {
+                    List<ErrorMessage> errors = new ArrayList<>();
+                    amendments.validate(errors);
+                    if (errors.size() > 0) {
+                        for (ErrorMessage em : errors) {
+                            Notifications.create().owner(previewContainer.getScene().getWindow())
+                                    .title("Greška <" + em.getElementType().toString() + ">")
+                                    .text(em.getMessage())
+                                    .showError();
                         }
-                    }));
+                    } else {
+                        amendments.preMarshaller();
+                        GluonObservableObject<Object> amendmentsProperty =
+                                RestClientProvider.getInstance().postAmendments(amendments);
+                        Stage stage = Loader.createLoader(amendmentsTable.getScene());
+                        stage.show();
+
+                        amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                            stage.close();
+                            if (amendmentsProperty.get() == null) {
+                                Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("GREŠKA!").text("Amandman sa ovim identifikatorom već postoji!").showError();
+                            }
+                        }));
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
                 }
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
+            } else {
+                Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
+
             }
+
         } else {
-            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
+            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Morate prvo kreirati amandman.").showWarning();
         }
 
     }

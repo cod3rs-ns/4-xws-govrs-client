@@ -567,29 +567,33 @@ public class XMLEditorController implements TreeController {
     @FXML
     private void uploadLaw() {
         if (law != null) {
-            List<ErrorMessage> errors = new ArrayList<>();
-            law.validate(errors);
-            if (errors.size() > 0) {
-                for (ErrorMessage em : errors) {
-                    Notifications.create().owner(areaContainer.getScene().getWindow())
-                            .title("Greška <" + em.getElementType().toString() + ">")
-                            .text(em.getMessage())
-                            .showError();
+            if ("sazvana".equals(RestClientProvider.getInstance().parliamentState.get())) {
+                List<ErrorMessage> errors = new ArrayList<>();
+                law.validate(errors);
+                if (errors.size() > 0) {
+                    for (ErrorMessage em : errors) {
+                        Notifications.create().owner(areaContainer.getScene().getWindow())
+                                .title("Greška <" + em.getElementType().toString() + ">")
+                                .text(em.getMessage())
+                                .showError();
+                    }
+                } else {
+                    law.preMarshaller();
+                    GluonObservableObject<Law> lawProperty =
+                            RestClientProvider.getInstance().postLaw(law);
+                    Stage stage = Loader.createLoader(treeContainer.getScene());
+                    stage.show();
+
+                    lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                        stage.close();
+                        if (lawProperty.get() == null) {
+                            Notifications.create().owner(areaContainer.getScene().getWindow()).title("GREŠKA!").text("Propis već postoji!").showError();
+                        }
+                    }));
+
                 }
             } else {
-                law.preMarshaller();
-                GluonObservableObject<Law> lawProperty =
-                        RestClientProvider.getInstance().postLaw(law);
-                Stage stage = Loader.createLoader(treeContainer.getScene());
-                stage.show();
-
-                lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-                    stage.close();
-                    if (lawProperty.get() == null) {
-                        Notifications.create().owner(areaContainer.getScene().getWindow()).title("GREŠKA!").text("Propis već postoji!").showError();
-                    }
-                }));
-
+                Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
             }
         } else {
             Notifications.create().owner(treeContainer.getScene().getWindow()).title("Neispravna akcija").text("Morate prvo otvoriti/napraviti novi propis").showWarning();
