@@ -392,9 +392,13 @@ public class AssemblyController implements Initializable {
                     RestClientProvider.getInstance().createParliament(parliament);
                     RestClientProvider.getInstance().parliamentState.setValue("sazvana");
                     stateLabel.setText("sazvana");
-                    placeLabel.setText(RestClientProvider.getInstance().getActiveParliament().getHead().getMjestoOdrzavanja());
+                    placeLabel.setText("Novi Sad");
                     parliamentDateLabel.setText(DateUtils.dateToString(RestClientProvider.getInstance().getActiveParliament().getHead().getDatumOdrzavanja().toGregorianCalendar().getTime()));
-
+                    try {
+                        parliamentDateLabel.setText(DateUtils.dateToString(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar).toGregorianCalendar().getTime()));
+                    } catch (DatatypeConfigurationException e) {
+                        e.printStackTrace();
+                    }
                     stage.close();
                 });
                 picker.cancelButton.setOnAction(event1 -> {
