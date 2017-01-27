@@ -67,6 +67,9 @@ public class CustomDialogCreator {
         dialog.setTitle("Izbor Propisa");
         dialog.setHeaderText("Upravo dodajete novi amandman!");
         dialog.setContentText("Izaberite jedna od propisa:");
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(
+                new Image(MainFXApp.class.getResource("/images/dialog.png").toString()));
         return dialog;
     }
 }

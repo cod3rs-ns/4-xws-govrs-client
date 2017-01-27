@@ -70,10 +70,16 @@ public class HtmlPreview {
 
         // insert script into document
         StringBuilder sb = new StringBuilder();
-        sb.append(parts[0]);
-        sb.append("<body");
-        sb.append(scrollScript);
-        sb.append(parts[1]);
+        if (parts.length == 2) {
+            sb.append(parts[0]);
+            sb.append("<body");
+            sb.append(scrollScript);
+            sb.append(parts[1]);
+        } else {
+            sb.append(xhtml);
+        }
+
+
 
         webView.getEngine().loadContent(sb.toString());
     }

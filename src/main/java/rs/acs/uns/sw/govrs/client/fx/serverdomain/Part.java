@@ -72,7 +72,7 @@ public class Part extends Element{
 
     @XmlAttribute(name = "role")
     @XmlJavaTypeAdapter(PartEnumPropertyAdapter.class)
-    protected ObjectProperty<PartRoles> role = new SimpleObjectProperty<>();
+    protected ObjectProperty<PartRoles> role = new SimpleObjectProperty<>(PartRoles.OpsteOdredbe);
 
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")

@@ -16,10 +16,7 @@ public class ItemWrapper extends Element {
     private Item wrappedItem;
 
     public ItemWrapper(Item item) {
-        wrappedItem = new Item();
-        wrappedItem.setValue("");
-        wrappedItem.setElementName("Alineja");
-        wrappedItem.setId("");
+        wrappedItem = item;
         this.elementContentProperty().set(wrappedItem.getValue());
     }
 

@@ -311,6 +311,7 @@ public class AmendmentsController {
                     Optional<String> result = dialog.showAndWait();
                     result.ifPresent(name -> {
                         Amendments newl = Creator.createNewAmendments(id);
+                        newl.setName(name);
                         switchViewToNewAmendment(newl);
 
                     });
@@ -380,12 +381,11 @@ public class AmendmentsController {
         //amendments.initElement();
         preview = new HtmlPreview(amendments, "amandman", Amendments.class);
         previewContainer.setContent(preview.getNode());
+        amendmentsTable.getItems().clear();
         amendmentsTable.setItems(amendments.getChildren());
         amendmentsTable.refresh();
         preview.setRootElement(amendments);
         preview.update();
-        amendmentsTable.getItems().clear();
-        amendmentsTable.setItems(amendments.getChildren());
         generalProperties.getItems().clear();
         generalProperties.getItems().addAll(amendments.getPropertyItems());
         for(PropertySheet.Item i : generalProperties.getItems()) {

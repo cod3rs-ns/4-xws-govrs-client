@@ -137,7 +137,7 @@
 
     <xsl:template match="elem:stav">
         <p style="font-size: 11pt; text-align: justify">
-            <xsl:value-of select="current()"/>
+            <xsl:value-of select="text()"/>
         </p>
         <xsl:apply-templates select="elem:tacka"/>
     </xsl:template>
@@ -145,7 +145,7 @@
     <xsl:template match="elem:tacka">
         <ol>
             <li style="font-size: 11pt; text-align: justify">
-                <xsl:value-of select="current()"/>
+                <xsl:value-of select="text()"/>
 
                 <xsl:apply-templates/>
             </li>
@@ -155,7 +155,7 @@
     <xsl:template match="elem:podtacka">
         <ol class="podtacka">
             <li style="font-size: 11pt; text-align: justify">
-                <xsl:value-of select="current()"/>
+                <xsl:value-of select="text()"/>
                 <xsl:apply-templates/>
             </li>
         </ol>
@@ -164,14 +164,13 @@
     <xsl:template match="elem:alineja">
         <ul>
             <li style="font-size: 10pt; text-align: justify; list-style: none;">
-                - <xsl:value-of select="current()"/>
+                - <xsl:value-of select="text()"/>
             </li>
         </ul>
     </xsl:template>
 
     <!-- Override mixed content with link in XHTML -->
 
-    <!-- FIXME Add id's references -->
     <!-- Razlog -->
     <xsl:template match="aman:razlog//*">
         <xsl:copy>

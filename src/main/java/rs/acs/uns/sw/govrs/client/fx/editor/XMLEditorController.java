@@ -559,6 +559,7 @@ public class XMLEditorController implements TreeController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             Law newl = Creator.createNewLaw();
+            newl.setName(name);
             switchViewToNewLaw(newl);
             Notifications.create().owner(treeContainer.getScene().getWindow()).title("Propis").text("Propis je uspešno kreiran!").showInformation();
         });
