@@ -18,7 +18,7 @@ public class DocumentStatusAdapter extends XmlAdapter<String, ObjectProperty<rs.
         if (v.equals("odbijen")) {
             return new SimpleObjectProperty<>(rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus.Odbijen);
         }
-        if (v.equals("povuečen")) {
+        if (v.equals("povučen")) {
             return new SimpleObjectProperty<>(DocumentStatus.Povucen);
         }
         return null;

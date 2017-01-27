@@ -12,7 +12,7 @@ public class PartEnumPropertyItem implements PropertySheet.Item {
     private String name;
     private String description;
     private boolean editable;
-    private ObjectProperty<PartRoles> property;
+    public ObjectProperty<PartRoles> property;
 
     public PartEnumPropertyItem(ObjectProperty property, String category, String name, String description, boolean editable) {
         this.property = property;

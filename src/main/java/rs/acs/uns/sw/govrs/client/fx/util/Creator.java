@@ -31,7 +31,7 @@ public class Creator {
         law.setBody(factory.createLawBody());
 
         law.getHead().setDatumIzglasavanja(factory.createLawHeadDatumIzglasavanja());
-        law.getHead().getDatumIzglasavanja().setValue(dateTest);
+        law.getHead().getDatumIzglasavanja().setValue(RestClientProvider.getInstance().getActiveParliament().getHead().getDatumOdrzavanja());
         law.getHead().setDatumPredloga(factory.createLawHeadDatumPredloga());
         law.getHead().getDatumPredloga().setValue(dateTest);
         law.getHead().setGlasovaProtiv(factory.createLawHeadGlasovaProtiv());
@@ -86,7 +86,7 @@ public class Creator {
         amendments.setId(IdentityGenerator.get().generate(null, ElementType.Amendments));
         amendments.setName("Neki novi amandmani");
         amendments.getHead().setDatumIzglasavanja(factory.createAmendmentsHeadDatumIzglasavanja());
-        amendments.getHead().getDatumIzglasavanja().setValue(dateTest);
+        amendments.getHead().getDatumIzglasavanja().setValue(RestClientProvider.getInstance().getActiveParliament().getHead().getDatumOdrzavanja());
         amendments.getHead().setDatumPredloga(factory.createAmendmentsHeadDatumPredloga());
         amendments.getHead().getDatumPredloga().setValue(dateTest);
         amendments.getHead().setGlasovaProtiv(factory.createAmendmentsHeadGlasovaProtiv());

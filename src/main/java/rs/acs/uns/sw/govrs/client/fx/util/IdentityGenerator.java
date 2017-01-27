@@ -34,7 +34,7 @@ public class IdentityGenerator {
             sb.append(random.nextIdLarge());
         } else {
             sb.append(parent.idProperty().get());
-            sb.append("/");
+            sb.append("_");
             sb.append(type.toString());
             sb.append("_");
             sb.append(random.nextIdSmall());
