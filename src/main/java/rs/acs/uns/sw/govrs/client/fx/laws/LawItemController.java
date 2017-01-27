@@ -55,7 +55,8 @@ public class LawItemController implements Initializable {
         this.law = law;
         previewPane = preview;
         idLabel.setText(law.getId());
-        statusLabel.setText(law.getHead().getStatus().getValue());
+        System.out.println(law.getHead().getStatus());
+        if (law.getHead().getStatus() != null) statusLabel.setText(law.getHead().getStatus().getValue());
         forLabel.setText(String.valueOf(law.getHead().getGlasovaZa().getValue()));
         againstLabel.setText(String.valueOf(law.getHead().getGlasovaProtiv().getValue()));
         neutralLabel.setText(String.valueOf(law.getHead().getGlasovaSuzdrzani().getValue()));
@@ -63,6 +64,14 @@ public class LawItemController implements Initializable {
         proposedLabel.setText(DateUtils.dateToString(law.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         votedLabel.setText(DateUtils.dateToString(law.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         nameLink.setText(law.getName());
+        if(!"predložen".equals(law.getHead().getStatus().getValue())) {
+            System.out.println("hehehe");
+            withdrawButton.setVisible(false);
+        }
+        if(!"sazvana".equals(RestClientProvider.getInstance().parliamentState.get())){
+            System.out.println("huhehe");
+            withdrawButton.setVisible(false);
+        }
     }
 
     @FXML
@@ -139,7 +148,12 @@ public class LawItemController implements Initializable {
 
     @FXML
     private void withdraw() {
-
+        GluonObservableObject<Object> lawProperty = RestClientProvider.getInstance().withdrawLaw(law.getId());
+        lawProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+            Law l = (Law) lawProperty.get();
+            Notifications.create().owner(withdrawButton.getScene().getWindow()).title("Propis").text("Uspešno ste povukli propis").showConfirm();
+            withdrawButton.setVisible(false);
+        });
     }
 
     @FXML

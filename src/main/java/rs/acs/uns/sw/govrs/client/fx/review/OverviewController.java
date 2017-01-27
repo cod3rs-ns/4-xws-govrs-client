@@ -48,16 +48,18 @@ public class OverviewController implements Initializable {
         userLaws.initializedProperty().addListener((observable, oldValue, newValue) -> {
             SearchResult sr = userLaws.get();
             System.out.println(sr);
-            if (sr.getSet() != null && sr.getSet().size() > 0) {
-                for (SearchObject so: sr.getSet() ) {
-                    String currentId = IDUtils.extractId(so.getPath());
-                    GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw(currentId);
-                    lawProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        Law law = lawProperty.get();
-                        System.out.println("AHAHA");
-                        laws.add(law);
-                        updateLaws();
-                    });
+            if (sr.getSet() != null) {
+                if (sr.getSet().size() > 0) {
+                    for (SearchObject so : sr.getSet()) {
+                        String currentId = IDUtils.extractId(so.getPath());
+                        GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw(currentId);
+                        lawProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
+                            Law law = lawProperty.get();
+                            System.out.println("AHAHA");
+                            laws.add(law);
+                            updateLaws();
+                        });
+                    }
                 }
             }
         });

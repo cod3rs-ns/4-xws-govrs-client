@@ -323,6 +323,28 @@ public class RestClientProvider {
         return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
     }
 
+    public GluonObservableObject<Object> withdrawLaw(String id) {
+        RestClient restClient = RestClient.create()
+                .method("PUT")
+                .host("http://localhost:9000/api")
+                .header("Accept", "application/xml")
+                .path("/laws/" + id + "/status/povučen");
+
+        ResultInputConverter converter = new ResultInputConverter(Law.class);
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
+    public GluonObservableObject<Object> withdrawAmendment(String id) {
+        RestClient restClient = RestClient.create()
+                .method("PUT")
+                .host("http://localhost:9000/api")
+                .header("Accept", "application/xml")
+                .path("/amendments/" + id + "/status/povučen");
+
+        ResultInputConverter converter = new ResultInputConverter(Amendments.class);
+        return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
+    }
+
     public void changeParliamentStatus(String status) {
         RestClient restClient = RestClient.create()
                 .method("PUT")

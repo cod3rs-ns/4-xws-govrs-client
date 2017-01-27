@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Amendments;
+import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.util.DateUtils;
 
 import java.io.File;
@@ -66,6 +67,14 @@ public class AmendmentItemController implements Initializable {
         proposedLabel.setText(DateUtils.dateToString(amendment.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         votedLabel.setText(DateUtils.dateToString(amendment.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         nameLink.setText(amendment.getName());
+        if(!"predložen".equals(amendment.getHead().getStatus().getValue())) {
+            System.out.println("hehehe");
+            withdrawButton.setVisible(false);
+        }
+        if(!"sazvana".equals(RestClientProvider.getInstance().parliamentState.get())){
+            System.out.println("huhehe");
+            withdrawButton.setVisible(false);
+        }
     }
 
     @FXML
@@ -152,9 +161,15 @@ public class AmendmentItemController implements Initializable {
         });
     }
 
+
     @FXML
     private void withdraw() {
-
+        GluonObservableObject<Object> lawProperty = RestClientProvider.getInstance().withdrawAmendment(amendment.getId());
+        lawProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+            Amendments l = (Amendments) lawProperty.get();
+            Notifications.create().owner(withdrawButton.getScene().getWindow()).title("Amandman").text("Uspešno ste povukli amandman").showConfirm();
+            withdrawButton.setVisible(false);
+        });
     }
 
 }
