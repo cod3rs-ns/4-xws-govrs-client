@@ -352,6 +352,7 @@ public class AmendmentsController {
                             if (amendmentsProperty.get() == null) {
                                 Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("GREŠKA!").text("Amandman sa ovim identifikatorom već postoji!").showError();
                             }
+                            Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("Amandman").text("Uspešno ste predložili Amandman.").showInformation();
                         }));
                     }
                 } catch (Exception e) {

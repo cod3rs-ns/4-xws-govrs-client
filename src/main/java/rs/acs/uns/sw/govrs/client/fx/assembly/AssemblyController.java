@@ -108,6 +108,10 @@ public class AssemblyController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        refresh();
+    }
+
+    public void refresh() {
         lawVotePane.setDisable(true);
         RestClientProvider.getInstance().parliamentState.addListener((observable, oldValue, newValue) -> {
             setParliamentState();
@@ -154,7 +158,7 @@ public class AssemblyController implements Initializable {
                         System.out.println(selectedLaw.getHead().getPodnosilac().getRef().getId());
                         userProp.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
                             AppUser podnosilac = (AppUser) userProp.get();
-                            authorLabel.setText(podnosilac.getIme() + " " + podnosilac.getPrezime());
+                            if (podnosilac != null) authorLabel.setText(podnosilac.getIme() + " " + podnosilac.getPrezime());
                         });
                         GluonObservableObject<SearchResult> amenmentsProperty = RestClientProvider.getInstance().getAmendmentsByLaw(selectedLaw.getId());
                         amenmentsProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
@@ -203,7 +207,16 @@ public class AssemblyController implements Initializable {
         lawVotePane.setDisable(true);
     }
 
-    private void updateAmendments() {
+    public void reset() {
+        laws = FXCollections.observableArrayList();
+        observableObjects = FXCollections.observableArrayList();
+        amendmentsList = FXCollections.observableArrayList();
+        selectedLaw = null;
+        amendmentsContainer.getChildren().clear();
+
+    }
+
+    public void updateAmendments() {
         amendmentsContainer.getChildren().clear();
         for (Amendments amend: amendmentsList) {
             FXMLLoader loader = new FXMLLoader();
@@ -212,12 +225,14 @@ public class AssemblyController implements Initializable {
             try (InputStream in = MainFXApp.class.getResourceAsStream("/assembly/SingleAmendment.fxml")) {
                 AnchorPane pane = loader.load(in);
                 AmendmentVoteController controller = loader.getController();
+                controller.setAssemblyController(this);
                 controller.display(amend,selectedLaw, previewContainer);
                 amendmentsContainer.getChildren().add(pane);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     private void finishParliament() {
@@ -231,7 +246,10 @@ public class AssemblyController implements Initializable {
             Notifications.create().owner(amendmentsContainer.getScene().getWindow()).title("Upozorenje!").text("Postoje Propisi čiji status nije razrešen!").showWarning();
         } else {
             RestClientProvider.getInstance().changeParliamentStatus("završena");
+
         }
+        loadTestData();
+        refresh();
     }
 
     ObservableList<GluonObservableObject<Law>> observableObjects = FXCollections.observableArrayList();
@@ -276,6 +294,8 @@ public class AssemblyController implements Initializable {
                     GluonObservableObject patchProperty = RestClientProvider.getInstance().patchLaw(a.getId());
                 }
                 loadTestData();
+                Notifications.create().owner(againstSlider.getScene().getWindow()).title("Glasanje").text("Uspešno ste igzlasali propis").showInformation();
+                voteButton.setDisable(true);
             }
         });
     }
@@ -320,7 +340,7 @@ public class AssemblyController implements Initializable {
             buttonContainer.getChildren().add(finish);
             stateLabel.setText(RestClientProvider.getInstance().parliamentState.get());
         } else if ("završena".equals(RestClientProvider.getInstance().parliamentState.get())) {
-            amendmentsContainerPane.setDisable(false);
+            amendmentsContainerPane.setDisable(true);
             lawVotePane.setDisable(true);
             lawTable.setDisable(true);
             lawInfoPane.setDisable(true);
@@ -364,8 +384,18 @@ public class AssemblyController implements Initializable {
                     } catch (DatatypeConfigurationException e) {
                         e.printStackTrace();
                     }
+
+                    reset();
+                    loadTestData();
+                    refresh();
                     parliament.getBody().setAkti(new Parliament.Body.Akti());
                     RestClientProvider.getInstance().createParliament(parliament);
+                    RestClientProvider.getInstance().parliamentState.setValue("sazvana");
+                    stateLabel.setText("sazvana");
+                    placeLabel.setText(RestClientProvider.getInstance().getActiveParliament().getHead().getMjestoOdrzavanja());
+                    parliamentDateLabel.setText(DateUtils.dateToString(RestClientProvider.getInstance().getActiveParliament().getHead().getDatumOdrzavanja().toGregorianCalendar().getTime()));
+
+                    stage.close();
                 });
                 picker.cancelButton.setOnAction(event1 -> {
                     stage.close();

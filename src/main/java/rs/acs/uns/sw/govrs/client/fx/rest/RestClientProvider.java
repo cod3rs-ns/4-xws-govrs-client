@@ -338,7 +338,7 @@ public class RestClientProvider {
                 .method("PUT")
                 .host("http://localhost:9000/api")
                 .header("Accept", "application/xml")
-                .path("/amendments/" + id + "/status/povučen");
+                .path("/amendments/" + id + "/povučen");
 
         ResultInputConverter converter = new ResultInputConverter(Amendments.class);
         return DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
@@ -383,7 +383,7 @@ public class RestClientProvider {
         GluonObservableObject<Object> parliamentProperty = DataProvider.retrieveObject(restClient.createObjectDataReader(converter));
         parliamentProperty.initializedProperty().addListener((observable2, oldValue2, newValue2) -> {
             activeParliament = (Parliament) parliamentProperty.get();
-            parliamentState.set(activeParliament.getHead().getStatus());
+            parliamentState.set("sazvana");
         });
     }
 

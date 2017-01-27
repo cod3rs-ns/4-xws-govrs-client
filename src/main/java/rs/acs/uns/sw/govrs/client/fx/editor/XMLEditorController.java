@@ -589,6 +589,8 @@ public class XMLEditorController implements TreeController {
                         stage.close();
                         if (lawProperty.get() == null) {
                             Notifications.create().owner(areaContainer.getScene().getWindow()).title("GREŠKA!").text("Propis već postoji!").showError();
+                        } else {
+                            Notifications.create().owner(areaContainer.getScene().getWindow()).title("Propis").text("Uspešno ste predložili Propis.").showInformation();
                         }
                     }));
 

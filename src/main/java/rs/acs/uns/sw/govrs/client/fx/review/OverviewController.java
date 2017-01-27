@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -22,6 +24,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchObject;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
 import rs.acs.uns.sw.govrs.client.fx.util.IDUtils;
 
+import javax.xml.soap.Text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -44,41 +47,6 @@ public class OverviewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         lawsContainer.setSpacing(5);
         amendmentsContainer.setSpacing(5);
-        GluonObservableObject<SearchResult> userLaws = RestClientProvider.getInstance().getLawsByUser(RestClientProvider.getInstance().getUser().getId());
-        userLaws.initializedProperty().addListener((observable, oldValue, newValue) -> {
-            SearchResult sr = userLaws.get();
-            System.out.println(sr);
-            if (sr.getSet() != null) {
-                if (sr.getSet().size() > 0) {
-                    for (SearchObject so : sr.getSet()) {
-                        String currentId = IDUtils.extractId(so.getPath());
-                        GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw(currentId);
-                        lawProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                            Law law = lawProperty.get();
-                            System.out.println("AHAHA");
-                            laws.add(law);
-                            updateLaws();
-                        });
-                    }
-                }
-            }
-        });
-
-        GluonObservableObject<SearchResult> userAmendments = RestClientProvider.getInstance().getAmendmentsByUser(RestClientProvider.getInstance().getUser().getId());
-        userAmendments.initializedProperty().addListener((observable, oldValue, newValue) -> {
-            SearchResult sr = userAmendments.get();
-            if (sr.getSet() != null && sr.getSet().size() > 0) {
-                for (SearchObject so: sr.getSet() ) {
-                    String currentId = IDUtils.extractId(so.getPath());
-                    GluonObservableObject<Object> amendmentsProperty = RestClientProvider.getInstance().getAmendments(currentId);
-                    amendmentsProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                        Amendments amendment = (Amendments) amendmentsProperty.get();
-                        amendments.add(amendment);
-                        updateAmendments();
-                    });
-                }
-            }
-        });
     }
 
     private void updateLaws() {
@@ -117,5 +85,50 @@ public class OverviewController implements Initializable {
 
     public void setStateManager(StateManager stateManager) {
         this.stateManager = stateManager;
+
+        ProgressBar pb = new ProgressBar();
+        pb.setPrefWidth(150);
+        stateManager.homeController.getStatusBar().getLeftItems().clear();
+        stateManager.homeController.getStatusBar().getLeftItems().add(new Label("Učitavanje podataka..."));
+        stateManager.homeController.getStatusBar().getRightItems().add(pb);
+
+        GluonObservableObject<SearchResult> userLaws = RestClientProvider.getInstance().getLawsByUser(RestClientProvider.getInstance().getUser().getId());
+        userLaws.initializedProperty().addListener((observable, oldValue, newValue) -> {
+            SearchResult sr = userLaws.get();
+            System.out.println(sr);
+            if (sr.getSet() != null) {
+                if (sr.getSet().size() > 0) {
+                    for (SearchObject so : sr.getSet()) {
+                        String currentId = IDUtils.extractId(so.getPath());
+                        GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw(currentId);
+                        lawProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
+                            Law law = lawProperty.get();
+                            System.out.println("AHAHA");
+                            laws.add(law);
+                            updateLaws();
+                        });
+                    }
+                }
+            }
+        });
+
+        GluonObservableObject<SearchResult> userAmendments = RestClientProvider.getInstance().getAmendmentsByUser(RestClientProvider.getInstance().getUser().getId());
+        userAmendments.initializedProperty().addListener((observable, oldValue, newValue) -> {
+            SearchResult sr = userAmendments.get();
+            if (sr.getSet() != null && sr.getSet().size() > 0) {
+                for (SearchObject so: sr.getSet() ) {
+                    String currentId = IDUtils.extractId(so.getPath());
+                    GluonObservableObject<Object> amendmentsProperty = RestClientProvider.getInstance().getAmendments(currentId);
+                    amendmentsProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
+                        Amendments amendment = (Amendments) amendmentsProperty.get();
+                        amendments.add(amendment);
+                        updateAmendments();
+                    });
+                }
+            }
+            stateManager.homeController.getStatusBar().getLeftItems().clear();
+            stateManager.homeController.getStatusBar().getRightItems().clear();
+            stateManager.homeController.getStatusBar().getLeftItems().add(new Label("Podaci uspešno učitani."));
+        });
     }
 }
