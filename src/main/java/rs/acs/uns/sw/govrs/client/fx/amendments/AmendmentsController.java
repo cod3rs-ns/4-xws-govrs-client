@@ -1,6 +1,7 @@
 package rs.acs.uns.sw.govrs.client.fx.amendments;
 
 import com.gluonhq.connect.GluonObservableObject;
+import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -26,6 +27,7 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Ref;
 import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Loader;
+import rs.acs.uns.sw.govrs.client.fx.util.NoEscapeHandler;
 import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.JAXBContext;
