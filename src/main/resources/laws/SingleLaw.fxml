@@ -13,7 +13,7 @@
 
 <AnchorPane maxHeight="150.0" maxWidth="500.0" minHeight="150.0" minWidth="500.0" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: #37474F; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs.acs.uns.sw.govrs.client.fx.laws.SingleLaw">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d6c83" height="26.0" layoutX="64.0" layoutY="22.0" stroke="WHITE" strokeLineCap="ROUND" strokeType="INSIDE" width="496.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#363f45" height="26.0" layoutX="64.0" layoutY="22.0" stroke="WHITE" strokeLineCap="ROUND" strokeType="INSIDE" width="496.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0" />
       <Hyperlink fx:id="lawName" layoutX="14.0" layoutY="14.0" onAction="#previewHtml" text="Naziv propisa" textFill="WHITE" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0" />
       <Label fx:id="lawStatus" alignment="CENTER" layoutX="558.0" layoutY="8.0" text="Status propisa" textAlignment="CENTER" textFill="WHITE" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <font>
@@ -49,7 +49,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="forLabel" layoutX="278.0" layoutY="34.0" text="n/a" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="34.0" />
+      <Label fx:id="forLabel" layoutX="278.0" layoutY="34.0" text="n/a" AnchorPane.rightAnchor="198.0" AnchorPane.topAnchor="34.0" />
       <Label fx:id="againstLabel" layoutX="288.0" layoutY="44.0" text="n/a" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="34.0" />
       <Label fx:id="neutralLabel" layoutX="288.0" layoutY="44.0" text="n/a" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="34.0" />
       <ImageView fx:id="pdfButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#downloadPdf" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="3.0">
@@ -63,6 +63,22 @@
       <ImageView fx:id="htmlButton" fitHeight="20.0" fitWidth="20.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#downloadHtml" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="3.0">
          <image>
             <Image url="@../images/html.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="rdfButton" fitHeight="20.0" fitWidth="20.0" layoutX="325.0" layoutY="6.0" onMouseClicked="#downloadRdf" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="147.0" AnchorPane.topAnchor="3.0">
+         <image>
+            <Image url="@../images/rdf.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <ImageView fx:id="jsonButton" fitHeight="20.0" fitWidth="20.0" layoutX="298.0" layoutY="5.0" onMouseClicked="#downloadJson" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="3.0">
+         <image>
+            <Image url="@../images/json.png" />
          </image>
          <cursor>
             <Cursor fx:constant="HAND" />

@@ -54,6 +54,7 @@ public class OverviewController implements Initializable {
                     GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw(currentId);
                     lawProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
                         Law law = lawProperty.get();
+                        System.out.println("AHAHA");
                         laws.add(law);
                         updateLaws();
                     });

@@ -210,18 +210,19 @@ public class RestClientProvider {
         });
     }
 
-    public GluonObservableObject<Object> downloadPDF(String filePath, String lawId) {
+    public GluonObservableObject<Object> downloadPDFlaw(String filePath, String id, String type, String downloadType, String accept) {
         // create a RestClient to the specific URL
         RestClient restClient = RestClient.create()
                 .method("GET")
                 .host("http://localhost:9000/api")
-                .header("Accept", "application/octet-stream")
-                .path("/laws/" + lawId);
+                .header("Accept", accept)
+                .path("/" + type + "/" + downloadType + id);
 
         // retrieve an object from the DataProvider
         PDFInputConverter pdfInputConverter = new PDFInputConverter(filePath);
         return DataProvider.retrieveObject(restClient.createObjectDataReader(pdfInputConverter));
     }
+
 
     public GluonObservableObject<Object> getParliament() {
         RestClient restClient = RestClient.create()
@@ -248,6 +249,7 @@ public class RestClientProvider {
         RestClient restClient = RestClient.create()
                 .method("GET")
                 .host("http://localhost:9000")
+                .header("Accept", "application/xml")
                 .path("/api/laws/users/" + userId);
 
         SearchResultInputConverter converter = new SearchResultInputConverter();

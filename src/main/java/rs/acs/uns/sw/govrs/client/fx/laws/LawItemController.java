@@ -9,10 +9,14 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.Law;
 import rs.acs.uns.sw.govrs.client.fx.util.DateUtils;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -63,22 +67,74 @@ public class LawItemController implements Initializable {
 
     @FXML
     private void downloadRdf() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Preuzmite RDF...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML files", "*.xml")
+        );
 
+        Stage stage = (Stage) previewPane.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), idLabel.getText(), "laws", "metadata/xml/", "application/octet-stream");
+            pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+                Notifications.create().owner(stage).title("XML").text("XML fajl je uspešno preuzet.").showConfirm();
+            });
+        }
     }
 
     @FXML
     private void downloadPdf() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Preuzmite PDF...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF files", "*.pdf")
+        );
 
+        Stage stage = (Stage) previewPane.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), idLabel.getText(), "laws", "", "application/octet-stream");
+            pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+                Notifications.create().owner(stage).title("PDF").text("PDF fajl je uspešno preuzet.").showConfirm();
+            });
+        }
     }
 
     @FXML
     private void downloadHtml() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Preuzmite HTML...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("HTML files", "*.html")
+        );
 
+        Stage stage = (Stage) previewPane.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), idLabel.getText(), "laws", "", "application/xhtml+xml");
+            pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+                Notifications.create().owner(stage).title("HTML").text("HTML fajl je uspešno preuzet.").showConfirm();
+            });
+        }
     }
 
     @FXML
     private void downloadJson() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Preuzmite JSON...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON files", "*.json")
+        );
 
+        Stage stage = (Stage) previewPane.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), idLabel.getText(), "laws", "metadata/json/", "application/octet-stream");
+            pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+                Notifications.create().owner(stage).title("JSON").text("JSON fajl je uspešno preuzet.").showConfirm();
+            });
+        }
     }
 
     @FXML
