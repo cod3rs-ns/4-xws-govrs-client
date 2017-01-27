@@ -12,8 +12,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchResult;
-import rs.acs.uns.sw.govrs.client.fx.util.NoEscapeHandler;
-import rs.acs.uns.sw.govrs.client.fx.util.StringCleaner;
 import rs.acs.uns.sw.govrs.client.fx.util.Token;
 
 import javax.xml.bind.JAXBContext;

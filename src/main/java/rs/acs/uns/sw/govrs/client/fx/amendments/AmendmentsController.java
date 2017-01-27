@@ -16,7 +16,6 @@ import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.ContextMenuHandler;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
-import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentTypePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
@@ -27,7 +26,6 @@ import rs.acs.uns.sw.govrs.client.fx.serverdomain.Ref;
 import rs.acs.uns.sw.govrs.client.fx.util.Creator;
 import rs.acs.uns.sw.govrs.client.fx.util.CustomDialogCreator;
 import rs.acs.uns.sw.govrs.client.fx.util.Loader;
-import rs.acs.uns.sw.govrs.client.fx.util.NoEscapeHandler;
 import rs.acs.uns.sw.govrs.client.fx.validation.ErrorMessage;
 
 import javax.xml.bind.JAXBContext;
