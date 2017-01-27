@@ -53,13 +53,13 @@ public class Creator {
         law.getHead().getDatumIzglasavanja().getOtherAttributes().put(new QName("datatype"), "xs:date");
         law.getHead().getDatumIzglasavanja().getOtherAttributes().put(new QName("property"), "pred:datumIzglasavanja");
         law.getHead().getStatus().getOtherAttributes().put(new QName("datatype"), "xs:string");
-        law.getHead().getStatus().getOtherAttributes().put(new QName("property"), "pred:StatusOdluke");
+        law.getHead().getStatus().getOtherAttributes().put(new QName("property"), "pred:statusOdluke");
         law.getHead().getGlasovaZa().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        law.getHead().getGlasovaZa().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaZa");
+        law.getHead().getGlasovaZa().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaZa");
         law.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        law.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaProtiv");
+        law.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaProtiv");
         law.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        law.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaUzdrzanih");
+        law.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaUzdrzanih");
 
 
         Ref ref = factory.createRef();
