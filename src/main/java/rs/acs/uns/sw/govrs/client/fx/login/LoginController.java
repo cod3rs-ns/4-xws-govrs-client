@@ -46,8 +46,6 @@ public class LoginController extends AnchorPane implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // TODO: delete this
         // This is only for test purpose, because it speeds up log-in process
-        usernameField.setText("putin");
-        passwordField.setText("123456");
         indicator.setVisible(false);
         errorLabel.setText("");
 

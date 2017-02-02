@@ -105,7 +105,7 @@ public class AmendmentVoteController {
         updateProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
             Amendments a = (Amendments)updateProperty.get();
             amendment.getHead().getStatus().valueProperty().set(a.getHead().getStatus().valueProperty().get());
-            Notifications.create().owner(forSlider.getScene().getWindow()).title("Glasanje").text("Uspešno ste glasali o Amandmanu.").showInformation();
+            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Glasanje").text("Uspešno ste glasali o Amandmanu.").showInformation();
         });
         assemblyController.loadTestData();
         assemblyController.refresh();

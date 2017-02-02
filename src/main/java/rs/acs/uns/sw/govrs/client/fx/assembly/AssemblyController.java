@@ -112,13 +112,13 @@ public class AssemblyController implements Initializable {
     }
 
     public void refresh() {
-        lawVotePane.setDisable(true);
         RestClientProvider.getInstance().parliamentState.addListener((observable, oldValue, newValue) -> {
             setParliamentState();
         });
 
         finish.setOnAction(event -> {
             finishParliament();
+            stateLabel.setText("završena");
         });
 
         forSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -139,6 +139,7 @@ public class AssemblyController implements Initializable {
         lawsTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
+                        lawVotePane.setDisable(false);
                         amendmentsList.clear();
                         amendmentsContainer.getChildren().clear();
 
@@ -165,6 +166,7 @@ public class AssemblyController implements Initializable {
                             System.out.println("amendmentsProperty");
                             SearchResult sr = amenmentsProperty.get();
                             amendmentsList.clear();
+                            amendmentsList = FXCollections.observableArrayList();
                             amendmentsContainer.getChildren().clear();
                             if (sr.getSet() != null && sr.getSet().size() > 0) {
                                 for (SearchObject so : sr.getSet()){
@@ -204,7 +206,6 @@ public class AssemblyController implements Initializable {
             setParliamentState();
         });
         setParliamentState();
-        lawVotePane.setDisable(true);
     }
 
     public void reset() {
@@ -213,7 +214,6 @@ public class AssemblyController implements Initializable {
         amendmentsList = FXCollections.observableArrayList();
         selectedLaw = null;
         amendmentsContainer.getChildren().clear();
-
     }
 
     public void updateAmendments() {
@@ -236,6 +236,7 @@ public class AssemblyController implements Initializable {
     }
 
     private void finishParliament() {
+        stateLabel.setText("završena");
         boolean invalid = false;
         for (Law law : laws) {
             if ("predložen".equals(law.getHead().getStatus().getValue())){
@@ -248,14 +249,18 @@ public class AssemblyController implements Initializable {
             RestClientProvider.getInstance().changeParliamentStatus("završena");
 
         }
+        stateLabel.setText("završena");
         loadTestData();
         refresh();
+        stateLabel.setText("završena");
     }
 
     ObservableList<GluonObservableObject<Law>> observableObjects = FXCollections.observableArrayList();
     ObservableList<Law> laws = FXCollections.observableArrayList();
     public void loadTestData() {
         observableObjects.clear();
+        amendmentsContainer.getChildren().clear();
+        amendmentsList.clear();
         System.out.println("Loading");
         GluonObservableObject<Object> assemblyProperty = RestClientProvider.getInstance().getParliament();
         assemblyProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
