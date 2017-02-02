@@ -70,7 +70,6 @@ public class StateManager {
                 if (searchPane == null) {
                     searchPane = loader.load(in);
                     searchController = loader.getController();
-                    // TODO probably set main app
                 }
                 if (rootContainer.getChildren().size() > 0) {
                     rootContainer.getChildren().remove(0);
@@ -82,8 +81,6 @@ public class StateManager {
                     newLawPane = loader.load(in);
                     newLawController = loader.getController();
                     newLawController.setStateManager(this);
-                    // TODO this should not be called outside controller
-                    newLawController.loadTestData();
                 }
 
                 if (rootContainer.getChildren().size() > 0) {
@@ -95,7 +92,6 @@ public class StateManager {
                     amendmentsPane = loader.load(in);
                     amendmentsController = loader.getController();
                     amendmentsController.setStateManager(this);
-                    amendmentsController.loadTestData();
                 }
                 if (rootContainer.getChildren().size() > 0) {
                     rootContainer.getChildren().remove(0);

@@ -1,6 +1,5 @@
 package rs.acs.uns.sw.govrs.client.fx.util;
 
-import javafx.beans.property.ObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
@@ -8,13 +7,12 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
-import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
 
 public class Creator {
-    // TODO change when IDGenerator is implemented
+
     public static Law createNewLaw() {
         ObjectFactory factory = new ObjectFactory();
 
@@ -94,7 +92,7 @@ public class Creator {
         amendments.getHead().setGlasovaZa(factory.createAmendmentsHeadGlasovaZa());
         amendments.getHead().setStatus(factory.createAmendmentsHeadStatus());
         amendments.getHead().setPodnosilac(factory.createAmendmentsHeadPodnosilac());
-        // TODO change to real law ID
+
         amendments.getHead().setPropis(createPropis(lawId));
 
         Ref podnosilacRef = new Ref();

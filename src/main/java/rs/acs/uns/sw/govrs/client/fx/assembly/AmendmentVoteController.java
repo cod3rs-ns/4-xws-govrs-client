@@ -61,7 +61,6 @@ public class AmendmentVoteController {
         dateLabel.setText(DateUtils.dateToString(amendment.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         nameLabel.setText(amendment.getName());
         GluonObservableObject<Object> userProp = RestClientProvider.getInstance().getUser(amendment.getHead().getPodnosilac().getRef().getId());
-        System.out.println(amendment.getHead().getPodnosilac().getRef().getId());
         userProp.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
             AppUser podnosilac = (AppUser) userProp.get();
             authorNameLabel.setText(podnosilac.getIme() + " " + podnosilac.getPrezime());

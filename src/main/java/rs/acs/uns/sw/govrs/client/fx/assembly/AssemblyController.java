@@ -19,11 +19,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
-import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
-import rs.acs.uns.sw.govrs.client.fx.amendments.AmendmentItemController;
-import rs.acs.uns.sw.govrs.client.fx.amendments.AmendmentsController;
-import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
@@ -44,6 +40,8 @@ import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 public class AssemblyController implements Initializable {
+    ObservableList<GluonObservableObject<Law>> observableObjects = FXCollections.observableArrayList();
+    ObservableList<Law> laws = FXCollections.observableArrayList();
     @FXML
     private Label nameLabel;
     @FXML
@@ -72,7 +70,6 @@ public class AssemblyController implements Initializable {
     private Label votesAgainstLabel;
     @FXML
     private Label votesNeutralLabel;
-
     @FXML
     private Button voteButton;
     @FXML
@@ -86,7 +83,6 @@ public class AssemblyController implements Initializable {
     @FXML
     private HBox buttonContainer;
     private Button finish = new Button("Zatvori");
-
     @FXML
     private TitledPane lawTable;
     @FXML
@@ -97,13 +93,9 @@ public class AssemblyController implements Initializable {
     private TitledPane prevTitle;
     @FXML
     private Label lawStatusLabel;
-
     private Law selectedLaw;
-
     private Parliament parliament;
-
     private ObservableList<Amendments> amendmentsList = FXCollections.observableArrayList();
-
     private StateManager stateManager;
 
     @Override
@@ -142,7 +134,6 @@ public class AssemblyController implements Initializable {
                         lawVotePane.setDisable(false);
                         amendmentsList.clear();
                         amendmentsContainer.getChildren().clear();
-
                         selectedLaw = newValue;
                         nameLabel.setText(newValue.getElementName());
                         idLabel.setText(newValue.idProperty().get());
@@ -150,26 +141,25 @@ public class AssemblyController implements Initializable {
                         dateLabel.setText(DateUtils.dateToString((selectedLaw.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime())));
                         if (!"predložen".equals(selectedLaw.getHead().getStatus().getValue())) {
                             lawVotePane.setDisable(true);
-                            forSlider.setValue((int)selectedLaw.getHead().getGlasovaZa().getValue());
-                            againstSlider.setValue((int)selectedLaw.getHead().getGlasovaProtiv().getValue());
-                            neutralSlider.setValue((int)selectedLaw.getHead().getGlasovaSuzdrzani().getValue());
+                            forSlider.setValue((int) selectedLaw.getHead().getGlasovaZa().getValue());
+                            againstSlider.setValue((int) selectedLaw.getHead().getGlasovaProtiv().getValue());
+                            neutralSlider.setValue((int) selectedLaw.getHead().getGlasovaSuzdrzani().getValue());
 
                         }
                         GluonObservableObject<Object> userProp = RestClientProvider.getInstance().getUser(selectedLaw.getHead().getPodnosilac().getRef().getId());
-                        System.out.println(selectedLaw.getHead().getPodnosilac().getRef().getId());
                         userProp.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
                             AppUser podnosilac = (AppUser) userProp.get();
-                            if (podnosilac != null) authorLabel.setText(podnosilac.getIme() + " " + podnosilac.getPrezime());
+                            if (podnosilac != null)
+                                authorLabel.setText(podnosilac.getIme() + " " + podnosilac.getPrezime());
                         });
                         GluonObservableObject<SearchResult> amenmentsProperty = RestClientProvider.getInstance().getAmendmentsByLaw(selectedLaw.getId());
                         amenmentsProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
-                            System.out.println("amendmentsProperty");
                             SearchResult sr = amenmentsProperty.get();
                             amendmentsList.clear();
                             amendmentsList = FXCollections.observableArrayList();
                             amendmentsContainer.getChildren().clear();
                             if (sr.getSet() != null && sr.getSet().size() > 0) {
-                                for (SearchObject so : sr.getSet()){
+                                for (SearchObject so : sr.getSet()) {
                                     GluonObservableObject<Object> aproperty = RestClientProvider.getInstance().getAmendments(IDUtils.extractId(so.getPath()));
                                     aproperty.initializedProperty().addListener((observable2, oldValue2, newValue2) -> {
                                         Amendments amen = (Amendments) aproperty.get();
@@ -185,19 +175,17 @@ public class AssemblyController implements Initializable {
         amendmentsList.addListener(new ListChangeListener<Amendments>() {
             @Override
             public void onChanged(Change<? extends Amendments> c) {
-                System.out.println("Change");
                 lawVotePane.setDisable(false);
-                for (Amendments a: amendmentsList) {
+                for (Amendments a : amendmentsList) {
                     if (a.getHead().getStatus().getValue().equals(DocumentStatus.Predlozen.toString())) {
-                        System.out.println("True");
                         lawVotePane.setDisable(true);
                     }
                 }
                 if (!"predložen".equals(selectedLaw.getHead().getStatus().getValue())) {
                     lawVotePane.setDisable(true);
-                    forSlider.setValue((int)selectedLaw.getHead().getGlasovaZa().getValue());
-                    againstSlider.setValue((int)selectedLaw.getHead().getGlasovaProtiv().getValue());
-                    neutralSlider.setValue((int)selectedLaw.getHead().getGlasovaSuzdrzani().getValue());
+                    forSlider.setValue((int) selectedLaw.getHead().getGlasovaZa().getValue());
+                    againstSlider.setValue((int) selectedLaw.getHead().getGlasovaProtiv().getValue());
+                    neutralSlider.setValue((int) selectedLaw.getHead().getGlasovaSuzdrzani().getValue());
 
                 }
             }
@@ -218,7 +206,7 @@ public class AssemblyController implements Initializable {
 
     public void updateAmendments() {
         amendmentsContainer.getChildren().clear();
-        for (Amendments amend: amendmentsList) {
+        for (Amendments amend : amendmentsList) {
             FXMLLoader loader = new FXMLLoader();
             loader.setBuilderFactory(new JavaFXBuilderFactory());
             loader.setLocation(MainFXApp.class.getResource("/assembly/SingleAmendment.fxml"));
@@ -226,7 +214,7 @@ public class AssemblyController implements Initializable {
                 AnchorPane pane = loader.load(in);
                 AmendmentVoteController controller = loader.getController();
                 controller.setAssemblyController(this);
-                controller.display(amend,selectedLaw, previewContainer);
+                controller.display(amend, selectedLaw, previewContainer);
                 amendmentsContainer.getChildren().add(pane);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -239,7 +227,7 @@ public class AssemblyController implements Initializable {
         stateLabel.setText("završena");
         boolean invalid = false;
         for (Law law : laws) {
-            if ("predložen".equals(law.getHead().getStatus().getValue())){
+            if ("predložen".equals(law.getHead().getStatus().getValue())) {
                 invalid = true;
             }
         }
@@ -255,25 +243,20 @@ public class AssemblyController implements Initializable {
         stateLabel.setText("završena");
     }
 
-    ObservableList<GluonObservableObject<Law>> observableObjects = FXCollections.observableArrayList();
-    ObservableList<Law> laws = FXCollections.observableArrayList();
     public void loadTestData() {
         observableObjects.clear();
         amendmentsContainer.getChildren().clear();
         amendmentsList.clear();
-        System.out.println("Loading");
         GluonObservableObject<Object> assemblyProperty = RestClientProvider.getInstance().getParliament();
         assemblyProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Parliament Initialized");
-            parliament = (Parliament)assemblyProperty.get();
+            parliament = (Parliament) assemblyProperty.get();
             for (Ref r : parliament.getBody().getAkti().getRef()) {
-                if ("law".equals(r.getType())){
-                    System.out.println(r.getId());
+                if ("law".equals(r.getType())) {
                     observableObjects.add(RestClientProvider.getInstance().getLaw(r.getId()));
                 }
             }
             laws.clear();
-            for (GluonObservableObject<Law> goo: observableObjects) {
+            for (GluonObservableObject<Law> goo : observableObjects) {
                 goo.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
                     Law l = goo.get();
                     laws.add(l);
@@ -286,16 +269,15 @@ public class AssemblyController implements Initializable {
     @FXML
     private void vote() {
         VotingObject vo = new VotingObject();
-        vo.setVotesAgainst((int)againstSlider.getValue());
-        vo.setVotesFor((int)forSlider.getValue());
-        vo.setVotesNeutral((int)neutralSlider.getValue());
+        vo.setVotesAgainst((int) againstSlider.getValue());
+        vo.setVotesFor((int) forSlider.getValue());
+        vo.setVotesNeutral((int) neutralSlider.getValue());
         GluonObservableObject<Object> updateProperty = RestClientProvider.getInstance().updateLawVotes(vo, selectedLaw.getId());
         updateProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
             Law law = (Law) updateProperty.get();
             law.getHead().setStatus(law.getHead().getStatus());
             if ("prihvaćen".equals(law.getHead().getStatus().getValue())) {
-                System.out.println("Huehuehuhehuehueh");
-                for (Amendments a: amendmentsList) {
+                for (Amendments a : amendmentsList) {
                     GluonObservableObject patchProperty = RestClientProvider.getInstance().patchLaw(a.getId());
                 }
                 loadTestData();
@@ -381,7 +363,6 @@ public class AssemblyController implements Initializable {
                     parliament.setBody(new Parliament.Body());
                     parliament.getHead().setStatus("sazvana");
                     parliament.getHead().setBrojPrisutnih(100);
-                    // TODO
                     GregorianCalendar gregorianCalendar = GregorianCalendar.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()));
                     parliament.getHead().setMjestoOdrzavanja(mesto);
                     try {

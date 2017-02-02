@@ -100,9 +100,6 @@ public class PopupPropertyElementPickerEditor implements PropertyEditor<Selectio
                     value.get().setElementType(picker.getSelectedType());
                     value.get().setElement(picker.getSelectedElement());
                     value.get().setElementId(picker.getSelectedId());
-                    System.out.println("B");
-                    System.out.println(value.get());
-                    // TODO trigger Save - then switch back - possible bug
                     value.get().setSaved(true);
                     value.get().setSaved(false);
                 }

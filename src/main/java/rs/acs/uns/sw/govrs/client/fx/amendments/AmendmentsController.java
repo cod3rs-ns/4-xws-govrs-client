@@ -136,45 +136,6 @@ public class AmendmentsController {
 
     }
 
-    public void loadTestData() {
-        // send request
-        /*
-        GluonObservableObject<Object> amendmentsProperty =
-                RestClientProvider.getInstance().getAmendments("amendments02");
-
-        ProgressBar pb = new ProgressBar();
-        pb.setPrefWidth(150);
-
-        stateManager.homeController.getStatusBar().getLeftItems().clear();
-        stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
-        stateManager.homeController.getStatusBar().getRightItems().add(pb);
-
-
-        amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-            amendments = (Amendments) amendmentsProperty.get();
-            amendments.initElement();
-            generalProperties.getItems().clear();
-            generalProperties.getItems().addAll(amendments.getPropertyItems());
-            //amendments.initElement();
-            preview = new HtmlPreview(amendments, "amandman", Amendments.class);
-            previewContainer.setContent(preview.getNode());
-            preview.update();
-            for (Element a : amendments.getChildren()
-                    ) {
-                System.out.println(a.getElementName());
-            }
-
-            amendmentsTable.setItems(amendments.getChildren());
-            amendmentsTable.refresh();
-
-            stateManager.homeController.getStatusBar().getLeftItems().clear();
-            stateManager.homeController.getStatusBar().getRightItems().clear();
-            stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
-
-        }));
-    */
-    }
-
     /**
      * Opens XML file from disk.
      */

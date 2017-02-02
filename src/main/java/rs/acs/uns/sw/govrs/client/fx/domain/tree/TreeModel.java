@@ -30,8 +30,6 @@ public class TreeModel {
         treeView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {
                 TreeItem<Element> item = treeView.getSelectionModel().getSelectedItem();
-                System.out.println(item);
-                // TODO create Logic for displaying in text area
                 if (item != null) {
                     treeController.setSelectedElement(item.getValue());
                 }

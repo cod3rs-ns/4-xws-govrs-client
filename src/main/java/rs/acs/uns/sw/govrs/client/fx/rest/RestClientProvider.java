@@ -127,7 +127,6 @@ public class RestClientProvider {
         try {
             lawMarshaller.marshal(law, writer);
         } catch (JAXBException e) {
-            System.out.println("");
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal Amendments", e);
         }
         String marshalledData = writer.toString();
@@ -197,13 +196,11 @@ public class RestClientProvider {
             GluonObservableObject<Object> userProperty = DataProvider.retrieveObject(restClientUser.createObjectDataReader(userConverter));
             userProperty.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
                 AppUser loggedUser = (AppUser) userProperty.get();
-                System.out.println(loggedUser.getKorisnickoIme());
                 user.set(loggedUser);
                 GluonObservableObject<Object> parliamentProperty = getParliament();
                 parliamentProperty.initializedProperty().addListener((observable2, oldValue2, newValue2) -> {
                     activeParliament = (Parliament) parliamentProperty.get();
                     parliamentState.set(activeParliament.getHead().getStatus());
-                    System.out.println("Parliement retrieved");
                 });
             });
         });
@@ -280,12 +277,9 @@ public class RestClientProvider {
         try {
             votingMarshaller.marshal(votes, writer);
         } catch (JAXBException e) {
-            System.out.println();
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal Amendments", e);
         }
         String marshalledData = writer.toString();
-        System.out.println(marshalledData);
-        System.out.println(id);
         // create a RestClient to the specific URL
         RestClient restClient = RestClient.create()
                 .method("PUT")
@@ -304,11 +298,9 @@ public class RestClientProvider {
         try {
             votingMarshaller.marshal(votes, writer);
         } catch (JAXBException e) {
-            System.out.println();
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal Amendments", e);
         }
         String marshalledData = writer.toString();
-        System.out.println(marshalledData);
         // create a RestClient to the specific URL
         RestClient restClient = RestClient.create()
                 .method("PUT")
@@ -365,8 +357,6 @@ public class RestClientProvider {
         try {
             parliamentMarshaller.marshal(parliament, writer);
         } catch (JAXBException e) {
-            System.out.println();
-            System.out.println();
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to marshal", e);
         }
         String marshalledData = writer.toString();

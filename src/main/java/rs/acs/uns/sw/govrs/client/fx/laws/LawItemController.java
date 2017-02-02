@@ -55,7 +55,6 @@ public class LawItemController implements Initializable {
         this.law = law;
         previewPane = preview;
         idLabel.setText(law.getId());
-        System.out.println(law.getHead().getStatus());
         if (law.getHead().getStatus() != null) statusLabel.setText(law.getHead().getStatus().getValue());
         forLabel.setText(String.valueOf(law.getHead().getGlasovaZa().getValue()));
         againstLabel.setText(String.valueOf(law.getHead().getGlasovaProtiv().getValue()));
@@ -65,11 +64,9 @@ public class LawItemController implements Initializable {
         votedLabel.setText(DateUtils.dateToString(law.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         nameLink.setText(law.getName());
         if(!"predložen".equals(law.getHead().getStatus().getValue())) {
-            System.out.println("hehehe");
             withdrawButton.setVisible(false);
         }
         if(!"sazvana".equals(RestClientProvider.getInstance().parliamentState.get())){
-            System.out.println("huhehe");
             withdrawButton.setVisible(false);
         }
     }

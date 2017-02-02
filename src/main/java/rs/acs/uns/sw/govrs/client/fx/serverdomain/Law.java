@@ -1147,8 +1147,6 @@ public class Law extends Element {
              * {@link String }
              */
             public String getValue() {
-                System.out.println(value);
-                System.out.println(value.getValue().toString());
                 if (value.get() == DocumentStatus.Predlozen) {
                     return "predložen";
                 }
@@ -1173,8 +1171,6 @@ public class Law extends Element {
              *              {@link String }
              */
             public void setValue(String value) {
-                System.out.println(value);
-                System.out.println("_-----");
                 if (value.equals("predložen")) {
                     this.value.set(DocumentStatus.Predlozen);
                 }

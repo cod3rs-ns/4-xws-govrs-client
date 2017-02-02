@@ -44,8 +44,6 @@ public class LoginController extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO: delete this
-        // This is only for test purpose, because it speeds up log-in process
         indicator.setVisible(false);
         errorLabel.setText("");
 
@@ -62,7 +60,6 @@ public class LoginController extends AnchorPane implements Initializable {
         // close app
         closeButton.setOnAction(event -> Platform.exit());
 
-        // TODO: implement real login functionality
         loginButton.setOnAction(event -> {
             try {
                 indicator.setVisible(true);

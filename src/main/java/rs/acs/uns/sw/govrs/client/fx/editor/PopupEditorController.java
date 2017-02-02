@@ -30,6 +30,8 @@ import rs.acs.uns.sw.govrs.client.fx.util.ElementType;
 import rs.acs.uns.sw.govrs.client.fx.util.IdentityGenerator;
 
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PopupEditorController implements TreeController {
     /**
@@ -144,7 +146,7 @@ public class PopupEditorController implements TreeController {
                 i.idProperty().set(IdentityGenerator.get().generate(initObject.getParentElement(), ElementType.Item));
                 element = new ItemWrapper(i);
             } else {
-                System.out.println("Something went wrong in initElements");
+                Logger.getLogger(getClass().getName()).log(Level.INFO, "Something went wrong in initElements!");
             }
             init.setElement(element);
             init.setCreateNew(false);
