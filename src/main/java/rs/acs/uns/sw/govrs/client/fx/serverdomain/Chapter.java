@@ -71,7 +71,7 @@ public class Chapter extends Element {
 
     @XmlAttribute(name = "role")
     @XmlJavaTypeAdapter(ChapterEnumPropertyAdapter.class)
-    protected ObjectProperty<ChapterRoles> role = new SimpleObjectProperty<>();
+    protected ObjectProperty<ChapterRoles> role = new SimpleObjectProperty<>(ChapterRoles.GlavniDeo);
 
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "anyURI")

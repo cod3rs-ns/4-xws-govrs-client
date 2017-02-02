@@ -229,43 +229,43 @@ public class Law extends Element {
                 "Status",
                 "Status predloga",
                 "Trenutni status Akta na Skupštinskom repertoaru",
-                true);
+                false);
         LocalDatePropertyItem propositionDatePropertyItem = new LocalDatePropertyItem(
                 getHead().getDatumPredloga().valueProperty(),
                 "Status",
                 "Datum predloga",
                 "Datum kada je podnet ovaj pravni Akt",
-                true);
+                false);
         LocalDatePropertyItem acceptanceDatePropertyItem = new LocalDatePropertyItem(
                 getHead().getDatumIzglasavanja().valueProperty(),
                 "Status",
                 "Datum izglasavanja",
                 "Datum kada se glasalo o ovom Aktu",
-                true);
+                false);
         IntegerPropertyItem yesVotesPropertyItem = new IntegerPropertyItem(
                 getHead().getGlasovaZa().valueProperty(),
                 "Skupština",
                 "Glasova ZA",
                 "Broj poslanika koji su glasali ZA usvajanje ovog Akta",
-                true);
+                false);
         IntegerPropertyItem noVotesPropertyItem = new IntegerPropertyItem(
                 getHead().getGlasovaProtiv().valueProperty(),
                 "Skupština",
                 "Glasova PROTIV",
                 "Broj poslanika koji su glasali PROTIV usvajanja ovog Akta",
-                true);
+                false);
         IntegerPropertyItem sustainedVotesPropertyItem = new IntegerPropertyItem(
                 getHead().getGlasovaSuzdrzani().valueProperty(),
                 "Skupština",
                 "Suzdržanih",
                 "Broj poslanika koji su bili suzdržani za usvajanje ovog Akta",
-                true);
+                false);
         StringPropertyItem placePropertyItem = new StringPropertyItem(
                 getHead().mjestoProperty(),
                 "Skupština",
                 "Mesto",
                 "Mesto gde se nalazi ustanova koja odlučuje o Aktu",
-                false);
+                true);
 
         getPropertyItems().add(idPropertyItem);
         getPropertyItems().add(namePropertyItem);
@@ -1183,6 +1183,7 @@ public class Law extends Element {
                 if (value.equals("povučen")) {
                     this.value.set(DocumentStatus.Povucen);
                 }
+                this.value.set(DocumentStatus.Povucen);
             }
 
             public ObjectProperty<DocumentStatus> valueProperty() {

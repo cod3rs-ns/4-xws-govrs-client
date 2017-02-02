@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebView;
+import org.controlsfx.control.Notifications;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.enums.DocumentStatus;
@@ -39,6 +40,7 @@ public class AmendmentVoteController {
     @FXML
     private Label statusLabel;
 
+    private AssemblyController assemblyController;
 
     private Amendments amendment;
     private Law law;
@@ -59,7 +61,6 @@ public class AmendmentVoteController {
         dateLabel.setText(DateUtils.dateToString(amendment.getHead().getDatumPredloga().getValue().toGregorianCalendar().getTime()));
         nameLabel.setText(amendment.getName());
         GluonObservableObject<Object> userProp = RestClientProvider.getInstance().getUser(amendment.getHead().getPodnosilac().getRef().getId());
-        System.out.println(amendment.getHead().getPodnosilac().getRef().getId());
         userProp.initializedProperty().addListener((observable1, oldValue1, newValue1) -> {
             AppUser podnosilac = (AppUser) userProp.get();
             authorNameLabel.setText(podnosilac.getIme() + " " + podnosilac.getPrezime());
@@ -103,7 +104,10 @@ public class AmendmentVoteController {
         updateProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
             Amendments a = (Amendments)updateProperty.get();
             amendment.getHead().getStatus().valueProperty().set(a.getHead().getStatus().valueProperty().get());
+            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Glasanje").text("Uspešno ste glasali o Amandmanu.").showInformation();
         });
+        assemblyController.loadTestData();
+        assemblyController.refresh();
     }
 
     @FXML
@@ -116,5 +120,13 @@ public class AmendmentVoteController {
             webView.requestLayout();
             webView.requestFocus();
         });
+    }
+
+    public AssemblyController getAssemblyController() {
+        return assemblyController;
+    }
+
+    public void setAssemblyController(AssemblyController assemblyController) {
+        this.assemblyController = assemblyController;
     }
 }

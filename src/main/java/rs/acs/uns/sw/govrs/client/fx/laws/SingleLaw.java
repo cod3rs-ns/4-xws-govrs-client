@@ -8,6 +8,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
@@ -18,7 +19,6 @@ import org.controlsfx.control.Notifications;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.wrapper.SearchObject;
 import rs.acs.uns.sw.govrs.client.fx.util.DateUtils;
-import sun.rmi.runtime.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +50,10 @@ public class SingleLaw extends AnchorPane implements Initializable {
     private ImageView pdfButton;
     @FXML
     private ImageView htmlButton;
+    @FXML
+    private ImageView rdfButton;
+    @FXML
+    private ImageView jsonButton;
 
     private String id;
 
@@ -57,6 +61,8 @@ public class SingleLaw extends AnchorPane implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Tooltip.install(pdfButton, new Tooltip("Preuzmite PDF"));
         Tooltip.install(htmlButton, new Tooltip("Preuzmite HTML"));
+        Tooltip.install(rdfButton, new Tooltip("Preuzmite RDF"));
+        Tooltip.install(jsonButton, new Tooltip("Preuzmite JSON"));
     }
 
     public void setInfo(LawSearchController controller, SearchObject searchObject) {
@@ -108,7 +114,25 @@ public class SingleLaw extends AnchorPane implements Initializable {
     }
 
     @FXML
-    public void downloadPdf() {
+    private void downloadRdf() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Preuzmite RDF...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML files", "*.xml")
+        );
+
+        Stage stage = (Stage) pdfButton.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), id, "laws", "metadata/xml/", "application/octet-stream");
+            pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+                Notifications.create().owner(stage).title("XML").text("XML fajl je uspešno preuzet.").showConfirm();
+            });
+        }
+    }
+
+    @FXML
+    private void downloadPdf() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Preuzmite PDF...");
         fileChooser.getExtensionFilters().addAll(
@@ -118,7 +142,7 @@ public class SingleLaw extends AnchorPane implements Initializable {
         Stage stage = (Stage) pdfButton.getScene().getWindow();
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDF(file.getPath(), id);
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), id, "laws", "", "application/octet-stream");
             pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
                 Notifications.create().owner(stage).title("PDF").text("PDF fajl je uspešno preuzet.").showConfirm();
             });
@@ -126,7 +150,7 @@ public class SingleLaw extends AnchorPane implements Initializable {
     }
 
     @FXML
-    public void downloadHtml() {
+    private void downloadHtml() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Preuzmite HTML...");
         fileChooser.getExtensionFilters().addAll(
@@ -136,15 +160,27 @@ public class SingleLaw extends AnchorPane implements Initializable {
         Stage stage = (Stage) pdfButton.getScene().getWindow();
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            GluonObservableObject<String> pdfProperty = RestClientProvider.getInstance().getLawHtml(id);
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), id, "laws", "", "application/xhtml+xml");
             pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    FileUtils.writeStringToFile(file, pdfProperty.get(), "utf-8");
-                    Notifications.create().owner(stage).title("HTML").text("HTML fajl je uspešno preuzet.").showConfirm();
-                } catch (IOException e) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to save HTML file.", e);
-                    Notifications.create().owner(stage).title("HTML").text("HTML fajl nije uspešno preuzet.").showError();
-                }
+                Notifications.create().owner(stage).title("HTML").text("HTML fajl je uspešno preuzet.").showConfirm();
+            });
+        }
+    }
+
+    @FXML
+    private void downloadJson() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Preuzmite JSON...");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON files", "*.json")
+        );
+
+        Stage stage = (Stage) pdfButton.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            GluonObservableObject<Object> pdfProperty = RestClientProvider.getInstance().downloadPDFlaw(file.getPath(), id, "laws", "metadata/json/", "application/octet-stream");
+            pdfProperty.initializedProperty().addListener((observable, oldValue, newValue) -> {
+                Notifications.create().owner(stage).title("JSON").text("JSON fajl je uspešno preuzet.").showConfirm();
             });
         }
     }

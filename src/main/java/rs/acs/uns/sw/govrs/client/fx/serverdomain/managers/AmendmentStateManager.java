@@ -60,7 +60,6 @@ public class AmendmentStateManager {
                 "Element na koji se odnosi",
                 true
         );
-        System.out.println(selectionInfo);
 
         // ========== initial editor property
         Element e = getElement(amendment, selectionInfo.getElementType());
@@ -74,7 +73,6 @@ public class AmendmentStateManager {
                 "Nova ili izmenjena odredba",
                 true
         );
-        System.out.println(editorAttrs);
 
         // ==================================== default selected case =================================================
         selectionInfo.elementIdProperty().addListener((observable, oldValue, newValue) -> {
@@ -106,7 +104,6 @@ public class AmendmentStateManager {
         editorAttrs.savedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
-                System.out.println("Saved!");
             }
         });
 
@@ -278,8 +275,6 @@ public class AmendmentStateManager {
     }
 
     private void updateEditorAttrs(boolean createNew) {
-        System.out.println("___UPDATE___");
-        System.out.println(selectionInfo);
         editorAttrs = new PopupEditorOptions();
         editorAttrs.setCreateNew(createNew);
         if (!createNew) editorAttrs.setElement(selectionInfo.getElement());
@@ -288,7 +283,6 @@ public class AmendmentStateManager {
         editorAttrs.savedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 setNewOdredbaElement(editorAttrs.getElement(), editorAttrs.getTypeOfElement());
-                System.out.println("Saved!");
             }
         });
         editorAttrsProperty.set(editorAttrs);
@@ -297,9 +291,7 @@ public class AmendmentStateManager {
 
     public void checkIfStartWithoutOdredba() {
         if (resenjeProperty.get() == AmendmentType.Brisanje) {
-            System.out.println(amendment.getPropertyItems().size());
             amendment.getPropertyItems().remove(editorAttrsPropertyItem);
-            System.out.println(amendment.getPropertyItems().size());
             amendment.getBody().setOdredba(null);
         }
     }

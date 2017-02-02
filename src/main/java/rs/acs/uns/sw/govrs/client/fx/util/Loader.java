@@ -11,6 +11,8 @@ import javafx.stage.StageStyle;
 import rs.acs.uns.sw.govrs.client.fx.MainFXApp;
 
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Loader {
@@ -33,7 +35,7 @@ public class Loader {
             stage.setAlwaysOnTop(true);
             return stage;
         } catch (Exception e) {
-            System.out.println(e);
+            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, "Something went wrong.", e);
         }
         return null;
     }

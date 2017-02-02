@@ -7,6 +7,8 @@ import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 public class IdentityGenerator {
 
     private static IdentityGenerator instance = null;
+    private RandomGenerator random;
+    private RestClientProvider client;
 
     private IdentityGenerator() {
         random = new RandomGenerator();
@@ -14,14 +16,11 @@ public class IdentityGenerator {
     }
 
     public static IdentityGenerator get() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new IdentityGenerator();
         }
         return instance;
     }
-
-    private RandomGenerator random;
-    private RestClientProvider client;
 
     public String generate(Element parent, ElementType type) {
         StringBuilder sb = new StringBuilder();
@@ -34,13 +33,12 @@ public class IdentityGenerator {
             sb.append(random.nextIdLarge());
         } else {
             sb.append(parent.idProperty().get());
-            sb.append("/");
+            sb.append("_");
             sb.append(type.toString());
             sb.append("_");
             sb.append(random.nextIdSmall());
         }
         String id = sb.toString();
-        System.out.println(id);
         return id;
     }
 }

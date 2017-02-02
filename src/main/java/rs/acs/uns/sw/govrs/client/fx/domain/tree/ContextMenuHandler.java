@@ -124,14 +124,11 @@ public class ContextMenuHandler {
     private ContextMenu createArticleContextMenu(Article article) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem paragraphMenuItem = new MenuItem("Novi stav", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/paragraph.png"))));
-        MenuItem textMenuItem = new MenuItem("Novi tekst", new ImageView(new Image(MainFXApp.class.getResourceAsStream("/images/tree_images/text.png"))));
         MenuItem deleteMenuItem = createDeleteMenuItem();
         contextMenu.getItems().add(paragraphMenuItem);
-        contextMenu.getItems().add(textMenuItem);
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(paragraphMenuItem, "Stav", article, new Paragraph());
-        createInsertAction(textMenuItem, "Tekst", article, new StringWrapper("unutar članka"));
         createDeleteAction(deleteMenuItem, article);
         return contextMenu;
     }
@@ -146,7 +143,7 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
         createInsertAction(clauseMenuItem, "Tačka", paragraph, new Clause());
-        createInsertAction(textMenuItem, "Tekst", paragraph, new StringWrapper("unutar stava"));
+        createInsertAction(textMenuItem, "Tekst", paragraph, new StringWrapper(""));
         createDeleteAction(deleteMenuItem, paragraph);
         return contextMenu;
     }
@@ -175,7 +172,11 @@ public class ContextMenuHandler {
         contextMenu.getItems().add(textMenuItem);
         contextMenu.getItems().add(new SeparatorMenuItem());
         contextMenu.getItems().add(deleteMenuItem);
-        createInsertAction(itemMenuItem, "Alineja", subclause, new ItemWrapper(new Item()));
+        Item i = new Item();
+        i.setValue("");
+        i.setElementName("Alineja");
+        i.setId("");
+        createInsertAction(itemMenuItem, "Alineja", subclause, new ItemWrapper(i));
         createInsertAction(textMenuItem, "Tekst", subclause, new StringWrapper(""));
         createDeleteAction(deleteMenuItem, subclause);
         return contextMenu;

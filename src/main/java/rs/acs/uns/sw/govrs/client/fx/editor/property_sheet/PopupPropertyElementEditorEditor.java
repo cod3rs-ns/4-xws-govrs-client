@@ -81,7 +81,6 @@ public class PopupPropertyElementEditorEditor implements PropertyEditor<PopupEdi
             btnEditor.setText("<" + getValue().getTypeOfElement() + "> " + getValue().getElement().getElementName() + " (" + getValue().getElement().idProperty().get() + ")" );
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("WTF");
         }
 
 

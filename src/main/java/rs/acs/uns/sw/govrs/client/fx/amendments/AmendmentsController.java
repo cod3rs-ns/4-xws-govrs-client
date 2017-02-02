@@ -1,6 +1,7 @@
 package rs.acs.uns.sw.govrs.client.fx.amendments;
 
 import com.gluonhq.connect.GluonObservableObject;
+import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -15,7 +16,6 @@ import org.controlsfx.control.PropertySheet;
 import rs.acs.uns.sw.govrs.client.fx.domain.Element;
 import rs.acs.uns.sw.govrs.client.fx.domain.tree.ContextMenuHandler;
 import rs.acs.uns.sw.govrs.client.fx.editor.preview.HtmlPreview;
-import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.AmendmentTypePropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.editor.property_sheet.StringPropertyItem;
 import rs.acs.uns.sw.govrs.client.fx.manager.StateManager;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
@@ -134,45 +134,6 @@ public class AmendmentsController {
 
                 });
 
-    }
-
-    public void loadTestData() {
-        // send request
-        /*
-        GluonObservableObject<Object> amendmentsProperty =
-                RestClientProvider.getInstance().getAmendments("amendments02");
-
-        ProgressBar pb = new ProgressBar();
-        pb.setPrefWidth(150);
-
-        stateManager.homeController.getStatusBar().getLeftItems().clear();
-        stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
-        stateManager.homeController.getStatusBar().getRightItems().add(pb);
-
-
-        amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-            amendments = (Amendments) amendmentsProperty.get();
-            amendments.initElement();
-            generalProperties.getItems().clear();
-            generalProperties.getItems().addAll(amendments.getPropertyItems());
-            //amendments.initElement();
-            preview = new HtmlPreview(amendments, "amandman", Amendments.class);
-            previewContainer.setContent(preview.getNode());
-            preview.update();
-            for (Element a : amendments.getChildren()
-                    ) {
-                System.out.println(a.getElementName());
-            }
-
-            amendmentsTable.setItems(amendments.getChildren());
-            amendmentsTable.refresh();
-
-            stateManager.homeController.getStatusBar().getLeftItems().clear();
-            stateManager.homeController.getStatusBar().getRightItems().clear();
-            stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
-
-        }));
-    */
     }
 
     /**
@@ -311,6 +272,7 @@ public class AmendmentsController {
                     Optional<String> result = dialog.showAndWait();
                     result.ifPresent(name -> {
                         Amendments newl = Creator.createNewAmendments(id);
+                        newl.setName(name);
                         switchViewToNewAmendment(newl);
 
                     });
@@ -328,35 +290,42 @@ public class AmendmentsController {
     @FXML
     private void uploadAmendment() {
         if (amendments != null) {
-            try {
-                List<ErrorMessage> errors = new ArrayList<>();
-                amendments.validate(errors);
-                if (errors.size() > 0) {
-                    for (ErrorMessage em : errors) {
-                        Notifications.create().owner(previewContainer.getScene().getWindow())
-                                .title("Greška <" + em.getElementType().toString() + ">")
-                                .text(em.getMessage())
-                                .showError();
-                    }
-                } else {
-                    amendments.preMarshaller();
-                    GluonObservableObject<Object> amendmentsProperty =
-                            RestClientProvider.getInstance().postAmendments(amendments);
-                    Stage stage = Loader.createLoader(amendmentsTable.getScene());
-                    stage.show();
-
-                    amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-                        stage.close();
-                        if (amendmentsProperty.get() == null) {
-                            Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("GREŠKA!").text("Amandman sa ovim identifikatorom već postoji!").showError();
+            if ("sazvana".equals(RestClientProvider.getInstance().parliamentState.get())) {
+                try {
+                    List<ErrorMessage> errors = new ArrayList<>();
+                    amendments.validate(errors);
+                    if (errors.size() > 0) {
+                        for (ErrorMessage em : errors) {
+                            Notifications.create().owner(previewContainer.getScene().getWindow())
+                                    .title("Greška <" + em.getElementType().toString() + ">")
+                                    .text(em.getMessage())
+                                    .showError();
                         }
-                    }));
+                    } else {
+                        amendments.preMarshaller();
+                        GluonObservableObject<Object> amendmentsProperty =
+                                RestClientProvider.getInstance().postAmendments(amendments);
+                        Stage stage = Loader.createLoader(amendmentsTable.getScene());
+                        stage.show();
+
+                        amendmentsProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                            stage.close();
+                            if (amendmentsProperty.get() == null) {
+                                Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("GREŠKA!").text("Amandman sa ovim identifikatorom već postoji!").showError();
+                            }
+                            Notifications.create().owner(amendmentsTable.getScene().getWindow()).title("Amandman").text("Uspešno ste predložili Amandman.").showInformation();
+                        }));
+                    }
+                } catch (Exception e) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
                 }
-            } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to upload Amendments!");
+            } else {
+                Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
+
             }
+
         } else {
-            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
+            Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Morate prvo kreirati amandman.").showWarning();
         }
 
     }
@@ -374,12 +343,11 @@ public class AmendmentsController {
         //amendments.initElement();
         preview = new HtmlPreview(amendments, "amandman", Amendments.class);
         previewContainer.setContent(preview.getNode());
+        amendmentsTable.getItems().clear();
         amendmentsTable.setItems(amendments.getChildren());
         amendmentsTable.refresh();
         preview.setRootElement(amendments);
         preview.update();
-        amendmentsTable.getItems().clear();
-        amendmentsTable.setItems(amendments.getChildren());
         generalProperties.getItems().clear();
         generalProperties.getItems().addAll(amendments.getPropertyItems());
         for(PropertySheet.Item i : generalProperties.getItems()) {

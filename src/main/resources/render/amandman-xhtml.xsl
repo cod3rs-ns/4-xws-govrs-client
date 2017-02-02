@@ -2,7 +2,11 @@
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
         xmlns:aman="http://www.parlament.gov.rs/schema/amandman"
         xmlns:elem="http://www.parlament.gov.rs/schema/elementi"
+        xmlns:str="http://exslt.org/strings"
+        extension-element-prefixes="str"
         version="2.0">
+
+    <xsl:variable name="amendmentRef" select="'#'"/>
 
     <xsl:template match="/">
         <html>
@@ -53,8 +57,31 @@
     </xsl:template>
 
     <!-- Write head to new amendment -->
-    <xsl:template match="aman:amandmani/aman:body/aman:amandman/aman:head">
+    <xsl:template match="aman:amandman/aman:head/aman:predmet">
         <h3 style="font-size: 12pt; text-align: center;">AMANDMAN ZA DOPUNU ZAKONA</h3>
+        <xsl:copy>
+            <xsl:copy-of select="@*" />
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+
+    <!-- Skip 'rjesenje' -->
+    <xsl:template match="aman:amandman/aman:head/aman:rjesenje">
+
+    </xsl:template>
+
+    <xsl:template match="aman:amandman/aman:head/aman:predmet/elem:ref">
+        <xsl:variable name="refFull" select="current()/@id"/>
+        <xsl:variable name="refSplitted" select="str:tokenize(current()/@id, '_')"/>
+
+        <xsl:variable name="amendmentRef" select="concat($refSplitted[1], '_', $refSplitted[2], '_', $refSplitted[3], '#', $refFull)"/>
+
+        <p>
+            Amandman se odnosi na element koji možete vidjeti
+            <a>
+                <xsl:attribute name="href">http://localhost:9000/api/laws/<xsl:value-of select="$amendmentRef"/></xsl:attribute>
+                ovdje</a>.
+        </p>
     </xsl:template>
 
 
@@ -110,7 +137,7 @@
 
     <xsl:template match="elem:stav">
         <p style="font-size: 11pt; text-align: justify">
-            <xsl:value-of select="current()"/>
+            <xsl:value-of select="text()"/>
         </p>
         <xsl:apply-templates select="elem:tacka"/>
     </xsl:template>
@@ -118,7 +145,7 @@
     <xsl:template match="elem:tacka">
         <ol>
             <li style="font-size: 11pt; text-align: justify">
-                <xsl:value-of select="current()"/>
+                <xsl:value-of select="text()"/>
 
                 <xsl:apply-templates/>
             </li>
@@ -128,7 +155,7 @@
     <xsl:template match="elem:podtacka">
         <ol class="podtacka">
             <li style="font-size: 11pt; text-align: justify">
-                <xsl:value-of select="current()"/>
+                <xsl:value-of select="text()"/>
                 <xsl:apply-templates/>
             </li>
         </ol>
@@ -137,14 +164,13 @@
     <xsl:template match="elem:alineja">
         <ul>
             <li style="font-size: 10pt; text-align: justify; list-style: none;">
-                - <xsl:value-of select="current()"/>
+                - <xsl:value-of select="text()"/>
             </li>
         </ul>
     </xsl:template>
 
     <!-- Override mixed content with link in XHTML -->
 
-    <!-- FIXME Add id's references -->
     <!-- Razlog -->
     <xsl:template match="aman:razlog//*">
         <xsl:copy>

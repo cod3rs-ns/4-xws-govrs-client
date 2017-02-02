@@ -181,42 +181,6 @@ public class XMLEditorController implements TreeController {
         Tooltip.install(uploadButton, new Tooltip("Postavite propis na skupštinski red"));
     }
 
-    public void loadTestData() {
-        /*
-        GluonObservableObject<Law> lawProperty = RestClientProvider.getInstance().getLaw("law01");
-
-        // show progress to user
-        ProgressBar pb = new ProgressBar();
-        pb.setPrefWidth(150);
-        stateManager.homeController.getStatusBar().getLeftItems().clear();
-        stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Učitavanje podataka..."));
-        stateManager.homeController.getStatusBar().getRightItems().add(pb);
-
-
-        lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-            law = lawProperty.get();
-            law.initElement();
-            preview = new HtmlPreview(law, "propis", Law.class);
-            previewContainer.setContent(preview.getNode());
-            area.replaceText(0, 0, "");
-            tree = new TreeModel(
-                    law,
-                    Element::getChildren,
-                    Element::elementNameProperty,
-                    this
-            );
-
-            stateManager.homeController.getStatusBar().getLeftItems().clear();
-            stateManager.homeController.getStatusBar().getRightItems().clear();
-            stateManager.homeController.getStatusBar().getLeftItems().add(new Text("Podaci uspešno učitani."));
-
-            TreeView<Element> treeView = tree.getTreeView();
-            treeContainer.setContent(treeView);
-        }));
-        */
-
-    }
-
     /**
      * Creates all actions of <strong>TextArea</strong> and initializes all remaining properties.
      * Shouldn't be changed further.
@@ -559,6 +523,7 @@ public class XMLEditorController implements TreeController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
             Law newl = Creator.createNewLaw();
+            newl.setName(name);
             switchViewToNewLaw(newl);
             Notifications.create().owner(treeContainer.getScene().getWindow()).title("Propis").text("Propis je uspešno kreiran!").showInformation();
         });
@@ -567,29 +532,35 @@ public class XMLEditorController implements TreeController {
     @FXML
     private void uploadLaw() {
         if (law != null) {
-            List<ErrorMessage> errors = new ArrayList<>();
-            law.validate(errors);
-            if (errors.size() > 0) {
-                for (ErrorMessage em : errors) {
-                    Notifications.create().owner(areaContainer.getScene().getWindow())
-                            .title("Greška <" + em.getElementType().toString() + ">")
-                            .text(em.getMessage())
-                            .showError();
+            if ("sazvana".equals(RestClientProvider.getInstance().parliamentState.get())) {
+                List<ErrorMessage> errors = new ArrayList<>();
+                law.validate(errors);
+                if (errors.size() > 0) {
+                    for (ErrorMessage em : errors) {
+                        Notifications.create().owner(areaContainer.getScene().getWindow())
+                                .title("Greška <" + em.getElementType().toString() + ">")
+                                .text(em.getMessage())
+                                .showError();
+                    }
+                } else {
+                    law.preMarshaller();
+                    GluonObservableObject<Law> lawProperty =
+                            RestClientProvider.getInstance().postLaw(law);
+                    Stage stage = Loader.createLoader(treeContainer.getScene());
+                    stage.show();
+
+                    lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
+                        stage.close();
+                        if (lawProperty.get() == null) {
+                            Notifications.create().owner(areaContainer.getScene().getWindow()).title("GREŠKA!").text("Propis već postoji!").showError();
+                        } else {
+                            Notifications.create().owner(areaContainer.getScene().getWindow()).title("Propis").text("Uspešno ste predložili Propis.").showInformation();
+                        }
+                    }));
+
                 }
             } else {
-                law.preMarshaller();
-                GluonObservableObject<Law> lawProperty =
-                        RestClientProvider.getInstance().postLaw(law);
-                Stage stage = Loader.createLoader(treeContainer.getScene());
-                stage.show();
-
-                lawProperty.initializedProperty().addListener(((observable, oldValue, newValue) -> {
-                    stage.close();
-                    if (lawProperty.get() == null) {
-                        Notifications.create().owner(areaContainer.getScene().getWindow()).title("GREŠKA!").text("Propis već postoji!").showError();
-                    }
-                }));
-
+                Notifications.create().owner(previewContainer.getScene().getWindow()).title("Neuspela operacija").text("Trenutno ne postoji sazvana sednica Skupštine").showWarning();
             }
         } else {
             Notifications.create().owner(treeContainer.getScene().getWindow()).title("Neispravna akcija").text("Morate prvo otvoriti/napraviti novi propis").showWarning();

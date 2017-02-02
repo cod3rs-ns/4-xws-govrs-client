@@ -1,6 +1,5 @@
 package rs.acs.uns.sw.govrs.client.fx.util;
 
-import javafx.beans.property.ObjectProperty;
 import rs.acs.uns.sw.govrs.client.fx.rest.RestClientProvider;
 import rs.acs.uns.sw.govrs.client.fx.serverdomain.*;
 
@@ -8,13 +7,12 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
-import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
 
 public class Creator {
-    // TODO change when IDGenerator is implemented
+
     public static Law createNewLaw() {
         ObjectFactory factory = new ObjectFactory();
 
@@ -31,7 +29,7 @@ public class Creator {
         law.setBody(factory.createLawBody());
 
         law.getHead().setDatumIzglasavanja(factory.createLawHeadDatumIzglasavanja());
-        law.getHead().getDatumIzglasavanja().setValue(dateTest);
+        law.getHead().getDatumIzglasavanja().setValue(RestClientProvider.getInstance().getActiveParliament().getHead().getDatumOdrzavanja());
         law.getHead().setDatumPredloga(factory.createLawHeadDatumPredloga());
         law.getHead().getDatumPredloga().setValue(dateTest);
         law.getHead().setGlasovaProtiv(factory.createLawHeadGlasovaProtiv());
@@ -53,13 +51,13 @@ public class Creator {
         law.getHead().getDatumIzglasavanja().getOtherAttributes().put(new QName("datatype"), "xs:date");
         law.getHead().getDatumIzglasavanja().getOtherAttributes().put(new QName("property"), "pred:datumIzglasavanja");
         law.getHead().getStatus().getOtherAttributes().put(new QName("datatype"), "xs:string");
-        law.getHead().getStatus().getOtherAttributes().put(new QName("property"), "pred:StatusOdluke");
+        law.getHead().getStatus().getOtherAttributes().put(new QName("property"), "pred:statusOdluke");
         law.getHead().getGlasovaZa().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        law.getHead().getGlasovaZa().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaZa");
+        law.getHead().getGlasovaZa().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaZa");
         law.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        law.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaProtiv");
+        law.getHead().getGlasovaProtiv().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaProtiv");
         law.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("datatype"), "xs:int");
-        law.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("property"), "pred:BrojGlasovaUzdrzanih");
+        law.getHead().getGlasovaSuzdrzani().getOtherAttributes().put(new QName("property"), "pred:brojGlasovaUzdrzanih");
 
 
         Ref ref = factory.createRef();
@@ -86,7 +84,7 @@ public class Creator {
         amendments.setId(IdentityGenerator.get().generate(null, ElementType.Amendments));
         amendments.setName("Neki novi amandmani");
         amendments.getHead().setDatumIzglasavanja(factory.createAmendmentsHeadDatumIzglasavanja());
-        amendments.getHead().getDatumIzglasavanja().setValue(dateTest);
+        amendments.getHead().getDatumIzglasavanja().setValue(RestClientProvider.getInstance().getActiveParliament().getHead().getDatumOdrzavanja());
         amendments.getHead().setDatumPredloga(factory.createAmendmentsHeadDatumPredloga());
         amendments.getHead().getDatumPredloga().setValue(dateTest);
         amendments.getHead().setGlasovaProtiv(factory.createAmendmentsHeadGlasovaProtiv());
@@ -94,7 +92,7 @@ public class Creator {
         amendments.getHead().setGlasovaZa(factory.createAmendmentsHeadGlasovaZa());
         amendments.getHead().setStatus(factory.createAmendmentsHeadStatus());
         amendments.getHead().setPodnosilac(factory.createAmendmentsHeadPodnosilac());
-        // TODO change to real law ID
+
         amendments.getHead().setPropis(createPropis(lawId));
 
         Ref podnosilacRef = new Ref();
