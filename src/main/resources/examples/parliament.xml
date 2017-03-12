@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skup:skupstina xmlns:elem="http://www.parlament.gov.rs/schema/elementi"
+ xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+ xmlns:skup="http://www.parlament.gov.rs/schema/skupstina"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.parlament.gov.rs/schema/skupstina file:/C:/Users/Korisnik/Desktop/xml_ws/xml-ws-siit-2016-project-service/src/main/resources/schemas/skupstina.xsd" id="http://www.oxygenxml.com/">
+    <skup:head>
+        <skup:datum_odrzavanja>2017-01-31</skup:datum_odrzavanja>
+        <skup:mjesto_odrzavanja>Novi Sad</skup:mjesto_odrzavanja>
+        <skup:broj_prisutnih>50</skup:broj_prisutnih>
+        <skup:status>sazvana</skup:status>
+    </skup:head>
+    <skup:body>
+        <skup:akti>
+        </skup:akti>
+    </skup:body>
+</skup:skupstina>

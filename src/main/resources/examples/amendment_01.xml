@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<aman:amandmani xmlns:aman="http://www.parlament.gov.rs/schema/amandman" xmlns:pred="http://www.parlament.gov.rs/rdf_schema/skupstina#" xmlns:elem="http://www.parlament.gov.rs/schema/elementi" xmlns:xs="http://www.w3.org/2001/XMLSchema#" xmlns:propis="http://www.parlament.gov.rs/schema/propis" xmlns:kor="http://www.parlament.gov.rs/schema/korisnici" id="zika_amendments_ikcbf5jj3p" name="Amandman na gramatičku grešku">
+    <aman:head about="http://www.ftn.uns.ac.rs/rdf/examples/amendments/zika_amendments_ikcbf5jj3p" vocab="http://www.parlament.gov.rs/rdf_schema/skupstina" typeOf="pred:Amandman">
+        <aman:datum_predloga datatype="xs:date" property="pred:datumPredloga">2017-01-27+01:00</aman:datum_predloga>
+        <aman:datum_izglasavanja datatype="xs:date" property="pred:datumIzglasavanja">2017-01-32+01:00</aman:datum_izglasavanja>
+        <aman:status datatype="xs:string" property="pred:statusAmandmana">predložen</aman:status>
+        <aman:mjesto>Novi Sad</aman:mjesto>
+        <aman:glasova_za datatype="xs:int" property="pred:brojGlasovaZa">-1</aman:glasova_za>
+        <aman:glasova_protiv datatype="xs:int" property="pred:brojGlasovaProtiv">-1</aman:glasova_protiv>
+        <aman:glasova_suzdrzani datatype="xs:int" property="pred:brojGlasovaUzdrzanih">-1</aman:glasova_suzdrzani>
+        <aman:podnosilac rel="pred:predlozenOd" href="http://www.ftn.uns.ac.rs/rdf/examples/users/zika" typeOf="pred:Odbornik">
+            <elem:ref id="zika"></elem:ref>
+        </aman:podnosilac>
+        <aman:propis rel="pred:seOdnosiNa" href="http://www.ftn.uns.ac.rs/rdf/examples/laws/milance_law_aa6jfaaqvo" typeof="pred:Odluka">
+            <elem:ref id="milance_law_aa6jfaaqvo"></elem:ref>
+        </aman:propis>
+    </aman:head>
+    <aman:body>
+        <aman:pravni_osnov>
+            <elem:clan id="pravni_osnov" name="Pravni osnov">
+                <elem:stav id="pravni_osnov_paragraph_1bepe" name="Stav 1">Prema Stavu 1. Člana 7, Zakona o podnošenju amandmana na predlog zakona, donosi se amandman u sledećoj pisanoj formi.</elem:stav>
+            </elem:clan>
+        </aman:pravni_osnov>
+        <aman:amandman id="zika_amendments_ikcbf5jj3p_amendment_mq8fi" name="Novi amandman">
+            <aman:head>
+                <aman:rjesenje>izmjena</aman:rjesenje>
+                <aman:predmet>
+                    <elem:ref id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3_clause_s0u9k_subclause_275pa"></elem:ref>
+                </aman:predmet>
+            </aman:head>
+            <aman:body>
+                <aman:odredba>
+                    <elem:podtacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3_clause_s0u9k_subclause_275pa" name="Podtačka">na određeno vrijeme</elem:podtacka>
+                </aman:odredba>
+                <aman:obrazlozenje>
+                    <aman:razlog>Problem je što postoji greška u zakonu</aman:razlog>
+                    <aman:objasnjene_predlozenog_rjesenja>Ne određeno vrijeme treba da se zamijeni sa "neodređeno" vrijeme</aman:objasnjene_predlozenog_rjesenja>
+                    <aman:cilj>Ispravka greške</aman:cilj>
+                    <aman:uticaj_na_budzetska_sredstva>Nema uticaja na budžetska sredstva</aman:uticaj_na_budzetska_sredstva>
+                </aman:obrazlozenje>
+            </aman:body>
+        </aman:amandman>
+    </aman:body>
+</aman:amandmani>

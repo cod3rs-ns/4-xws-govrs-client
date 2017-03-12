@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aman:amandmani xmlns:elem="http://www.parlament.gov.rs/schema/elementi"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:prop="http://www.parlament.gov.rs/schema/propis"
+    xmlns:kor="http://www.parlament.gov.rs/schema/korisnici"
+    xmlns:aman="http://www.parlament.gov.rs/schema/amandman"
+    xmlns:pred="http://www.parlament.gov.rs/rdf_schema/skupstina#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.parlament.gov.rs/schema/amandman file:/C:/Users/Korisnik/Desktop/xml_ws/xml-ws-siit-2016-project-service/src/main/resources/schemas/amandman.xsd" 
+    id="amendments02" name="Dopuna zakona o državljanstvu">
+    <aman:head vocab="http://www.parlament.gov.rs/rdf_schema/skupstina"
+        about="http://www.ftn.uns.ac.rs/rdf/examples/amendments/amendments02" typeof="pred:Amandman">
+        <aman:datum_predloga property="pred:datumPredloga" datatype="xs:date">2016-06-04</aman:datum_predloga>
+        <aman:datum_izglasavanja datatype="xs:date" property="pred:datumIzglasavanja">2016-07-04</aman:datum_izglasavanja>
+        <aman:status  property="pred:statusAmandmana" datatype="xs:string">prihvaćen</aman:status>
+        <aman:mjesto>Beograd</aman:mjesto>
+        <aman:glasova_za  datatype="xs:int" property="pred:brojGlasovaZa">90</aman:glasova_za>
+        <aman:glasova_protiv datatype="xs:int" property="pred:brojGlasovaProtiv">51</aman:glasova_protiv>
+        <aman:glasova_suzdrzani datatype="xs:int" property="pred:brojGlasovaUzdrzanih">15</aman:glasova_suzdrzani>
+        <aman:podnosilac  rel="pred:predlozenOd" href="http://www.ftn.uns.ac.rs/rdf/examples/users/pera" typeof="pred:Odbornik">
+            <elem:ref id="pera"></elem:ref>
+        </aman:podnosilac>
+        <aman:propis rel="pred:seOdnosiNa" href="http://www.ftn.uns.ac.rs/rdf/examples/laws/law03" typeof="pred:Odluka">
+            <elem:ref id="law03"></elem:ref>
+        </aman:propis>
+    </aman:head>
+    <aman:body>
+        <aman:pravni_osnov>
+            <elem:clan id="article01">
+                <elem:stav id="paragraph01">
+                    Na osnovu člana zakona 1, stava 5. podnosi se amandman na...
+                </elem:stav>
+            </elem:clan>
+        </aman:pravni_osnov>
+        <aman:amandman id="amendment01">
+            <aman:head>
+                <aman:rjesenje>dopuna</aman:rjesenje>
+                <aman:predmet>
+                    <elem:ref id="part01/section01"></elem:ref>
+                </aman:predmet>
+            </aman:head>
+            <aman:body>
+                <aman:odredba>
+                    <elem:clan id="article03" name="Član 3">
+                        <elem:stav id="paragraph01">Dopunjen član</elem:stav>
+                    </elem:clan>
+                </aman:odredba>
+                <aman:obrazlozenje>
+                    <aman:razlog>
+                        Mora se odraditi projekat.
+                    </aman:razlog>
+                    <aman:objasnjene_predlozenog_rjesenja>
+                        Potreba da se doda 
+                    </aman:objasnjene_predlozenog_rjesenja>
+                    <aman:cilj> Dodaje se u odjeljak <elem:ref id="part01/section01">odjeljak 1</elem:ref>
+                        novi član tri
+                    </aman:cilj>
+                    <aman:uticaj_na_budzetska_sredstva>
+                        Smanjenje budžetski sredstava
+                    </aman:uticaj_na_budzetska_sredstva>
+                </aman:obrazlozenje>
+            </aman:body>
+        </aman:amandman>
+    </aman:body>
+</aman:amandmani>
+
