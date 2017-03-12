@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<propis:propis xmlns:aman="http://www.parlament.gov.rs/schema/amandman" xmlns:pred="http://www.parlament.gov.rs/rdf_schema/skupstina#" xmlns:elem="http://www.parlament.gov.rs/schema/elementi" xmlns:xs="http://www.w3.org/2001/XMLSchema#" xmlns:propis="http://www.parlament.gov.rs/schema/propis" xmlns:kor="http://www.parlament.gov.rs/schema/korisnici" id="milance_law_vbklsb42fc" name="Zakon o državljanstvu BIH">
+    <propis:head about="http://www.ftn.uns.ac.rs/rdf/examples/laws/milance_law_vbklsb42fc" vocab="http://www.parlament.gov.rs/rdf_schema/skupstina" typeOf="pred:Odluka">
+        <propis:datum_predloga datatype="xs:date" property="pred:datumPredloga">2017-01-27+01:00</propis:datum_predloga>
+        <propis:datum_izglasavanja datatype="xs:date" property="pred:datumIzglasavanja">2017-01-27+01:00</propis:datum_izglasavanja>
+        <propis:status datatype="xs:string" property="pred:statusOdluke">predložen</propis:status>
+        <propis:mjesto>New York</propis:mjesto>
+        <propis:glasova_za datatype="xs:int" property="pred:brojGlasovaZa">-1</propis:glasova_za>
+        <propis:glasova_protiv datatype="xs:int" property="pred:brojGlasovaProtiv">-1</propis:glasova_protiv>
+        <propis:glasova_suzdrzani datatype="xs:int" property="pred:brojGlasovaUzdrzanih">-1</propis:glasova_suzdrzani>
+        <propis:podnosilac rel="pred:predlozenOd" href="http://www.ftn.uns.ac.rs/rdf/examples/users/milance" typeOf="pred:Odbornik">
+            <elem:ref id="milance"/>
+        </propis:podnosilac>
+    </propis:head>
+    <propis:body>
+        <elem:glava role="opste_odredbe" id="milance_law_vbklsb42fc_part_34qie" name="Osnovne odredbe">
+            <elem:odjeljak id="milance_law_vbklsb42fc_part_34qie_section_1muvn" name="Odeljak">
+                <elem:clan id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_blai2" name="Ustav BIH">
+                    <elem:stav id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_blai2_paragraph_p23lu" name="Stav"> Ovim zakonom uređuju se uvjeti za sticanje i
+                        prestanak državljanstva Federacije Bosne i Hercegovine (u daljnjem tekstu:
+                        državljanstvo Federacije), u skladu sa Ustavom Bosne i Hercegovine, Ustavom
+                        Federacije Bosne i Hercegovine i Zakonom o državljanstvu Bosne i Hercegovine
+                        ("Službeni glasnik BiH", br. 4/97, 13/99, 41/02, 6/03, 14/03, 82/05, 43/09,
+                        76/09 i 87/13 - u daljnjem tekstu: Zakon o državljanstvu BiH) i druga
+                        pitanja koja se odnose na državljanstvo Federacije.</elem:stav>
+                    <elem:stav id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_blai2_paragraph_8vdt0" name="Stav">
+                        <elem:tacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_blai2_paragraph_8vdt0_clause_vevu0" name="Tačka">Svi državljani Federacije su samim tim i državljani Bosne i Hercegovine.</elem:tacka>
+                        <elem:tacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_blai2_paragraph_8vdt0_clause_ahmdj" name="Tačka">Državljanima Bosne i Hercegovine kojima prestane
+                            državljanstvo Federacije istovremeno prestaje i državljanstvo Bosne i
+                            Hercegovine, osim ako ne steknu državljanstvo Republike</elem:tacka>
+                        <elem:tacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_blai2_paragraph_8vdt0_clause_okvse" name="Tačka">Državljanima Federacije kojima prestane
+                            državljanstvo Bosne i Hercegovine istovremeno prestaje i državljanstvo
+                            Federacije.</elem:tacka>
+                    </elem:stav>
+                </elem:clan>
+                <elem:clan id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn" name="Sticanje državljanstva porijeklom">
+                    <elem:stav id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg" name="Stav">Dijete rođeno nakon stupanja na snagu Ustava stiče državljanstvo BiH porijeklom:<elem:tacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg_clause_hei5c" name="Tačka">čija su oba roditelja bili državljani BiH u vrijeme rođenja djeteta, bez obzira na mjesto njegovog rođenja; 
+</elem:tacka>
+                        <elem:tacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg_clause_clesk" name="Tačka">čiji je jedan roditelj bio državljanin BiH u vrijeme rođenja djeteta i dijete je rođeno na teritoriji BiH;</elem:tacka>
+                        <elem:tacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg_clause_jb0pu" name="Tačka"> čiji je jedan roditelj bio državljanin BiH u vrijeme djetetovog rođenja, a dijete je rođeno u inostranstvu, ako bi ono
+inače bilo bez državljanstva; </elem:tacka>
+                        <elem:tacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg_clause_jsis4" name="Tačka"> rođeno u inostranstvu, a čiji je jedan roditelj bio državljanin BiH u vrijeme djetetovog rođenja, pod uslovom da do
+vremena kada napuni 23 godine: <elem:podtacka id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg_clause_jsis4_subclause_aafae" name="Podtačka">
+<elem:alineja id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg_clause_jsis4_subclause_aafae_item_vtadb" name="Alineja">bude registrovano u svrhu evidentiranja BiH državljana kod kompetentnih vlasti u BiH u zemlji ili inostranstvu; </elem:alineja>
+<elem:alineja id="milance_law_vbklsb42fc_part_34qie_section_1muvn_article_hpjqn_paragraph_67qmg_clause_jsis4_subclause_aafae_item_qka86" name="Alineja"> ima stalno mjesto boravka na teritoriji BiH. </elem:alineja>
+                            </elem:podtacka>
+                        </elem:tacka>
+                    </elem:stav>
+                </elem:clan>
+            </elem:odjeljak>
+        </elem:glava>
+    </propis:body>
+</propis:propis>

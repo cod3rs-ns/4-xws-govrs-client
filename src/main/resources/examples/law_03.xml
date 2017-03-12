@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<propis:propis xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.parlament.gov.rs/schema/propis ../xml_ws/xml-ws-siit-2016-project-service/src/main/resources/schemas/propis.xsd"
+ xmlns:elem="http://www.parlament.gov.rs/schema/elementi"
+ xmlns:kor="http://www.parlament.gov.rs/schema/korisnici"
+ xmlns:aman="http://www.parlament.gov.rs/schema/amandman"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema#"
+ xmlns:pred="http://www.parlament.gov.rs/rdf_schema/skupstina#"
+ xmlns:propis="http://www.parlament.gov.rs/schema/propis" id="zika_law_s0vta96ogk"
+ name="Zakon o igrama na sreću">
+    <propis:head about="http://www.ftn.uns.ac.rs/rdf/examples/laws/zika_law_s0vta96ogk" vocab="http://www.parlament.gov.rs/rdf_schema/skupstina" typeOf="pred:Odluka">
+        <propis:datum_predloga datatype="xs:date" property="pred:datumPredloga">2017-01-27+01:00</propis:datum_predloga>
+        <propis:datum_izglasavanja datatype="xs:date" property="pred:datumIzglasavanja">2017-01-27+01:00</propis:datum_izglasavanja>
+        <propis:status datatype="xs:string" property="pred:statusOdluke">predložen</propis:status>
+        <propis:mjesto>New York</propis:mjesto>
+        <propis:glasova_za datatype="xs:int" property="pred:brojGlasovaZa">-1</propis:glasova_za>
+        <propis:glasova_protiv datatype="xs:int" property="pred:brojGlasovaProtiv">-1</propis:glasova_protiv>
+        <propis:glasova_suzdrzani datatype="xs:int" property="pred:brojGlasovaUzdrzanih">-1</propis:glasova_suzdrzani>
+        <propis:podnosilac rel="pred:predlozenOd" href="http://www.ftn.uns.ac.rs/rdf/examples/users/zika" typeOf="pred:Odbornik">
+            <elem:ref id="zika"/>
+        </propis:podnosilac>
+    </propis:head>
+    <propis:body>
+        <elem:dio role="glavni_dio" id="zika_law_s0vta96ogk_chapter_mq3fa" name="Dio prvi">
+            <elem:glava role="uvodne_odredbe" id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97" name="Opšte odredbe">
+                <elem:odjeljak id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc" name="Odeljak">
+                    <elem:pododjeljak id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_j87g6" name="Naknada novčanih sredstava">
+                        <elem:clan id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_j87g6_article_ipc9s" name="Mjesečna naknada">
+                            <elem:stav id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_j87g6_article_ipc9s_paragraph_9b7ru" name="Stav">Lutrija BiH plaća mjesečnu naknadu u iznosu
+                                od 10% od ukupnog prometa ostvarenog priređivanjem klasičnih igara
+                                na sreću iz člana 4. stav 2. ovog zakona. Osnovicu za uplatu naknade
+                                iz stava 1. ovog člana kod svih oblika srećki čini ukupna vrijednost
+                                prodanih srećaka, odnosno ukupna vrijednost primljenih uplata za
+                                pojedinu igru. Mjesečnu naknadu iz stava 1. ovog člana, Lutrija BiH
+                                uplaćuje u korist budžeta Federacije najkasnije desetog dana u
+                                tekućem mjesecu za prethodni mjesec, a dokaz o uplati mjesečne
+                                naknade Lutrija BiH je dužna dostaviti nadležnom uredu Porezne
+                                uprave Federacije Bosne i Hercegovine (u daljem tekstu: Porezna
+                                uprava) najkasnije do dvadesetog dana u tekućem mjesecu za prethodni
+                                mjesec. </elem:stav>
+                        </elem:clan>
+                    </elem:pododjeljak>
+                    <elem:pododjeljak id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_uafkg" name="Lutrija BIH">
+                        <elem:clan id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_uafkg_article_qbn5n" name="Naknade">
+                            <elem:stav id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_uafkg_article_qbn5n_paragraph_33j10" name="Stav">
+<elem:tacka id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_uafkg_article_qbn5n_paragraph_33j10_clause_5ihvo" name="Tačka">50% mjesečne naknade za priređivanja
+                                    klasičnih lutrijskih igara na sreću (član 6. stav 1. i 120. stav</elem:tacka>
+<elem:tacka id="zika_law_s0vta96ogk_chapter_mq3fa_part_pht97_section_1nolc_subsection_uafkg_article_qbn5n_paragraph_33j10_clause_j8i91" name="Tačka"> 50% od naknada za priređivanja igara na
+                                    sreću u casinima (član 73. st. 1. i 2. i član 74. stav 1.)</elem:tacka>
+                            </elem:stav>
+                        </elem:clan>
+                    </elem:pododjeljak>
+                </elem:odjeljak>
+            </elem:glava>
+            <elem:glava role="uvodne_odredbe" id="zika_law_s0vta96ogk_chapter_mq3fa_part_c7r0u" name="Priređivanje igara">
+                <elem:odjeljak id="zika_law_s0vta96ogk_chapter_mq3fa_part_c7r0u_section_mk4bq" name="Odeljak">
+                    <elem:clan id="zika_law_s0vta96ogk_chapter_mq3fa_part_c7r0u_section_mk4bq_article_2b29n" name="Igre na sreću ">
+                        <elem:stav id="zika_law_s0vta96ogk_chapter_mq3fa_part_c7r0u_section_mk4bq_article_2b29n_paragraph_4t3m3" name="Stav">Priređivanje igara na sreću je isključivo pravo
+                            Federacije, ako ovim zakonom nije drugačije određeno. Pravo priređivanja
+                            igara na sreću iz člana 4. ovog zakona Federacija prenosi na Lutriju
+                            BiH, kojoj za priređivanje nije potrebno posebno odobrenje Ministarstva.
+                            Druga pravna lica, registrovana za priređivanje igara na sreću na
+                            teritoriji Federacije, mogu pod uslovima predviđenim ovim zakonom, na
+                            osnovu odobrenja Ministarstva, priređivati igre iz člana 4. stav 3. ovog
+                            zakona.</elem:stav>
+                    </elem:clan>
+                </elem:odjeljak>
+            </elem:glava>
+        </elem:dio>
+    </propis:body>
+</propis:propis>

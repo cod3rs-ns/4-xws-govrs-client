@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<propis:propis xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.parlament.gov.rs/schema/propis ../xml_ws/xml-ws-siit-2016-project-service/src/main/resources/schemas/propis.xsd"
+ xmlns:elem="http://www.parlament.gov.rs/schema/elementi"
+ xmlns:kor="http://www.parlament.gov.rs/schema/korisnici"
+ xmlns:aman="http://www.parlament.gov.rs/schema/amandman"
+ xmlns:xs="http://www.w3.org/2001/XMLSchema#"
+ xmlns:pred="http://www.parlament.gov.rs/rdf_schema/skupstina#"
+ xmlns:propis="http://www.parlament.gov.rs/schema/propis" id="milance_law_aa6jfaaqvo"
+ name="Ugovor o radu">
+    <propis:head about="http://www.ftn.uns.ac.rs/rdf/examples/laws/milance_law_aa6jfaaqvo" vocab="http://www.parlament.gov.rs/rdf_schema/skupstina" typeOf="pred:Odluka">
+        <propis:datum_predloga datatype="xs:date" property="pred:datumPredloga">2017-01-27+01:00</propis:datum_predloga>
+        <propis:datum_izglasavanja datatype="xs:date" property="pred:datumIzglasavanja">2017-01-32+01:00</propis:datum_izglasavanja>
+        <propis:status datatype="xs:string" property="pred:statusOdluke">predložen</propis:status>
+        <propis:mjesto>New York</propis:mjesto>
+        <propis:glasova_za datatype="xs:int" property="pred:brojGlasovaZa">-1</propis:glasova_za>
+        <propis:glasova_protiv datatype="xs:int" property="pred:brojGlasovaProtiv">-1</propis:glasova_protiv>
+        <propis:glasova_suzdrzani datatype="xs:int" property="pred:brojGlasovaUzdrzanih">-1</propis:glasova_suzdrzani>
+        <propis:podnosilac rel="pred:predlozenOd" href="http://www.ftn.uns.ac.rs/rdf/examples/users/milance" typeOf="pred:Odbornik">
+            <elem:ref id="milance"></elem:ref>
+        </propis:podnosilac>
+    </propis:head>
+    <propis:body>
+        <elem:glava role="uvodne_odredbe" id="milance_law_aa6jfaaqvo_part_kd6qq" name="Osnovne odredbe">
+            <elem:odjeljak id="milance_law_aa6jfaaqvo_part_kd6qq_section_f333f" name="Predmet zakona">
+                <elem:clan id="milance_law_aa6jfaaqvo_part_kd6qq_section_f333f_article_a7of3" name="Zaključivanje ugovora">
+                    <elem:stav id="milance_law_aa6jfaaqvo_part_kd6qq_section_f333f_article_a7of3_paragraph_4qdrt" name="Stav 1">Ovim zakonom uređuje se zaključivanje ugovora o radu, radno vrijeme, plaće, prestanak ugovora o radu, ostvarivanje prava i obaveza iz radnog odnosa, zaključivanje kolektivnih ugovora, mirno rješavanje kolektivnih radnih sporova i druga pitanja iz radnog odnosa, ako drugim zakonom ili međunarodnim ugovorom nije drugačije određeno.</elem:stav>
+                </elem:clan>
+            </elem:odjeljak>
+            <elem:odjeljak id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj" name="Gramatička terminologija">
+                <elem:clan id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_vc7nn" name="Gramatika">
+                    <elem:stav id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_vc7nn_paragraph_eadmd" name="Stav">Gramatička terminologija korištenja muškog i ženskog roda za pojmove u ovom zakonu uključuje oba roda.</elem:stav>
+                </elem:clan>
+                <elem:clan id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_sto3v" name="Zabrane">
+                    <elem:stav id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_sto3v_paragraph_e8sbl" name="Stav">
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_sto3v_paragraph_e8sbl_clause_6ggb1" name="Tačka">Zabranjena je diskriminacija radnika kao i lica koje traži zaposlenje, s obzirom na spol, spolno opredjeljenje, bračno stanje, porodične obaveze, starost, invalidnost, trudnoću, jezik, vjeru, političko i drugo mišljenje, nacionalnu pripadnost, socijalno porijeklo, imovno stanje, rođenje, rasu, boju kože, članstvo ili nečlanstvo u političkim strankama i sindikatima, zdravstveni status, ili neko drugo lično svojstvo.</elem:tacka>
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_sto3v_paragraph_e8sbl_clause_j6jgu" name="Tačka">Diskriminacija može biti direktna ili indirektna.</elem:tacka>
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_sto3v_paragraph_e8sbl_clause_28ejn" name="Tačka">Direktna diskriminacija, u smislu ovog zakona, znači svako postupanje uzrokovano nekim od osnova iz stava 1. ovog člana kojim se radnik, kao i lice koje traži zaposlenje stavlja ili je bilo stavljeno u nepovoljniji položaj u odnosu na druga lica u istoj ili sličnoj situaciji.</elem:tacka>
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kd6qq_section_leocj_article_sto3v_paragraph_e8sbl_clause_bacng" name="Tačka">Indirektna diskriminacija, u smislu ovog zakona, postoji kada određena naizgled neutralna odredba, pravilo, kriterij ili praksa stavlja ili bi stavila u nepovoljniji položaj radnika kao i lice koje traži zaposlenje zbog određene osobine, statusa, opredjeljenja, uvjerenja ili vrijednosnog sistema koji čine osnove za zabranu diskriminacije iz stava 1. ovog člana u odnosu na drugog radnika, kao i lice koje traže zaposlenje.</elem:tacka>
+                    </elem:stav>
+                </elem:clan>
+            </elem:odjeljak>
+        </elem:glava>
+        <elem:glava role="uvodne_odredbe" id="milance_law_aa6jfaaqvo_part_kns26" name="Zaključivanje ugovora o radu">
+            <elem:odjeljak id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us" name="Odeljak drugi">
+                <elem:clan id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf" name="Član ugovora">
+                    <elem:stav id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3" name="Stav">
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3_clause_s0u9k" name="Tačka">Ugoovor o radu zaključuje se:<elem:podtacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3_clause_s0u9k_subclause_mr26f" name="Podtačka">na određeno vrijeme</elem:podtacka>
+                            <elem:podtacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3_clause_s0u9k_subclause_275pa" name="Podtačka">na ne određeno vrijeme</elem:podtacka>
+                        </elem:tacka>
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3_clause_bsmgv" name="Tačka">Ugovor o radu koji ne sadrži podatak u pogledu trajanja smatrat će se ugovorom o radu na neodređeno vrijeme.</elem:tacka>
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_7sprf_paragraph_esnv3_clause_hbq7c" name="Tačka">Ako radnik izričito ili prećutno obnovi ugovor o radu na određeno vrijeme sa istim poslodavcem, odnosno izričito ili prećutno zaključi s istim poslodavcem uzastopne ugovore o radu na određeno vrijeme na period duži od tri godine bez prekida, takav ugovor smatrat će se ugovorom o radu na neodređeno vrijeme.</elem:tacka>
+                    </elem:stav>
+                </elem:clan>
+                <elem:clan id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_38mmc" name="Otkaz poslodavca">
+                    <elem:stav id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_38mmc_paragraph_i5p5r" name="Stav">
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_38mmc_paragraph_i5p5r_clause_9fa38" name="Tačka">Ako sud utvrdi da je otkaz nezakonit može poslodavca obavezati da:<elem:podtacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_38mmc_paragraph_i5p5r_clause_9fa38_subclause_6juq7" name="Podtačka">vrati radnika na rad, na njegov zahtjev, na poslove na kojima je radio ili druge odgovarajuće</elem:podtacka>
+                            <elem:podtacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_38mmc_paragraph_i5p5r_clause_9fa38_subclause_ivani" name="Podtačka">isplati radniku:</elem:podtacka>
+                        </elem:tacka>
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_38mmc_paragraph_i5p5r_clause_aam1q" name="Tačka">Ako radnik, na zahtijev poslodavca, prestane sa radom prije isteka propisanog otkaznog roka, poslodavac je obavezan da mu isplati naknadu plaće i prizna sva ostala prava kao da je radio do isteka otkaznog roka.</elem:tacka>
+                        <elem:tacka id="milance_law_aa6jfaaqvo_part_kns26_section_gs2us_article_38mmc_paragraph_i5p5r_clause_h28k3" name="Tačka">Radnik koji osporava otkazivanje ugovora o radu može tražiti da sud donese privremenu mjeru o njegovom vraćanju na rad, do okončanja sudskog spora.</elem:tacka>
+                    </elem:stav>
+                </elem:clan>
+            </elem:odjeljak>
+        </elem:glava>
+    </propis:body>
+</propis:propis>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kor:korisnik_aplikacije xmlns:kor="http://www.parlament.gov.rs/schema/korisnici"
+ xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.parlament.gov.rs/schema/korisnici file:/C:/Users/Korisnik/Desktop/xml_ws/xml-ws-siit-2016-project-service/src/main/resources/schemas/korisnici.xsd"
+ id="zika">
+    <kor:Adresa>
+        <kor:ulica>Pejićevi Salaši</kor:ulica>
+        <kor:postanski_broj>21000</kor:postanski_broj>
+        <kor:mjesto>Novi Sad</kor:mjesto>
+        <kor:broj>88</kor:broj>
+    </kor:Adresa>
+    <kor:ime>Živan</kor:ime>
+    <kor:prezime>Radosavljević</kor:prezime>
+    <kor:uloga>narodni_poslanik</kor:uloga>
+    <kor:korisnicko_ime>zika</kor:korisnicko_ime>
+    <kor:lozinka>123456</kor:lozinka>
+    <kor:email>zika@gmail.com</kor:email>
+</kor:korisnik_aplikacije>
